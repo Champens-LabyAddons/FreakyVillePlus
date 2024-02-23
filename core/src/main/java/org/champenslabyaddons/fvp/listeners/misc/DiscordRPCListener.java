@@ -9,6 +9,7 @@ import net.labymod.api.util.I18n;
 import org.champenslabyaddons.fvp.connection.ClientInfo;
 import org.champenslabyaddons.fvp.event.DiscordRPCEvent;
 import org.champenslabyaddons.fvp.util.FreakyVilleServer;
+import java.time.Instant;
 
 public class DiscordRPCListener {
 
@@ -31,15 +32,9 @@ public class DiscordRPCListener {
     }
 
     currentlyRunning = true;
-    DiscordActivity currentActivity = this.labyAPI.thirdPartyService().discord()
-        .getDisplayedActivity();
     Builder acBuilder = DiscordActivity.builder(this);
     String status;
     String extraDetails = "";
-
-    if (currentActivity != null) {
-      acBuilder.start(currentActivity.getStartTime());
-    }
 
     if (clientInfo.getCurrentServer() == FreakyVilleServer.HUB) {
       status = I18n.translate("fvp.rpc.in", FreakyVilleServer.HUB.getServerName());
@@ -59,6 +54,7 @@ public class DiscordRPCListener {
       acBuilder.details(extraDetails);
     }
     acBuilder.largeAsset(getServerAsset(clientInfo.getCurrentServer()));
+    acBuilder.start(Instant.now());
     //acBuilder.smallAsset(getPlayerAsset());
 
     this.labyAPI.thirdPartyService().discord().displayActivity(acBuilder.build());
