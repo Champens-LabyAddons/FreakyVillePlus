@@ -41,7 +41,7 @@ public class CheckRollCommand extends FreakyVillePlusCommand {
 
     CompletableFuture.supplyAsync(() -> {
       try {
-        URL url = new URL("https://freakyville.dk/api/wheel/" + uniqueId);
+        URL url = new URL("https://freakyville.dk/api/wheel/wheel/" + uniqueId);
         InputStreamReader reader = new InputStreamReader(url.openStream());
         return new Gson().fromJson(reader, WheelData.class);
       } catch (Exception e) {
