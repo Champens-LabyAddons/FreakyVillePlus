@@ -29,7 +29,7 @@ public class SessionSubConfiguration {
     return this.includeStatsFromPrison;
   }
 
-  public ConfigProperty<Boolean> getSaveToFileSystem() {
+  public ConfigProperty<Boolean> saveToFileSystem() {
     return this.saveToFileSystem;
   }
 }
