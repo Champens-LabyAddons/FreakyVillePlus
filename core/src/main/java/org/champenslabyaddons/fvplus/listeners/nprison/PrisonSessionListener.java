@@ -20,13 +20,13 @@ public class PrisonSessionListener {
 
   @Subscribe
   public void onStatChange(StatChangeEvent event) {
-    if (!this.configuration.includeStatsFromPrison().get()) {
-      return;
-    }
     if (!this.clientInfo.isOnFreakyVille()) {
       return;
     }
     if (this.clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) {
+      return;
+    }
+    if (!this.configuration.includeStatsFromPrison().get()) {
       return;
     }
     if (this.addonSession.getPrisonSession().isEmpty()) {
