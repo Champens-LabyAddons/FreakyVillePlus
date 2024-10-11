@@ -11,7 +11,7 @@ import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.internal.CellList;
 import dk.fvtrademarket.fvplus.core.listeners.HousingListener;
 import dk.fvtrademarket.fvplus.core.objects.CellBlock;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 
 import java.util.Objects;

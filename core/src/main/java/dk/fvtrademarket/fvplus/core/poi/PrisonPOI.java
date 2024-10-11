@@ -1,7 +1,7 @@
 package dk.fvtrademarket.fvplus.core.poi;
 
 import net.labymod.api.util.Pair;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.core.util.Prison;
 
 /**

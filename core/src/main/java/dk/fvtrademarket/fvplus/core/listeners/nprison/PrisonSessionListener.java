@@ -5,7 +5,7 @@ import dk.fvtrademarket.fvplus.core.configuration.SessionSubConfiguration;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.event.StatChangeEvent;
 import dk.fvtrademarket.fvplus.core.session.AddonSession;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 
 public class PrisonSessionListener {
   private final AddonSession addonSession;

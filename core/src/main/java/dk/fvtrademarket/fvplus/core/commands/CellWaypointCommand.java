@@ -9,7 +9,7 @@ import dk.fvtrademarket.fvplus.core.event.CreateLocationWaypointEvent;
 import dk.fvtrademarket.fvplus.core.integrations.WaypointsIntegration;
 import dk.fvtrademarket.fvplus.core.internal.CellList;
 import dk.fvtrademarket.fvplus.core.objects.CellBlock;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 
 public class CellWaypointCommand extends Command {
   private final ClientInfo clientInfo;

@@ -4,7 +4,7 @@ import net.labymod.api.util.I18n;
 import net.labymod.api.util.Pair;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.util.Client;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

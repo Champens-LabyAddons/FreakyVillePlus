@@ -7,7 +7,7 @@ import dk.fvtrademarket.fvplus.core.commands.FreakyVillePlusSubCommand;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.internal.PoiList;
 import dk.fvtrademarket.fvplus.core.poi.POI;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import java.util.ArrayList;
 import java.util.List;
 

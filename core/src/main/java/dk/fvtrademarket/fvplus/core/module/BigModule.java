@@ -1,6 +1,6 @@
 package dk.fvtrademarket.fvplus.core.module;
 
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import java.util.ArrayList;
 import java.util.List;
 

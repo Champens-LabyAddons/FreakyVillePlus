@@ -8,7 +8,7 @@ import net.labymod.api.event.client.network.server.SubServerSwitchEvent;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.event.RequestEvent;
 import dk.fvtrademarket.fvplus.core.event.RequestEvent.RequestType;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 
 public class ServerNavigationListener {
   private final ClientInfo clientInfo;

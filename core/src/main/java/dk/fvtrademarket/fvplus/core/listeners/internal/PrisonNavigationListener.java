@@ -8,7 +8,7 @@ import net.labymod.api.util.I18n;
 import net.labymod.api.util.Pair;
 import net.labymod.api.util.logging.Logging;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 import dk.fvtrademarket.fvplus.core.util.Prison;
 import java.util.Objects;

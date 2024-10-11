@@ -2,7 +2,7 @@ package dk.fvtrademarket.fvplus.core.connection;
 
 import net.labymod.api.client.entity.player.ClientPlayer;
 import net.labymod.api.client.network.server.ServerController;
-import dk.fvtrademarket.fvplus.core.util.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.core.util.Prison;
 import java.util.Objects;
 import java.util.Optional;

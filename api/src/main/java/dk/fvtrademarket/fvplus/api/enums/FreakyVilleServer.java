@@ -1,13 +1,16 @@
-package dk.fvtrademarket.fvplus.core.util;
+package dk.fvtrademarket.fvplus.api.enums;
 
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TranslatableComponent;
 import net.labymod.api.util.I18n;
 
 /**
- * Enum for at repræsentere de forskellige FreakyVille servere.
- * Vi bruger denne til at identificere hvilken server klienten er på.
- * Den indeholder også repræsentationer af servere, der ikke længere er tilgængelige.
+ * Repræsentation af forskellige servere på Freakyville
+ * <p>
+ * De forskellige ENUMS kan afkodes fra diverse scoreboard headers
+ *
+ * @author Champen_V1ldtand
+ * @since 2.0.0
  */
 public enum FreakyVilleServer {
   PRISON("fvplus.server.prison.name"),
@@ -16,34 +19,36 @@ public enum FreakyVilleServer {
   THE_CITY("fvplus.server.city.name"),
   KIT_PVP("fvplus.server.kitpvp.name"),
   HUB("fvplus.server.hub.name"),
-  NONE(""),
+  NONE,
 
   /**
    * @deprecated Ekspeditionen er ikke længere tilgængelig. Den kan blive genaktiveret i fremtiden.
    */
   @Deprecated(forRemoval = false)
-  THE_EXPEDITION(""),
+  THE_EXPEDITION(),
 
   /**
    * @deprecated Factions er ikke længere tilgængelig. Den kan blive genaktiveret i fremtiden.
    */
   @Deprecated(forRemoval = false)
-  FACTIONS(""),
+  FACTIONS(),
 
   /**
    * @deprecated OP-Prison er ikke længere tilgængelig. Den kan blive genaktiveret i fremtiden.
    */
   @Deprecated(forRemoval = false)
-  OP_PRISON(""),
+  OP_PRISON(),
 
   /**
    * @deprecated Rumrejsen er ikke længere tilgængelig. Den kan blive genaktiveret i fremtiden.
    */
   @Deprecated(forRemoval = false)
-  SPACE_JOURNEY(""),
+  SPACE_JOURNEY(),
   ;
 
-  private final String nameKey;
+  private String nameKey;
+
+  FreakyVilleServer() {}
 
   FreakyVilleServer(String nameKey) {
       this.nameKey = nameKey;
