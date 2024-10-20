@@ -1,16 +1,10 @@
 package dk.fvtrademarket.fvplus.core.internal;
 
 import dk.fvtrademarket.fvplus.core.objects.CellBlock;
+import dk.fvtrademarket.fvplus.core.util.DataFormatter;
 import dk.fvtrademarket.fvplus.core.util.Location;
-import dk.fvtrademarket.fvplus.core.util.csv.Csv;
-import dk.fvtrademarket.fvplus.core.util.http.HttpConnector;
 import dk.fvtrademarket.fvplus.core.util.resource.Resources;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +21,8 @@ public class CellList implements Manager {
 
   @Override
   public void init() throws IOException {
-    HttpURLConnection connection = HttpConnector.getOpenHttpConnection(new URL(
-        Resources.CELL_LIST_URL));
-    Csv csv = new Csv(new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)));
-
-    for (String[] strings : csv.readALl()) {
+    ArrayList<String[]> csv = DataFormatter.csv(Resources.CELL_LIST_URL);
+    for (String[] strings : csv) {
       this.cellBlocks.add(new CellBlock(
           strings[0],
           Integer.parseInt(strings[1]),
@@ -40,8 +31,6 @@ public class CellList implements Manager {
           new Location(strings[4], strings[5], strings[6])
       ));
     }
-
-    connection.disconnect();
   }
 
   public boolean isCellListed(String typeAndId) {
