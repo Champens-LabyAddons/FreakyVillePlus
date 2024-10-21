@@ -1,4 +1,12 @@
 {
+  "labymod": {
+    "hudWidgetCategory": {
+      "fvplus_timer_category": {
+        "name": "Freakyville+ Timers",
+        "description": "Alle timerwidgets fra FreakyVille+"
+      }
+    }
+  },
   "fvplus": {
     "prefix": "FV",
     "settings": {
@@ -147,14 +155,13 @@
     "widgets": {
       "timer": {
         "timeLeft": {
-          "isTakeable": "Kan blive overtaget",
+          "finished": "Kan blive taget",
           "unavailable": "Ikke tilgængeligt",
-          "cantKnowForSure": "Opdateres ikke",
+          "cantKnowForSure": "Opdateres ikke på nuværende tidspunkt",
           "format": {
-            "all": "%s, %s",
-            "hours": "%st",
-            "minutes": "%sm",
-            "seconds": "%ss"
+            "hours": "t",
+            "minutes": "m",
+            "seconds": "s"
           }
         }
       }
