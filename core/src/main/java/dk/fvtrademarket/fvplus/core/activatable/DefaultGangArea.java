@@ -1,21 +1,20 @@
-package dk.fvtrademarket.fvplus.api.activatable.guardvault;
+package dk.fvtrademarket.fvplus.core.activatable;
 
+import dk.fvtrademarket.fvplus.api.activatable.misc.GangArea;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.format.NamedTextColor;
 
-public class DefaultGuardVault implements GuardVault {
+public class DefaultGangArea implements GangArea {
   private final PrisonSector prisonSector;
-  private final PrisonSector[] visiblePrisonSectors;
 
   private final int expectedActivationTime, cooldownUponFailure, personalCooldown, sharedCooldown;
 
-  public DefaultGuardVault(PrisonSector prisonSector, PrisonSector[] visiblePrisonSectors,
+  public DefaultGangArea(PrisonSector prisonSector,
       int expectedActivationTime, int cooldownUponFailure, int personalCooldown, int sharedCooldown) {
     this.prisonSector = prisonSector;
-    this.visiblePrisonSectors = visiblePrisonSectors;
     this.expectedActivationTime = expectedActivationTime;
     this.cooldownUponFailure = cooldownUponFailure;
     this.personalCooldown = personalCooldown;
@@ -25,11 +24,6 @@ public class DefaultGuardVault implements GuardVault {
   @Override
   public PrisonSector getPrisonSector() {
     return this.prisonSector;
-  }
-
-  @Override
-  public PrisonSector[] getVisiblePrisonSectors() {
-    return this.visiblePrisonSectors;
   }
 
   @Override
@@ -59,16 +53,10 @@ public class DefaultGuardVault implements GuardVault {
 
   @Override
   public Component toComponent() {
-    String key = "fvplus.activatable.";
-    if (this.prisonSector == PrisonSector.A_PLUS || this.prisonSector == PrisonSector.B_PLUS) {
-      key += "bank";
-    } else {
-      key += "guardVault";
-    }
     return TextComponent.builder()
             .append(getPrisonSector().toComponent())
             .append(Component.space())
-            .append(Component.translatable(key, NamedTextColor.GRAY))
+            .append(Component.translatable("fvplus.activatable.gangArea", NamedTextColor.GRAY))
             .build();
   }
 }
