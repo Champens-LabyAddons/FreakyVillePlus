@@ -2,15 +2,17 @@ package dk.fvtrademarket.fvplus.api.service.housing;
 
 import dk.fvtrademarket.fvplus.api.housing.LivingArea;
 import dk.fvtrademarket.fvplus.api.service.Service;
+import net.labymod.api.reference.annotation.Referenceable;
 import java.util.Collection;
 
-public interface HousingService<T extends LivingArea> extends Service {
+@Referenceable
+public interface HousingService extends Service {
 
-  void registerLivingQuarters(T housing);
+  void registerLivingQuarters(LivingArea housing);
 
-  void unregisterLivingQuarters(T housing);
+  void unregisterLivingQuarters(LivingArea housing);
 
-  Collection<T> getAllLivingQuarters();
+  Collection<LivingArea> getAllLivingQuarters();
 
   @Override
   void initialize();

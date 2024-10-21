@@ -2,9 +2,11 @@ package dk.fvtrademarket.fvplus.api.service.message;
 
 import dk.fvtrademarket.fvplus.api.misc.EventMessage;
 import dk.fvtrademarket.fvplus.api.service.Service;
+import net.labymod.api.reference.annotation.Referenceable;
 import net.labymod.api.util.Pair;
 import java.util.Map;
 
+@Referenceable
 public interface MessageService extends Service {
 
   /**
@@ -36,6 +38,14 @@ public interface MessageService extends Service {
   void addAdvancedMessage(Pair<String, String> messagePair, EventMessage eventMessage);
 
   /**
+   * Tilføjer en besked med variabel information i slutningen
+   *
+   * @param messageStr Beskedens begyndelse
+   * @param eventMessage Beskedtypen
+   */
+  void addEndVarMessage(String messageStr, EventMessage eventMessage);
+
+  /**
    * Fjerner en besked
    *
    * @param eventMessage Beskedtypen
@@ -55,6 +65,13 @@ public interface MessageService extends Service {
    * @return Beskederne
    */
   Map<Pair<String, String>, EventMessage> getAdvancedMessages();
+
+  /**
+   * Returnerer alle endVar beskeder
+   *
+   * @return Beskederne
+   */
+  Map<String, EventMessage> getEndVarMessages();
 
   @Override
   void initialize();
