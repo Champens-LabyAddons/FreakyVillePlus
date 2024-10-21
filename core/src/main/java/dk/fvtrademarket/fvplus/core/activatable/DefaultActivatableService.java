@@ -11,17 +11,26 @@ import net.labymod.api.models.Implements;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Singleton
 @Implements(ActivatableService.class)
 public class DefaultActivatableService implements ActivatableService {
   private final Set<Activatable> activatables;
+  private final Map<Activatable, Long> cooldowns;
+  private final Map<Activatable, Long> personalCooldowns;
+  private final Set<Activatable> limboingActivatables;
+
   private boolean initialized;
 
   public DefaultActivatableService() {
     this.activatables = new HashSet<>();
+    this.cooldowns = new HashMap<>();
+    this.personalCooldowns = new HashMap<>();
+    this.limboingActivatables = new HashSet<>();
     this.initialized = false;
   }
 
@@ -35,9 +44,55 @@ public class DefaultActivatableService implements ActivatableService {
     this.activatables.remove(activatable);
   }
 
+  public void putActivatableOnCooldown(Activatable activatable, long endTime, boolean personal) {
+    if (personal) {
+      this.personalCooldowns.put(activatable, endTime);
+    } else {
+      this.cooldowns.put(activatable, endTime);
+    }
+  }
+
+  public void putActivatableOnCooldown(Activatable activatable, boolean personal) {
+    long currentTime = System.currentTimeMillis();
+    long endTime = currentTime + (activatable.getSharedCooldown() * 1000L);
+    if (personal) {
+      endTime = currentTime + (activatable.getPersonalCooldown() * 1000L);
+    }
+    putActivatableOnCooldown(activatable, endTime, personal);
+  }
+
+  public void putActivatableOnFailureCooldown(Activatable activatable) {
+    long currentTime = System.currentTimeMillis();
+    long endTime = currentTime + (activatable.getCooldownUponFailure() * 1000L);
+    putActivatableOnCooldown(activatable, endTime, false);
+  }
+
+  public void removeActivatableFromCooldown(Activatable activatable) {
+    this.cooldowns.remove(activatable);
+    this.personalCooldowns.remove(activatable);
+  }
+
+  public void putActivatableInLimbo(Activatable activatable) {
+    this.limboingActivatables.add(activatable);
+  }
+
+  public void removeActivatableFromLimbo(Activatable activatable) {
+    this.limboingActivatables.remove(activatable);
+  }
+
   @Override
   public Collection<Activatable> getAllActivatables() {
     return new HashSet<>(this.activatables);
+  }
+
+  @Override
+  public Map<Activatable, Long> getCooldowns() {
+    return Map.copyOf(this.cooldowns);
+  }
+
+  @Override
+  public Collection<Activatable> getLimboingActivatables() {
+    return Set.copyOf(this.limboingActivatables);
   }
 
   @Override
@@ -49,6 +104,30 @@ public class DefaultActivatableService implements ActivatableService {
       }
     }
     return activatables;
+  }
+
+  @Override
+  public long getCooldownTime(Activatable activatable) {
+    long endTime = this.cooldowns.getOrDefault(activatable, 0L);
+    if (this.personalCooldowns.containsKey(activatable)) {
+      endTime = this.personalCooldowns.get(activatable);
+    }
+    return Math.max(0, endTime - System.currentTimeMillis());
+  }
+
+  @Override
+  public boolean hasActivatable(Activatable activatable) {
+    return this.activatables.contains(activatable);
+  }
+
+  @Override
+  public boolean isOnCooldown(Activatable activatable) {
+    return getCooldownTime(activatable) > 0;
+  }
+
+  @Override
+  public boolean isOnPersonalCooldown(Activatable activatable) {
+    return this.personalCooldowns.containsKey(activatable) && getCooldownTime(activatable) > 0;
   }
 
   @Override
