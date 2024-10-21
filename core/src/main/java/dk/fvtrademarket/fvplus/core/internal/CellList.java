@@ -3,7 +3,7 @@ package dk.fvtrademarket.fvplus.core.internal;
 import dk.fvtrademarket.fvplus.core.objects.CellBlock;
 import dk.fvtrademarket.fvplus.core.util.DataFormatter;
 import dk.fvtrademarket.fvplus.core.util.Location;
-import dk.fvtrademarket.fvplus.core.util.resource.Resources;
+import dk.fvtrademarket.fvplus.core.util.Resources;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

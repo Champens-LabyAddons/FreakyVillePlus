@@ -6,7 +6,7 @@ import net.labymod.api.util.logging.Logging;
 import dk.fvtrademarket.fvplus.core.poi.POI;
 import dk.fvtrademarket.fvplus.core.poi.PrisonPOI;
 import dk.fvtrademarket.fvplus.core.util.Prison;
-import dk.fvtrademarket.fvplus.core.util.resource.Resources;
+import dk.fvtrademarket.fvplus.core.util.Resources;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
