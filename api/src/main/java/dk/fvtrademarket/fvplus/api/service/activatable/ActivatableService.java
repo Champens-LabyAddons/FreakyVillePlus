@@ -4,13 +4,13 @@ import dk.fvtrademarket.fvplus.api.activatable.Activatable;
 import dk.fvtrademarket.fvplus.api.service.Service;
 import java.util.Collection;
 
-public interface ActivatableService extends Service {
+public interface ActivatableService<T extends Activatable> extends Service {
 
-  void registerActivatable(Activatable activatable);
+  void registerActivatable(T activatable);
 
-  void unregisterActivatable(Activatable activatable);
+  void unregisterActivatable(T activatable);
 
-  Collection<Activatable> getAllActivatables();
+  Collection<T> getAllActivatables();
 
   @Override
   void initialize();
