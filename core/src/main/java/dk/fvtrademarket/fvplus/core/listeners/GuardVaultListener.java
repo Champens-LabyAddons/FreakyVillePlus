@@ -34,22 +34,21 @@ public class GuardVaultListener {
 
   @Subscribe
   public void onGuardVaultTryEvent(GuardVaultTryEvent event) {
-    for (GuardVault guardVault : activatableService.getActivatables(GuardVault.class)) {
-      if (guardVault.getPrisonSector() == event.getSector()) {
-        this.activatableService.putActivatableInLimbo(guardVault);
-        Task robbingTask = Task.builder(
+    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getSector());
+    if (guardVault.isEmpty()) {
+      return;
+    }
+    this.activatableService.putActivatableInLimbo(guardVault.get());
+    Task robbingTask = Task.builder(
             () -> {
-              if (activatableService.getLimboingActivatables().contains(guardVault)) {
-                activatableService.removeActivatableFromLimbo(guardVault);
+              if (activatableService.getLimboingActivatables().contains(guardVault.get())) {
+                activatableService.removeActivatableFromLimbo(guardVault.get());
                 Laby.fireEvent(new GuardVaultFinishEvent(event.getSector(), event.getRobber(), false));
               }
             }
-        ).delay(guardVault.getExpectedActivationTime() + 1, TimeUnit.SECONDS)
+        ).delay(guardVault.get().getExpectedActivationTime() + 1, TimeUnit.SECONDS)
         .build();
-        robbingTask.execute();
-        return;
-      }
-    }
+    robbingTask.execute();
   }
 
   @Subscribe
@@ -73,22 +72,16 @@ public class GuardVaultListener {
 
   @Subscribe
   public void onGuardVaultFinishEvent(GuardVaultFinishEvent event) {
-    GuardVault guardVault = null;
-    for (GuardVault guard : activatableService.getActivatables(GuardVault.class)) {
-      if (guard.getPrisonSector() == event.getSector()) {
-        guardVault = guard;
-        break;
-      }
-    }
-    if (guardVault == null) {
+    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getSector());
+    if (guardVault.isEmpty()) {
       return;
     }
     if (!event.wasSuccessFull()) {
-      activatableService.putActivatableOnFailureCooldown(guardVault);
+      activatableService.putActivatableOnFailureCooldown(guardVault.get());
     } else {
-      activatableService.putActivatableOnCooldown(guardVault, wasPersonal(event.getRobber()));
+      activatableService.putActivatableOnCooldown(guardVault.get(), wasPersonal(event.getRobber()));
     }
-    activatableService.removeActivatableFromLimbo(guardVault);
+    activatableService.removeActivatableFromLimbo(guardVault.get());
   }
 
   private Optional<GuardVault> getGuardVaultBySector(PrisonSector sector) {

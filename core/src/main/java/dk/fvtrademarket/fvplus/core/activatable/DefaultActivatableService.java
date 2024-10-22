@@ -82,7 +82,7 @@ public class DefaultActivatableService implements ActivatableService {
 
   @Override
   public Collection<Activatable> getAllActivatables() {
-    return new HashSet<>(this.activatables);
+    return Set.copyOf(this.activatables);
   }
 
   @Override
