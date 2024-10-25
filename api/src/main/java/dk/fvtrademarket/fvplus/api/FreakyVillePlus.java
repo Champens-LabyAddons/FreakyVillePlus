@@ -24,10 +24,17 @@ public class FreakyVillePlus {
       throw new IllegalStateException("FreakyVillePlus is already initialized");
     } else {
       FreakyVillePlus.references = references;
+      initRefs(references);
     }
   }
 
   public static void refresh() {
 
+  }
+
+  private static void initRefs(ReferenceStorage references) {
+    references.messageService().initialize();
+    references.activatableService().initialize();
+    references.housingService().initialize();
   }
 }

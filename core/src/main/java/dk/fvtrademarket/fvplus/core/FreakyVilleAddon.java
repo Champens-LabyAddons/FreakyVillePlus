@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core;
 
+import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import net.labymod.api.Laby;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.addon.LabyAddon;
@@ -30,9 +31,11 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     this.registerSettingCategory();
     LabyAPI labyAPI = this.labyAPI();
 
-    HudWidgetCategory timerWidgets = new HudWidgetCategory("fvplus_timer_category");
+    HudWidgetCategory timerWidgets = new HudWidgetCategory(this,"fvplus_timer_category");
 
     labyAPI.hudWidgetRegistry().categoryRegistry().register(timerWidgets);
+
+    FreakyVillePlus.init(this.referenceStorageAccessor());
 
     ClientInfo clientInfo = new ClientInfo(labyAPI.serverController(), labyAPI.minecraft().getClientPlayer());
     EventBus eventBus = labyAPI.eventBus();

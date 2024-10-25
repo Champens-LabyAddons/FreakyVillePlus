@@ -7,6 +7,7 @@ import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import dk.fvtrademarket.fvplus.api.service.activatable.ActivatableService;
 import dk.fvtrademarket.fvplus.core.util.DataFormatter;
 import dk.fvtrademarket.fvplus.core.util.Resources;
+import dk.fvtrademarket.fvplus.core.widgets.Widgets;
 import net.labymod.api.models.Implements;
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class DefaultActivatableService implements ActivatableService {
   private final Map<Activatable, Long> personalCooldowns;
   private final Set<Activatable> limboingActivatables;
 
+  private final Widgets widgets;
+
   private boolean initialized;
 
   public DefaultActivatableService() {
@@ -31,6 +34,9 @@ public class DefaultActivatableService implements ActivatableService {
     this.cooldowns = new HashMap<>();
     this.personalCooldowns = new HashMap<>();
     this.limboingActivatables = new HashSet<>();
+
+    this.widgets = new Widgets(this);
+
     this.initialized = false;
   }
 
@@ -50,6 +56,7 @@ public class DefaultActivatableService implements ActivatableService {
     } else {
       this.cooldowns.put(activatable, endTime);
     }
+    this.widgets.setTimer(activatable, endTime);
   }
 
   public void putActivatableOnCooldown(Activatable activatable, boolean personal) {
@@ -59,12 +66,14 @@ public class DefaultActivatableService implements ActivatableService {
       endTime = currentTime + (activatable.getPersonalCooldown() * 1000L);
     }
     putActivatableOnCooldown(activatable, endTime, personal);
+    this.widgets.setTimer(activatable, endTime);
   }
 
   public void putActivatableOnFailureCooldown(Activatable activatable) {
     long currentTime = System.currentTimeMillis();
     long endTime = currentTime + (activatable.getCooldownUponFailure() * 1000L);
     putActivatableOnCooldown(activatable, endTime, false);
+    this.widgets.setTimer(activatable, endTime);
   }
 
   public void removeActivatableFromCooldown(Activatable activatable) {
@@ -138,15 +147,19 @@ public class DefaultActivatableService implements ActivatableService {
     ArrayList<String[]> guardVaultData = DataFormatter.csv(Resources.GUARD_VAULTS);
     ArrayList<String[]> gangAreaData = DataFormatter.csv(Resources.GANG_AREAS);
 
-    guardVaultData.removeFirst();
-    gangAreaData.removeFirst();
-
-    for (String[] line : guardVaultData) {
-      readGuardVault(line);
+    if (!guardVaultData.isEmpty()) {
+      guardVaultData.removeFirst();
+      for (String[] line : guardVaultData) {
+        readGuardVault(line);
+      }
     }
-    for (String[] line : gangAreaData) {
-      readGangArea(line);
+    if (!gangAreaData.isEmpty()) {
+      gangAreaData.removeFirst();
+      for (String[] line : gangAreaData) {
+        readGangArea(line);
+      }
     }
+    widgets.initialize();
     initialized = true;
   }
 

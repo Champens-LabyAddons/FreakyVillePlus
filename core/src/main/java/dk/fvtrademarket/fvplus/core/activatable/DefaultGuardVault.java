@@ -6,6 +6,7 @@ import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.format.NamedTextColor;
+import net.labymod.api.util.I18n;
 
 public class DefaultGuardVault implements GuardVault {
   private final PrisonSector prisonSector;
@@ -69,7 +70,7 @@ public class DefaultGuardVault implements GuardVault {
     return TextComponent.builder()
             .append(getPrisonSector().toComponent())
             .append(Component.space())
-            .append(Component.translatable(key, NamedTextColor.GRAY))
+            .append(Component.text(I18n.translate(key), NamedTextColor.GRAY))
             .build();
   }
 }

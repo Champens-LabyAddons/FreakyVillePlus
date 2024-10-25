@@ -20,7 +20,7 @@ public class FreakyVillePlusConfiguration extends AddonConfig {
 
   private final DiscordSubConfiguration discordSubSettings = new DiscordSubConfiguration();
 
-  private final SessionSubConfiguration sessionSubSettings = new SessionSubConfiguration();
+  //private final SessionSubConfiguration sessionSubSettings = new SessionSubConfiguration();
 
   @Override
   public ConfigProperty<Boolean> enabled() {
@@ -35,7 +35,7 @@ public class FreakyVillePlusConfiguration extends AddonConfig {
     return this.discordSubSettings;
   }
 
-  public SessionSubConfiguration getSessionSubSettings() {
-    return this.sessionSubSettings;
-  }
+  //public SessionSubConfiguration getSessionSubSettings() {
+    //return this.sessionSubSettings;
+  //}
 }

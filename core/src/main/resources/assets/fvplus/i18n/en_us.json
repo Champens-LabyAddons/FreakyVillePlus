@@ -1,12 +1,4 @@
 {
-  "labymod": {
-    "hudWidgetCategory": {
-      "fvplus_timer_category": {
-        "name": "Freakyville+ Timers",
-        "description": "Alle timerwidgets fra FreakyVille+"
-      }
-    }
-  },
   "fvplus": {
     "prefix": "FV",
     "settings": {
@@ -46,6 +38,12 @@
         "saveToFileSystem": {
           "name": "Gem stats til filsystemet"
         }
+      }
+    },
+    "hudWidgetCategory": {
+      "fvplus_timer_category": {
+        "name": "Freakyville+ Timers",
+        "description": "Alle timerwidgets fra FreakyVille+"
       }
     },
     "server": {
@@ -165,6 +163,11 @@
           }
         }
       }
+    },
+    "activatable": {
+      "gangArea": "Bande-Område",
+      "guardVault": "Vagt-Vault",
+      "bank": "Banken"
     },
     "hudWidget": {
       "C_VV": {

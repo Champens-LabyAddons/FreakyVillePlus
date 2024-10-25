@@ -1,6 +1,6 @@
 package dk.fvtrademarket.fvplus.core.widgets;
 
-import net.labymod.api.client.gui.hud.binding.category.HudWidgetCategory;
+import net.labymod.api.Laby;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextHudWidget;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextHudWidgetConfig;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextLine;
@@ -25,7 +25,7 @@ public class TimerHudWidget extends TextHudWidget<TextHudWidgetConfig> {
     this.associatedIcon = associatedIcon;
     this.endTime = endTime;
 
-    this.bindCategory(new HudWidgetCategory("fvplus_timer_category"));
+    this.bindCategory(Laby.labyAPI().hudWidgetRegistry().categoryRegistry().getById("fvplus_timer_category"));
   }
 
   @Override
