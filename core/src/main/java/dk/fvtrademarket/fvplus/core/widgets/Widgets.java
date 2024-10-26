@@ -29,6 +29,12 @@ public class Widgets implements Service {
     instance = this;
   }
 
+  public void register(Activatable activatable) {
+    TimerHudWidget widget = createWidget(activatable);
+    this.widgets.put(activatable, widget);
+    Laby.labyAPI().hudWidgetRegistry().register(widget);
+  }
+
   public void setTimer(Activatable activatable, long endTime) {
     TimerHudWidget widget = this.widgets.get(activatable);
     if (widget == null) {
@@ -41,9 +47,7 @@ public class Widgets implements Service {
   @Override
   public void initialize() {
     for (Activatable activatable : this.activatableService.getAllActivatables()) {
-      TimerHudWidget widget = createWidget(activatable);
-      this.widgets.put(activatable, widget);
-      Laby.labyAPI().hudWidgetRegistry().register(widget);
+      register(activatable);
     }
   }
 

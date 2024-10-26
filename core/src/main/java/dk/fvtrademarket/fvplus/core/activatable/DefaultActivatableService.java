@@ -42,6 +42,9 @@ public class DefaultActivatableService implements ActivatableService {
 
   @Override
   public void registerActivatable(Activatable activatable) {
+    if (!this.activatables.contains(activatable)) {
+      this.widgets.register(activatable);
+    }
     this.activatables.add(activatable);
   }
 
