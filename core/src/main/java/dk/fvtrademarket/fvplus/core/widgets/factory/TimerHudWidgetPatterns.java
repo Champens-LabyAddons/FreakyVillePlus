@@ -50,10 +50,10 @@ public class TimerHudWidgetPatterns {
         case B_PLUS -> Icon.sprite16(iconLocation, 3, 0);
         case B -> Icon.sprite16(iconLocation, 1, 0);
         case C -> Icon.sprite16(iconLocation, 0, 0);
-        default -> Icon.sprite16(iconLocation, 5, 0);
       };
-    } else {
-      return Icon.sprite16(iconLocation, 1, 5);
+    } else if (activatable instanceof GangArea) {
+      return Icon.sprite16(iconLocation, 0, 5);
     }
+    return Icon.sprite16(iconLocation, 0, 0);
   }
 }
