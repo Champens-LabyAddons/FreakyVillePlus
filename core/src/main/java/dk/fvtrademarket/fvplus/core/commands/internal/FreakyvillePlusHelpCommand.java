@@ -34,12 +34,8 @@ public class FreakyvillePlusHelpCommand extends FreakyVillePlusCommand {
     switch (command.toLowerCase()) {
       case "waypoint":
       case "w":
+      case "wp":
         displayTranslatable("commands.waypoint.usage", NamedTextColor.AQUA);
-        break;
-      case "checkroll":
-      case "cr":
-      case "roll":
-        displayTranslatable("commands.checkRoll.usage", NamedTextColor.AQUA);
         break;
       case "timer":
       case "tim":
