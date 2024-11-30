@@ -6,7 +6,7 @@ import net.labymod.api.util.logging.Logging;
 import dk.fvtrademarket.fvplus.core.poi.POI;
 import dk.fvtrademarket.fvplus.core.poi.PrisonPOI;
 import dk.fvtrademarket.fvplus.core.util.Prison;
-import dk.fvtrademarket.fvplus.core.util.Resources;
+import dk.fvtrademarket.fvplus.core.util.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class PoiList implements Manager {
 
   @Override
   public void init() throws IOException {
-    ArrayList<String[]> csv = DataFormatter.csv(Resources.POI_LIST_URL);
+    ArrayList<String[]> csv = DataFormatter.csv(Resource.POI_LIST_URL);
     for (String[] strings : csv) {
       this.pois.add(new PrisonPOI(
           strings[0],

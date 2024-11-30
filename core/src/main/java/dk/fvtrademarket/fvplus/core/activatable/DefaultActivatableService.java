@@ -6,7 +6,7 @@ import dk.fvtrademarket.fvplus.api.activatable.misc.GangArea;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import dk.fvtrademarket.fvplus.api.service.activatable.ActivatableService;
 import dk.fvtrademarket.fvplus.core.util.DataFormatter;
-import dk.fvtrademarket.fvplus.core.util.Resources;
+import dk.fvtrademarket.fvplus.core.util.Resource;
 import dk.fvtrademarket.fvplus.core.widgets.Widgets;
 import net.labymod.api.models.Implements;
 import javax.inject.Singleton;
@@ -147,19 +147,19 @@ public class DefaultActivatableService implements ActivatableService {
     if (initialized) {
       throw new IllegalStateException("Service already initialized");
     }
-    ArrayList<String[]> guardVaultData = DataFormatter.csv(Resources.GUARD_VAULTS);
-    ArrayList<String[]> gangAreaData = DataFormatter.csv(Resources.GANG_AREAS);
+    ArrayList<String[]> guardVaultData = DataFormatter.csv(Resource.GUARD_VAULTS.toString());
+    ArrayList<String[]> gangAreaData = DataFormatter.csv(Resource.GANG_AREAS.toString());
 
     if (!guardVaultData.isEmpty()) {
       guardVaultData.removeFirst();
       for (String[] line : guardVaultData) {
-        readGuardVault(line);
+        this.activatables.add(readGuardVault(line));
       }
     }
     if (!gangAreaData.isEmpty()) {
       gangAreaData.removeFirst();
       for (String[] line : gangAreaData) {
-        readGangArea(line);
+        this.activatables.add(readGangArea(line));
       }
     }
     widgets.initialize();
@@ -171,8 +171,8 @@ public class DefaultActivatableService implements ActivatableService {
     initialized = false;
   }
 
-  private void readGangArea(String[] line) {
-    GangArea gangArea = new DefaultGangArea(
+  private GangArea readGangArea(String[] line) {
+    return new DefaultGangArea(
         // Den Sector som Bandeområdet er placeret i
         PrisonSector.fromString(line[0]),
         Integer.parseInt(line[1]),
@@ -180,11 +180,10 @@ public class DefaultActivatableService implements ActivatableService {
         Integer.parseInt(line[3]),
         Integer.parseInt(line[4])
     );
-    this.registerActivatable(gangArea);
   }
 
-  private void readGuardVault(String[] line) {
-    GuardVault guardVault = new DefaultGuardVault(
+  private GuardVault readGuardVault(String[] line) {
+    return new DefaultGuardVault(
         // Den Sector som VagtVaulten er placeret i
         PrisonSector.fromString(line[0]),
         // De sektorer som VagtVaulten kan ses fra
@@ -194,7 +193,6 @@ public class DefaultActivatableService implements ActivatableService {
         Integer.parseInt(line[4]),
         Integer.parseInt(line[5])
     );
-    this.registerActivatable(guardVault);
   }
 
   private PrisonSector[] readVisibleSectors(String data) {

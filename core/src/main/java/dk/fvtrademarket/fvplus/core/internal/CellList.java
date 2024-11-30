@@ -3,7 +3,7 @@ package dk.fvtrademarket.fvplus.core.internal;
 import dk.fvtrademarket.fvplus.core.objects.CellBlock;
 import dk.fvtrademarket.fvplus.core.util.DataFormatter;
 import dk.fvtrademarket.fvplus.core.util.Location;
-import dk.fvtrademarket.fvplus.core.util.Resources;
+import dk.fvtrademarket.fvplus.core.util.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class CellList implements Manager {
 
   @Override
   public void init() throws IOException {
-    ArrayList<String[]> csv = DataFormatter.csv(Resources.CELL_LIST_URL);
+    ArrayList<String[]> csv = DataFormatter.csv(Resource.CELL_LIST_URL);
     for (String[] strings : csv) {
       this.cellBlocks.add(new CellBlock(
           strings[0],
