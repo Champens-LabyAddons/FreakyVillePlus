@@ -1,10 +1,14 @@
 package dk.fvtrademarket.fvplus.core.message;
 
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleMessage;
 import dk.fvtrademarket.fvplus.api.misc.EventMessage;
 import dk.fvtrademarket.fvplus.api.service.message.MessageService;
+import dk.fvtrademarket.fvplus.core.util.DataFormatter;
+import dk.fvtrademarket.fvplus.core.util.Resource;
 import net.labymod.api.models.Implements;
 import net.labymod.api.util.Pair;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +18,8 @@ public class DefaultMessageService implements MessageService {
   private final Map<String, EventMessage> messages;
   private final Map<Pair<String, String>, EventMessage> advancedMessages;
   private final Map<String, EventMessage> endVarMessages;
+
+  private boolean initialized;
 
   public DefaultMessageService() {
     this.messages = new HashMap<>();
@@ -60,7 +66,36 @@ public class DefaultMessageService implements MessageService {
 
   @Override
   public void initialize() {
+    if (this.initialized) {
+      throw new IllegalStateException("Service already initialized");
+    }
 
+    ArrayList<String[]> messageData = DataFormatter.csv(Resource.MESSAGES.toString());
+    ArrayList<String[]> advancedMessageData = DataFormatter.csv(Resource.ADVANCED_MESSAGES.toString());
+    ArrayList<String[]> endVarMessageData = DataFormatter.csv(Resource.END_VAR_MESSAGES.toString());
+
+    if (!messageData.isEmpty()) {
+      messageData.removeFirst();
+      for (String[] line : messageData) {
+        this.messages.put(line[0], FreakyVilleMessage.fromString(line[1]));
+      }
+    }
+
+    if (!advancedMessageData.isEmpty()) {
+      advancedMessageData.removeFirst();
+      for (String[] line : advancedMessageData) {
+        this.advancedMessages.put(Pair.of(line[0], line[1]), FreakyVilleMessage.fromString(line[2]));
+      }
+    }
+
+    if (!endVarMessageData.isEmpty()) {
+      endVarMessageData.removeFirst();
+      for (String[] line : endVarMessageData) {
+        this.endVarMessages.put(line[0], FreakyVilleMessage.fromString(line[1]));
+      }
+    }
+
+    this.initialized = true;
   }
 
   @Override
