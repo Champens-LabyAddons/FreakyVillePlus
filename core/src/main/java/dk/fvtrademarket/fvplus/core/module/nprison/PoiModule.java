@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.module.nprison;
 
+import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import net.labymod.api.client.chat.command.Command;
 import net.labymod.api.client.chat.command.CommandService;
 import net.labymod.api.client.gui.hud.HudWidgetRegistry;
@@ -64,7 +65,7 @@ public class PoiModule extends CombinedModule {
   @Override
   protected ArrayList<Command> moduleCommandsOverview() {
     ArrayList<Command> commands = new ArrayList<>();
-    commands.add(new TimerCommand(clientInfo, poiList));
+    commands.add(new TimerCommand(clientInfo, FreakyVillePlus.getReferences().activatableService()));
     return commands;
   }
 

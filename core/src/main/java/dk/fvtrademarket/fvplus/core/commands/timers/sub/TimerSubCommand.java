@@ -1,31 +1,33 @@
 package dk.fvtrademarket.fvplus.core.commands.timers.sub;
 
+import dk.fvtrademarket.fvplus.api.activatable.Activatable;
+import dk.fvtrademarket.fvplus.api.service.activatable.ActivatableService;
+import dk.fvtrademarket.fvplus.core.util.NumberUtil;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.format.NamedTextColor;
 import net.labymod.api.util.I18n;
 import dk.fvtrademarket.fvplus.core.commands.FreakyVillePlusSubCommand;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
-import dk.fvtrademarket.fvplus.core.internal.PoiList;
-import dk.fvtrademarket.fvplus.core.poi.POI;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TimerSubCommand extends FreakyVillePlusSubCommand {
   protected final ClientInfo clientInfo;
-  protected final PoiList poiList;
+  protected final ActivatableService activatableService;
 
-  public TimerSubCommand(String prefix, String serverAndCategoryKey, String parentPrefix, ClientInfo clientInfo, PoiList poiList, String... aliases) {
+  public TimerSubCommand(String prefix, String serverAndCategoryKey, String parentPrefix,
+      ClientInfo clientInfo, ActivatableService activatableService, String... aliases) {
     super(prefix, parentPrefix, serverAndCategoryKey, aliases);
     this.clientInfo = clientInfo;
-    this.poiList = poiList;
+    this.activatableService = activatableService;
   }
 
   public abstract boolean execute(String prefix, String[] arguments);
 
-  protected boolean howToExecute(String[] arguments, List<POI> poisOnCooldown) {
+  protected boolean howToExecute(String[] arguments, List<Activatable> activatablesOnCooldown) {
     if (arguments.length < 1) {
-      defaultExecution(poisOnCooldown);
+      defaultExecution(activatablesOnCooldown);
       return true;
     }
     FreakyVilleServer specifiedServer;
@@ -35,42 +37,47 @@ public abstract class TimerSubCommand extends FreakyVillePlusSubCommand {
       displayTranslatable("invalidServer", NamedTextColor.RED);
       return true;
     }
-    serverSpecificExecution(poisOnCooldown, specifiedServer);
+    serverSpecificExecution(activatablesOnCooldown, specifiedServer);
     return true;
   }
 
-  protected void defaultExecution(List<POI> poisToShow) {
+  protected void defaultExecution(List<Activatable> activatablesToShow) {
     String header = " -= [ " + I18n.translate(getTranslationKey("header")) + " ] =-";
     displayMessage(Component.text(header, NamedTextColor.GOLD));
-    if (poisToShow.isEmpty()) {
+    if (activatablesToShow.isEmpty()) {
       displayTranslatable("noPoisToShow", NamedTextColor.GREEN);
       return;
     }
-    for (POI poi : poisToShow) {
-      displayPOI(poi);
+    for (Activatable activatable : activatablesToShow) {
+      displayActivatable(activatable);
     }
   }
 
-  protected void serverSpecificExecution(List<POI> poisToShow, FreakyVilleServer specifiedServer) {
-    List<POI> poisOnSpecifiedServerToShow = new ArrayList<>();
-    for (POI poi : poisToShow) {
-      if (poi.getAssosciatedServer() == specifiedServer) {
-        poisOnSpecifiedServerToShow.add(poi);
+  protected void serverSpecificExecution(List<Activatable> activatablesToShow, FreakyVilleServer specifiedServer) {
+    List<Activatable> activatablesOnSpecifiedServerToShow = new ArrayList<>();
+    for (Activatable activatable : activatablesToShow) {
+      if (activatable.getAssociatedServer() == specifiedServer) {
+        activatablesOnSpecifiedServerToShow.add(activatable);
       }
     }
     String headerVal = I18n.translate(getTranslationKey("header"));
     String header = String.format(" -= [ %s - %s ] =-", headerVal, specifiedServer.getTranslatedName());
     displayMessage(Component.text(header, NamedTextColor.GOLD));
-    if (poisOnSpecifiedServerToShow.isEmpty()) {
+    if (activatablesOnSpecifiedServerToShow.isEmpty()) {
       displayTranslatable("noPoisToShow", NamedTextColor.GREEN);
       return;
     }
-    for (POI poi : poisOnSpecifiedServerToShow) {
-      displayPOI(poi);
+    for (Activatable activatable : activatablesToShow) {
+      displayActivatable(activatable);
     }
   }
 
-  protected abstract void displayPOI(POI poi);
+  protected void displayActivatable(Activatable activatable) {
+    Component line = Component.text(" - ", NamedTextColor.GRAY);
+    Component separator = Component.text(": ", NamedTextColor.GRAY);
+    Component timeLeft = getTimeLeftComponent(activatable);
+    displayMessage(line.append(activatable.toComponent()).append(separator).append(timeLeft));
+  }
 
   protected FreakyVilleServer getServerFromString(String server) {
     return switch (server.toLowerCase()) {
@@ -80,5 +87,11 @@ public abstract class TimerSubCommand extends FreakyVillePlusSubCommand {
       case "friheden", "fri" -> FreakyVilleServer.THE_CITY;
       default -> throw new IllegalArgumentException("Invalid server");
     };
+  }
+
+  protected Component getTimeLeftComponent(Activatable activatable) {
+    long timeLeftMillis = this.activatableService.getCooldownTime(activatable);
+    String timeLeftString = NumberUtil.convertLongToTimeString(timeLeftMillis);
+    return Component.text(timeLeftString, NamedTextColor.WHITE);
   }
 }

@@ -1,21 +1,21 @@
 package dk.fvtrademarket.fvplus.core.commands.timers;
 
+import dk.fvtrademarket.fvplus.api.service.activatable.ActivatableService;
 import net.labymod.api.client.component.format.NamedTextColor;
 import dk.fvtrademarket.fvplus.core.commands.FreakyVillePlusCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.sub.TimerGlobalCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.sub.TimerPersonalCommand;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
-import dk.fvtrademarket.fvplus.core.internal.PoiList;
 import java.util.List;
 
 public class TimerCommand extends FreakyVillePlusCommand {
   private final ClientInfo clientInfo;
 
-  public TimerCommand(ClientInfo clientInfo, PoiList poiList) {
+  public TimerCommand(ClientInfo clientInfo, ActivatableService activatableService) {
     super("timer", "", "tim");
     this.clientInfo = clientInfo;
-    this.withSubCommand(new TimerGlobalCommand(getServerAndCategoryKey(), this.getPrefix(), clientInfo, poiList));
-    this.withSubCommand(new TimerPersonalCommand(getServerAndCategoryKey(), this.getPrefix(), clientInfo, poiList));
+    this.withSubCommand(new TimerGlobalCommand(getServerAndCategoryKey(), this.getPrefix(), clientInfo, activatableService));
+    this.withSubCommand(new TimerPersonalCommand(getServerAndCategoryKey(), this.getPrefix(), clientInfo, activatableService));
   }
 
   @Override
