@@ -15,6 +15,7 @@ import java.util.Objects;
 
 public class PrisonNavigationListener {
   private final ClientInfo clientInfo;
+  private final Logging logger = Logging.create(this.getClass());
 
   public PrisonNavigationListener(ClientInfo clientInfo) {
     this.clientInfo = clientInfo;
@@ -38,7 +39,7 @@ public class PrisonNavigationListener {
         this.clientInfo.setPrison(prisonFromHeader(plainMessage));
       } catch (IllegalArgumentException e) {
         this.clientInfo.setPrison(null);
-        Logging.getLogger().error(I18n.translate("fvplus.logging.error.findingPrison"), e);
+        this.logger.error(I18n.translate("fvplus.logging.error.findingPrison"), e);
         Messaging.displayTranslatable("fvplus.logging.error.findingPrison", NamedTextColor.RED);
       }
     }

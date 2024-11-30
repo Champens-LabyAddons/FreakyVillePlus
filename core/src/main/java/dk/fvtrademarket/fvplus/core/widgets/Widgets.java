@@ -7,6 +7,7 @@ import dk.fvtrademarket.fvplus.api.service.Service;
 import dk.fvtrademarket.fvplus.api.service.activatable.ActivatableService;
 import dk.fvtrademarket.fvplus.core.widgets.factory.TimerHudWidgetPatterns;
 import net.labymod.api.Laby;
+import net.labymod.api.util.logging.Logging;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ public class Widgets implements Service {
   private final ActivatableService activatableService;
   private final Map<Activatable, TimerHudWidget> widgets;
   private final TimerHudWidgetPatterns timerHudWidgetPatterns;
+
+  private final Logging logger = Logging.create(this.getClass());
 
   private static Widgets instance = null;
 
@@ -30,6 +33,17 @@ public class Widgets implements Service {
   }
 
   public void register(Activatable activatable) {
+    try {
+      internalRegistration(activatable);
+    } catch (Exception e) {
+      this.logger.error("Failed to register activatable", e);
+    }
+  }
+
+  private void internalRegistration(Activatable activatable) {
+    if (this.widgets.containsKey(activatable)) {
+      throw new IllegalStateException("Activatable already registered");
+    }
     TimerHudWidget widget = createWidget(activatable);
     this.widgets.put(activatable, widget);
     Laby.labyAPI().hudWidgetRegistry().register(widget);
@@ -47,7 +61,7 @@ public class Widgets implements Service {
   @Override
   public void initialize() {
     for (Activatable activatable : this.activatableService.getAllActivatables()) {
-      register(activatable);
+      internalRegistration(activatable);
     }
   }
 
