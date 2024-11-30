@@ -94,7 +94,7 @@ public class GuardVaultListener {
   }
 
   private boolean wasPersonal(String robberName) {
-    String playerName = clientInfo.getClientPlayer().get().getName();
+    String playerName = clientInfo.getClientPlayer().orElseThrow().getName();
     return playerName.equals(robberName);
   }
 
