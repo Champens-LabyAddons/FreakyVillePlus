@@ -1,13 +1,15 @@
 package dk.fvtrademarket.fvplus.core.widgets;
 
+import dk.fvtrademarket.fvplus.core.util.NumberUtil;
 import net.labymod.api.Laby;
+import net.labymod.api.client.component.Component;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextHudWidget;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextHudWidgetConfig;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextLine;
 import net.labymod.api.client.gui.hud.hudwidget.text.TextLine.State;
 import net.labymod.api.client.gui.icon.Icon;
 import net.labymod.api.util.I18n;
-import java.time.Duration;
+import org.jetbrains.annotations.NotNull;
 
 public class TimerHudWidget extends TextHudWidget<TextHudWidgetConfig> {
 
@@ -63,24 +65,14 @@ public class TimerHudWidget extends TextHudWidget<TextHudWidgetConfig> {
     }
   }
 
+  @Override
+  public @NotNull Component displayName() {
+    return Component.text(this.timerName + " " + I18n.translate("fvplus.widgets.timer." + "displayName"));
+  }
+
   private String getTimeLeft() {
-    StringBuilder timeLeft = new StringBuilder();
     long timeLeftMillis = endTime - System.currentTimeMillis();
-    if (timeLeftMillis >= 0) {
-      Duration timeLeftDuration = Duration.ofMillis(timeLeftMillis);
-      if (timeLeftDuration.toHours() > 0) {
-        timeLeft.append(timeLeftDuration.toHours())
-            .append(I18n.translate(FORMAT_KEY + "format.hours")).append(",");
-      }
-      if (timeLeftDuration.toMinutes() > 0) {
-        timeLeft.append(timeLeftDuration.toMinutes() % 60)
-            .append(I18n.translate(FORMAT_KEY + "format.minutes")).append(",");
-      }
-      timeLeft.append(timeLeftDuration.getSeconds() % 60).append(I18n.translate(FORMAT_KEY + "format.seconds"));
-    } else {
-      return "";
-    }
-    return timeLeft.toString();
+    return NumberUtil.convertLongToTimeString(timeLeftMillis);
   }
 
   public void setEndTime(long endTime) {
@@ -88,6 +80,6 @@ public class TimerHudWidget extends TextHudWidget<TextHudWidgetConfig> {
   }
 
   private boolean isFinished() {
-    return System.currentTimeMillis() >= endTime;
+    return System.currentTimeMillis() >= endTime && endTime != -1;
   }
 }

@@ -152,6 +152,7 @@
     },
     "widgets": {
       "timer": {
+        "displayName": "Timer",
         "timeLeft": {
           "finished": "Kan blive taget",
           "unavailable": "Ikke tilgængeligt",
@@ -170,33 +171,7 @@
       "bank": "Banken"
     },
     "hudWidget": {
-      "C_VV": {
-        "name": "C Vagt-Vault timer"
-      },
-      "B_VV": {
-        "name": "B Vagt-Vault timer"
-      },
-      "A_VV": {
-        "name": "A Vagt-Vault timer"
-      },
-      "BPLUS_VV": {
-        "name": "B+ Bank timer"
-      },
-      "APLUS_VV": {
-        "name": "A+ Bank timer"
-      },
-      "B_BO": {
-        "name": "B Bande-Område timer"
-      },
-      "A_BO": {
-        "name": "A Bande-Område timer"
-      },
-      "BPLUS_BO": {
-        "name": "B+ Bande-Område timer"
-      },
-      "APLUS_BO": {
-        "name": "A+ Bande-Område timer"
-      }
+
     }
   }
 }

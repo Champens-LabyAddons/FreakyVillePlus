@@ -11,26 +11,26 @@ import net.labymod.api.client.resources.ResourceLocation;
 
 public class TimerHudWidgetPatterns {
 
+  public TimerHudWidgetPatterns() {
+
+  }
+
   public TimerHudWidget createTimerHudWidget(GuardVault guardVault) {
     TextComponent component = (TextComponent) guardVault.toComponent();
-    return new TimerHudWidget("guard_vault_timer_" +
-        correctFormat(componentToString(component)),
-        componentToString((TextComponent) guardVault.toComponent()), getIcon(guardVault), 0L);
+    String id = "guard_vault_timer_" + correctFormat(componentToString(component));
+    return new TimerHudWidget(id, componentToString(component), getIcon(guardVault), -1L);
   }
 
   public TimerHudWidget createTimerHudWidget(GangArea gangArea) {
     TextComponent component = (TextComponent) gangArea.toComponent();
-    return new TimerHudWidget("gang_area_timer_" +
-        correctFormat(componentToString(component)),
-        componentToString((TextComponent) gangArea.toComponent()), getIcon(gangArea), 0L);
+    String id = "gang_area_timer_" + correctFormat(componentToString(component));
+    return new TimerHudWidget(id, componentToString(component), getIcon(gangArea), -1L);
   }
 
   public TimerHudWidget createTimerHudWidget(Activatable activatable) {
     TextComponent component = (TextComponent) activatable.toComponent();
-    return new TimerHudWidget("activatable_misc_timer_" +
-        correctFormat(componentToString(component)),
-        componentToString(component),
-        getIcon(activatable), 0L);
+    String id = "activatable_misc_timer_" + correctFormat(componentToString(component));
+    return new TimerHudWidget(id, componentToString(component), getIcon(activatable), -1L);
   }
 
   private String componentToString(TextComponent component) {
