@@ -1,4 +1,4 @@
-package dk.fvtrademarket.fvplus.core.util;
+package dk.fvtrademarket.fvplus.api.misc;
 
 import net.labymod.api.util.I18n;
 import net.labymod.api.util.math.MathHelper;

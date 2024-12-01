@@ -1,6 +1,6 @@
 package dk.fvtrademarket.fvplus.core.objects;
 
-import dk.fvtrademarket.fvplus.core.util.Location;
+import dk.fvtrademarket.fvplus.api.misc.Location;
 
 /**
  * Repræsenterer et område med celler på Prison.

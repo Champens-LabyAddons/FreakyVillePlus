@@ -1,7 +1,7 @@
 package dk.fvtrademarket.fvplus.core.event;
 
 import net.labymod.api.event.Event;
-import dk.fvtrademarket.fvplus.core.util.Location;
+import dk.fvtrademarket.fvplus.api.misc.Location;
 
 public class CreateLocationWaypointEvent implements Event {
   private final String displayName;
