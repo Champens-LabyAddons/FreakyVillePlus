@@ -55,7 +55,6 @@ public class ModuleService {
     if (module.isRegistered()) {
       return;
     }
-    module.setModuleService(this);
     module.register();
     if (!modules.contains(module)) {
       modules.add(module);

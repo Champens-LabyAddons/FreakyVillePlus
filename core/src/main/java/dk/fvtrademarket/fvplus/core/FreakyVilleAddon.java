@@ -56,6 +56,10 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     this.registerSettingCategory();
     LabyAPI labyAPI = this.labyAPI();
 
+    for (HudWidgetCategory widgetCategory : getWidgetCategories()) {
+      labyAPI.hudWidgetRegistry().categoryRegistry().register(widgetCategory);
+    }
+
     ReferenceStorage labyReferences = Laby.references();
 
     ClientInfo clientInfo = new ClientInfo(labyAPI.serverController(), labyAPI.minecraft().getClientPlayer());
@@ -64,9 +68,6 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
 
     Messaging.setExecutor(labyAPI.minecraft().chatExecutor());
 
-    for (HudWidgetCategory widgetCategory : getWidgetCategories()) {
-      labyAPI.hudWidgetRegistry().categoryRegistry().register(widgetCategory);
-    }
     for (Pair<String, Class<? extends AddonIntegration>> integration : getAddonIntegrations()) {
       labyReferences.addonIntegrationService().registerIntegration(integration.getFirst(), integration.getSecond());
     }

@@ -32,5 +32,6 @@ public abstract class AbstractModule implements Module {
     if (this.moduleService != null) {
       throw new IllegalStateException("ModuleService is already set");
     }
+    this.moduleService = moduleService;
   }
 }
