@@ -70,29 +70,20 @@ public class DefaultMessageService implements MessageService {
       throw new IllegalStateException("Service already initialized");
     }
 
-    ArrayList<String[]> messageData = DataFormatter.csv(Resource.MESSAGES.toString());
-    ArrayList<String[]> advancedMessageData = DataFormatter.csv(Resource.ADVANCED_MESSAGES.toString());
-    ArrayList<String[]> endVarMessageData = DataFormatter.csv(Resource.END_VAR_MESSAGES.toString());
+    ArrayList<String[]> messageData = DataFormatter.csv(Resource.MESSAGES.toString(), true);
+    ArrayList<String[]> advancedMessageData = DataFormatter.csv(Resource.ADVANCED_MESSAGES.toString(), true);
+    ArrayList<String[]> endVarMessageData = DataFormatter.csv(Resource.END_VAR_MESSAGES.toString(), true);
 
-    if (!messageData.isEmpty()) {
-      messageData.removeFirst();
-      for (String[] line : messageData) {
-        this.messages.put(line[0], FreakyVilleMessage.fromString(line[1]));
-      }
+    for (String[] line : messageData) {
+      this.messages.put(line[0], FreakyVilleMessage.fromString(line[1]));
     }
 
-    if (!advancedMessageData.isEmpty()) {
-      advancedMessageData.removeFirst();
-      for (String[] line : advancedMessageData) {
-        this.advancedMessages.put(Pair.of(line[0], line[1]), FreakyVilleMessage.fromString(line[2]));
-      }
+    for (String[] line : advancedMessageData) {
+      this.advancedMessages.put(Pair.of(line[0], line[1]), FreakyVilleMessage.fromString(line[2]));
     }
 
-    if (!endVarMessageData.isEmpty()) {
-      endVarMessageData.removeFirst();
-      for (String[] line : endVarMessageData) {
-        this.endVarMessages.put(line[0], FreakyVilleMessage.fromString(line[1]));
-      }
+    for (String[] line : endVarMessageData) {
+      this.endVarMessages.put(line[0], FreakyVilleMessage.fromString(line[1]));
     }
 
     this.initialized = true;

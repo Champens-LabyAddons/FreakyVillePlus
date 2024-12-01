@@ -147,8 +147,8 @@ public class DefaultActivatableService implements ActivatableService {
     if (initialized) {
       throw new IllegalStateException("Service already initialized");
     }
-    ArrayList<String[]> guardVaultData = DataFormatter.csv(Resource.GUARD_VAULTS.toString());
-    ArrayList<String[]> gangAreaData = DataFormatter.csv(Resource.GANG_AREAS.toString());
+    ArrayList<String[]> guardVaultData = DataFormatter.csv(Resource.GUARD_VAULTS.toString(), true);
+    ArrayList<String[]> gangAreaData = DataFormatter.csv(Resource.GANG_AREAS.toString(), true);
 
     if (!guardVaultData.isEmpty()) {
       guardVaultData.removeFirst();
