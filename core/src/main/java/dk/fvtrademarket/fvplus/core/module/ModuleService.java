@@ -1,5 +1,9 @@
 package dk.fvtrademarket.fvplus.core.module;
 
+import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
+import net.labymod.api.LabyAPI;
+import net.labymod.api.client.chat.command.CommandService;
+import net.labymod.api.event.EventBus;
 import net.labymod.api.util.I18n;
 import net.labymod.api.util.logging.Logging;
 import java.util.ArrayList;
@@ -17,17 +21,29 @@ import java.util.List;
  * på, så vi ikke skal lave for meget kode for at håndtere moduler. Hele systemet er bygget op
  * omkring denne klasse, og det er derfor vigtigt at den ikke modtager for mange ændringer uden at
  * det er nødvendigt.
- *
+ * <p>
+ * Efter 2.0.0 versionen af FreakyVillePlus er alle resourcer som skal være tilgængelige for moduler
+ * blevet mulige at hente gennem denne klasse. Dette er for at gøre det nemmere at skabe moduler
+ * der skal bruge forskellige resourcer, som f.eks. {@link LabyAPI}, {@link EventBus} og {@link dk.fvtrademarket.fvplus.core.connection.ClientInfo}.
  * @since 1.0.0
  */
 public class ModuleService {
 
-  private final Logging logger;
+  private final LabyAPI labyAPI;
+  private final EventBus eventBus;
+  private final CommandService commandService;
+  private final ClientInfo clientInfo;
+
+  private final Logging logger = Logging.create(this.getClass());
   private final List<Module> modules;
 
-  public ModuleService(Logging logger) {
-    this.logger = logger;
+  public ModuleService(LabyAPI labyAPI, EventBus eventBus, CommandService commandService, ClientInfo clientInfo) {
     this.modules = new ArrayList<>();
+
+    this.labyAPI = labyAPI;
+    this.eventBus = eventBus;
+    this.commandService = commandService;
+    this.clientInfo = clientInfo;
   }
 
   /**
@@ -39,11 +55,12 @@ public class ModuleService {
     if (module.isRegistered()) {
       return;
     }
+    module.setModuleService(this);
     module.register();
     if (!modules.contains(module)) {
       modules.add(module);
     }
-    String registrationMessage = I18n.translate("fvplus.logging.info.registeredModule") +  " | " + module.getClass().getTypeName();
+    String registrationMessage = I18n.translate("fvplus.logging.info.registeredModule") +  " | " + module;
     if (module instanceof BigModule) {
       registrationMessage += (" " + Arrays.toString(
           ((BigModule) module).getInternalModules().toArray(new Module[0])));
@@ -93,5 +110,21 @@ public class ModuleService {
 
   public List<Module> getModules() {
     return List.copyOf(modules);
+  }
+
+  public LabyAPI getLabyAPI() {
+    return labyAPI;
+  }
+
+  public EventBus getEventBus() {
+    return eventBus;
+  }
+
+  public CommandService getCommandService() {
+    return commandService;
+  }
+
+  public ClientInfo getClientInfo() {
+    return clientInfo;
   }
 }

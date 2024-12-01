@@ -1,7 +1,6 @@
 package dk.fvtrademarket.fvplus.core.module;
 
 import net.labymod.api.client.chat.command.Command;
-import net.labymod.api.client.chat.command.CommandService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,32 +9,28 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public abstract class CommandModule implements Module {
+public abstract class CommandModule extends AbstractModule {
 
-  private final CommandService commandService;
   protected List<Command> moduleCommands;
-  private boolean registered;
 
-  public CommandModule(CommandService commandService) {
-    this.commandService = commandService;
-    this.moduleCommands = this.moduleCommandsOverview();
-    this.registered = false;
+  public CommandModule(ModuleService moduleService) {
+    super(moduleService);
   }
 
   @Override
   public void register() {
     for (Command command : this.moduleCommands) {
-      this.commandService.register(command);
+      this.moduleService.getCommandService().register(command);
     }
-    this.registered = true;
+    super.register();
   }
 
   @Override
   public void unregister() {
     for (Command command : this.moduleCommands) {
-      this.commandService.unregister(command);
+      this.moduleService.getCommandService().unregister(command);
     }
-    this.registered = false;
+    super.unregister();
   }
 
   /**
@@ -47,8 +42,4 @@ public abstract class CommandModule implements Module {
 
   @Override
   public abstract boolean shouldRegisterAutomatically();
-
-  public boolean isRegistered() {
-    return this.registered;
-  }
 }

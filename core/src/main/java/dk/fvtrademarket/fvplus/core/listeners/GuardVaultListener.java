@@ -1,7 +1,9 @@
 package dk.fvtrademarket.fvplus.core.listeners;
 
 import dk.fvtrademarket.fvplus.api.activatable.guardvault.GuardVault;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
+import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultFinishEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
@@ -34,27 +36,27 @@ public class GuardVaultListener {
 
   @Subscribe
   public void onGuardVaultTryEvent(GuardVaultTryEvent event) {
-    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getSector());
-    if (guardVault.isEmpty()) {
+    GuardVault guardVault = parseGuardVault(event);
+    if (guardVault == null) {
       return;
     }
-    this.activatableService.putActivatableInLimbo(guardVault.get());
+    this.activatableService.putActivatableInLimbo(guardVault);
     Task robbingTask = Task.builder(
             () -> {
-              if (activatableService.getLimboingActivatables().contains(guardVault.get())) {
-                activatableService.removeActivatableFromLimbo(guardVault.get());
+              if (activatableService.getLimboingActivatables().contains(guardVault)) {
+                activatableService.removeActivatableFromLimbo(guardVault);
                 Laby.fireEvent(new GuardVaultFinishEvent(event.getSector(), event.getRobber(), false));
               }
             }
-        ).delay(guardVault.get().getExpectedActivationTime() + 1, TimeUnit.SECONDS)
+        ).delay(guardVault.getExpectedActivationTime() + 1, TimeUnit.SECONDS)
         .build();
     robbingTask.execute();
   }
 
   @Subscribe
   public void onGuardVaultUpdateEvent(GuardVaultUpdateEvent event) {
-    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getPrisonSector());
-    if (guardVault.isEmpty()) {
+    GuardVault guardVault = parseGuardVault(event);
+    if (guardVault == null) {
       return;
     }
     String message = event.getTimeLeftStr();
@@ -65,23 +67,42 @@ public class GuardVaultListener {
     LocalDateTime endTime = LocalDateTime.now().plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
     ZonedDateTime zonedDateTime = endTime.atZone(ZoneId.systemDefault());
 
-    boolean personal = this.activatableService.isOnPersonalCooldown(guardVault.get());
+    boolean personal = this.activatableService.isOnPersonalCooldown(guardVault);
 
-    this.activatableService.putActivatableOnCooldown(guardVault.get(), zonedDateTime.toInstant().toEpochMilli(), personal);
+    this.activatableService.putActivatableOnCooldown(guardVault, zonedDateTime.toInstant().toEpochMilli(), personal);
   }
 
   @Subscribe
   public void onGuardVaultFinishEvent(GuardVaultFinishEvent event) {
-    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getSector());
-    if (guardVault.isEmpty()) {
+    GuardVault guardVault = parseGuardVault(event);
+    if (guardVault == null) {
       return;
     }
     if (!event.wasSuccessFull()) {
-      activatableService.putActivatableOnFailureCooldown(guardVault.get());
+      activatableService.putActivatableOnFailureCooldown(guardVault);
     } else {
-      activatableService.putActivatableOnCooldown(guardVault.get(), wasPersonal(event.getRobber()));
+      activatableService.putActivatableOnCooldown(guardVault, wasPersonal(event.getRobber()));
     }
-    activatableService.removeActivatableFromLimbo(guardVault.get());
+    activatableService.removeActivatableFromLimbo(guardVault);
+  }
+
+  private GuardVault parseGuardVault(GuardVaultEvent event) {
+    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getSector());
+    if (guardVault.isEmpty()) {
+      return null;
+    }
+    if (this.clientInfo.getCurrentServer() != guardVault.get().getAssociatedServer()) {
+      return null;
+    }
+    if (this.clientInfo.getCurrentServer() == FreakyVilleServer.PRISON && clientInfo.getPrisonSector().isEmpty()) {
+      return null;
+    }
+    for (PrisonSector prisonSector : guardVault.get().getVisiblePrisonSectors()) {
+      if (prisonSector == clientInfo.getPrisonSector().get()) {
+        return guardVault.get();
+      }
+    }
+    return null;
   }
 
   private Optional<GuardVault> getGuardVaultBySector(PrisonSector sector) {

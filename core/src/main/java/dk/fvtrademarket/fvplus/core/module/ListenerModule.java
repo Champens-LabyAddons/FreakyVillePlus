@@ -1,6 +1,5 @@
 package dk.fvtrademarket.fvplus.core.module;
 
-import net.labymod.api.event.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,31 +8,28 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public abstract class ListenerModule implements Module {
+public abstract class ListenerModule extends AbstractModule {
 
-  private final EventBus eventBus;
   protected List<Object> moduleListeners;
-  private boolean registered;
 
-  public ListenerModule(EventBus eventBus) {
-    this.eventBus = eventBus;
-    this.registered = false;
+  public ListenerModule(ModuleService moduleService) {
+    super(moduleService);
   }
 
   @Override
   public void register() {
     for (Object listener : this.moduleListeners) {
-      this.eventBus.registerListener(listener);
+      this.moduleService.getEventBus().registerListener(listener);
     }
-    this.registered = true;
+    super.register();
   }
 
   @Override
   public void unregister() {
     for (Object listener : this.moduleListeners) {
-      this.eventBus.unregisterListener(listener);
+      this.moduleService.getEventBus().unregisterListener(listener);
     }
-    this.registered = false;
+    super.unregister();
   }
 
   /**
@@ -45,8 +41,4 @@ public abstract class ListenerModule implements Module {
 
   @Override
   public abstract boolean shouldRegisterAutomatically();
-
-  public boolean isRegistered() {
-    return this.registered;
-  }
 }

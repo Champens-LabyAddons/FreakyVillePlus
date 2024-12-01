@@ -38,4 +38,12 @@ public interface Module {
    * @return om modulet er registreret.
    */
   boolean isRegistered();
+
+  /**
+   * Henviser den moduleservice som modulet skal trække informationer fra.
+   *
+   * @param moduleService moduleservicen som modulet skal trække informationer fra.
+   * @since 2.0.0
+   */
+  void setModuleService(ModuleService moduleService);
 }

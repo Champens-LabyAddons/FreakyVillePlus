@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.connection;
 
+import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import net.labymod.api.client.entity.player.ClientPlayer;
 import net.labymod.api.client.network.server.ServerController;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
@@ -12,7 +13,7 @@ public class ClientInfo {
   private ClientPlayer clientPlayer;
   private FreakyVilleServer currentServer;
   private FreakyVilleServer lastServer;
-  private Prison prison;
+  private PrisonSector prisonSector;
   private boolean hasUpdatedToCurrentServer;
 
   public ClientInfo(ServerController serverController, ClientPlayer clientPlayer) {
@@ -20,7 +21,7 @@ public class ClientInfo {
     this.clientPlayer = clientPlayer;
     this.currentServer = FreakyVilleServer.NONE;
     this.lastServer = FreakyVilleServer.NONE;
-    this.prison = null;
+    this.prisonSector = null;
     this.hasUpdatedToCurrentServer = false;
   }
 
@@ -54,12 +55,12 @@ public class ClientInfo {
     this.lastServer = lastServer;
   }
 
-  public Optional<Prison> getPrison() {
-    return Optional.ofNullable(prison);
+  public Optional<PrisonSector> getPrisonSector() {
+    return Optional.ofNullable(prisonSector);
   }
 
-  public void setPrison(Prison prison) {
-    this.prison = prison;
+  public void setPrisonSector(PrisonSector prisonSector) {
+    this.prisonSector = prisonSector;
   }
 
   public boolean isUpdatedToCurrentServer() {

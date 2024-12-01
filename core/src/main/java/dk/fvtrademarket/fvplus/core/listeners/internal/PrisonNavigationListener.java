@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.listeners.internal;
 
+import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import net.labymod.api.client.component.format.NamedTextColor;
 import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
@@ -10,7 +11,6 @@ import net.labymod.api.util.logging.Logging;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
-import dk.fvtrademarket.fvplus.core.util.Prison;
 import java.util.Objects;
 
 public class PrisonNavigationListener {
@@ -29,31 +29,31 @@ public class PrisonNavigationListener {
     if (this.clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) {
       return;
     }
-    if (this.clientInfo.getPrison().isPresent()) {
+    if (this.clientInfo.getPrisonSector().isPresent()) {
       return;
     }
     String plainMessage = event.chatMessage().getPlainText().trim();
     if (plainMessage.startsWith(Objects.requireNonNull(headerDecoration().getFirst())) &&
         plainMessage.endsWith(Objects.requireNonNull(headerDecoration().getSecond()))) {
       try {
-        this.clientInfo.setPrison(prisonFromHeader(plainMessage));
+        this.clientInfo.setPrisonSector(prisonFromHeader(plainMessage));
       } catch (IllegalArgumentException e) {
-        this.clientInfo.setPrison(null);
+        this.clientInfo.setPrisonSector(null);
         this.logger.error(I18n.translate("fvplus.logging.error.findingPrison"), e);
         Messaging.displayTranslatable("fvplus.logging.error.findingPrison", NamedTextColor.RED);
       }
     }
   }
 
-  private Prison prisonFromHeader(String header) {
+  private PrisonSector prisonFromHeader(String header) {
     String restProduct = header
         .replace(Objects.requireNonNull(headerDecoration().getFirst()), "")
         .replace(Objects.requireNonNull(headerDecoration().getSecond()), "")
         .trim();
       return switch (restProduct.toUpperCase()) {
-      case "C" -> Prison.C;
-      case "B" -> Prison.B;
-      case "A" -> Prison.A;
+      case "C" -> PrisonSector.C;
+      case "B" -> PrisonSector.B;
+      case "A" -> PrisonSector.A;
       default -> throw new IllegalArgumentException(I18n.translate("fvplus.logging.error.unexpectedValue", restProduct.toUpperCase()));
     };
   }
