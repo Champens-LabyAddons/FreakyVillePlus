@@ -40,6 +40,12 @@
         }
       }
     },
+    "hudWidgetCategory": {
+      "fvplus_timer_category": {
+        "name": "Freakyville+ Timers",
+        "description": "Alle timerwidgets fra FreakyVille+"
+      }
+    },
     "server": {
       "name": "FreakyVille",
       "prison": {
@@ -146,47 +152,26 @@
     },
     "widgets": {
       "timer": {
+        "displayName": "Timer",
         "timeLeft": {
-          "isTakeable": "Kan blive overtaget",
+          "finished": "Kan blive taget",
           "unavailable": "Ikke tilgængeligt",
-          "cantKnowForSure": "Opdateres ikke",
+          "cantKnowForSure": "Opdateres ikke på nuværende tidspunkt",
           "format": {
-            "all": "%s, %s",
-            "hours": "%st",
-            "minutes": "%sm",
-            "seconds": "%ss"
+            "hours": "t",
+            "minutes": "m",
+            "seconds": "s"
           }
         }
       }
     },
+    "activatable": {
+      "gangArea": "Bande-Område",
+      "guardVault": "Vagt-Vault",
+      "bank": "Banken"
+    },
     "hudWidget": {
-      "C_VV": {
-        "name": "C Vagt-Vault timer"
-      },
-      "B_VV": {
-        "name": "B Vagt-Vault timer"
-      },
-      "A_VV": {
-        "name": "A Vagt-Vault timer"
-      },
-      "BPLUS_VV": {
-        "name": "B+ Bank timer"
-      },
-      "APLUS_VV": {
-        "name": "A+ Bank timer"
-      },
-      "B_BO": {
-        "name": "B Bande-Område timer"
-      },
-      "A_BO": {
-        "name": "A Bande-Område timer"
-      },
-      "BPLUS_BO": {
-        "name": "B+ Bande-Område timer"
-      },
-      "APLUS_BO": {
-        "name": "A+ Bande-Område timer"
-      }
+
     }
   }
 }

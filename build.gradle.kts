@@ -5,11 +5,11 @@ plugins {
 
 val versions = providers.gradleProperty("net.labymod.minecraft-versions").get().split(";")
 
-group = "org.champenslabyaddons.fvplus"
+group = "dk.fvtrademarket"
 version = providers.environmentVariable("VERSION").getOrElse("0.0.1")
 
 labyMod {
-    defaultPackageName = "org.champenslabyaddons.fvplus" //change this to your main package name (used by all modules)
+    defaultPackageName = "dk.fvtrademarket.fvplus" //change this to your main package name (used by all modules)
 
     minecraft {
         registerVersion(versions.toTypedArray()) {
