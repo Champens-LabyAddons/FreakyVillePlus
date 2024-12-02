@@ -2,8 +2,12 @@ package dk.fvtrademarket.fvplus.core;
 
 import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import dk.fvtrademarket.fvplus.core.activatable.DefaultActivatableService;
+import dk.fvtrademarket.fvplus.core.commands.LivingAreaWaypointCommand;
+import dk.fvtrademarket.fvplus.core.listeners.AdvancedChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.GuardVaultListener;
+import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
+import dk.fvtrademarket.fvplus.core.util.WidgetUpdater;
 import net.labymod.api.Laby;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.addon.LabyAddon;
@@ -21,7 +25,6 @@ import dk.fvtrademarket.fvplus.core.listeners.internal.ServerNavigationListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.ModuleListener;
 import dk.fvtrademarket.fvplus.core.module.ModuleService;
 import dk.fvtrademarket.fvplus.core.module.general.RPCModule;
-import dk.fvtrademarket.fvplus.core.module.nprison.NPrisonModule;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 import net.labymod.api.util.Pair;
 
@@ -40,14 +43,17 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     };
   }
 
-  private Object[] getStandardListeners(ClientInfo clientInfo) {
+  private Object[] getStandardListeners(ClientInfo clientInfo, LabyAPI labyAPI, ReferenceStorage referenceStorage) {
     return new Object[] {
         new ScoreBoardListener(clientInfo),
         new ServerNavigationListener(clientInfo),
         new PrisonNavigationListener(clientInfo),
         new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService()),
-        new GuardVaultListener(clientInfo,
+        new GuardVaultListener(clientInfo, labyAPI,
             (DefaultActivatableService) FreakyVillePlus.getReferences().activatableService()),
+        new LivingAreaListener(clientInfo, referenceStorage.chatExecutor(),
+            FreakyVillePlus.getReferences().housingService()),
+        new AdvancedChatListener(clientInfo, referenceStorage.chatExecutor())
     };
   }
 
@@ -59,10 +65,11 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     for (HudWidgetCategory widgetCategory : getWidgetCategories()) {
       labyAPI.hudWidgetRegistry().categoryRegistry().register(widgetCategory);
     }
+    registerListener(new WidgetUpdater(labyAPI().hudWidgetRegistry()));
 
     ReferenceStorage labyReferences = Laby.references();
 
-    ClientInfo clientInfo = new ClientInfo(labyAPI.serverController(), labyAPI.minecraft().getClientPlayer());
+    ClientInfo clientInfo = new ClientInfo(labyAPI.serverController());
 
     FreakyVillePlus.init(this.referenceStorageAccessor());
 
@@ -71,17 +78,18 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     for (Pair<String, Class<? extends AddonIntegration>> integration : getAddonIntegrations()) {
       labyReferences.addonIntegrationService().registerIntegration(integration.getFirst(), integration.getSecond());
     }
-    for (Object listener : getStandardListeners(clientInfo)) {
+    for (Object listener : getStandardListeners(clientInfo, labyAPI, labyReferences)) {
       labyAPI.eventBus().registerListener(listener);
     }
 
     this.registerCommand(new FreakyvillePlusHelpCommand());
+    this.registerCommand(new LivingAreaWaypointCommand(clientInfo, FreakyVillePlus.getReferences().housingService()));
 
     ModuleService moduleService = new ModuleService(labyAPI, labyAPI.eventBus(),
         labyAPI.commandService(), clientInfo);
     moduleService.registerModules(
-        new RPCModule(moduleService, configuration().getDiscordSubSettings()),
-        new NPrisonModule(moduleService, configuration().getPrisonSubSettings())
+        new RPCModule(moduleService, configuration().getDiscordSubSettings())//,
+        //new NPrisonModule(moduleService, configuration().getPrisonSubSettings())
     );
 
     this.registerListener(new ModuleListener(moduleService));

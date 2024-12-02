@@ -3,7 +3,6 @@ package dk.fvtrademarket.fvplus.core.configuration;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.configuration.loader.Config;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
-import dk.fvtrademarket.fvplus.core.module.nprison.CellModule;
 import dk.fvtrademarket.fvplus.core.module.nprison.NPrisonModule;
 import dk.fvtrademarket.fvplus.core.util.Setting;
 
@@ -17,7 +16,6 @@ public class PrisonSubConfiguration extends Config {
 
   public PrisonSubConfiguration() {
     Setting.addModuleListener(this.enabled, NPrisonModule.class);
-    Setting.addModuleListener(this.enabledCellModule, CellModule.class);
   }
 
   public ConfigProperty<Boolean> enabled() {

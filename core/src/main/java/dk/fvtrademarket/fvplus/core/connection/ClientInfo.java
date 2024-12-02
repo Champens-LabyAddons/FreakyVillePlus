@@ -10,15 +10,13 @@ import java.util.Optional;
 
 public class ClientInfo {
   private ServerController serverController;
-  private ClientPlayer clientPlayer;
   private FreakyVilleServer currentServer;
   private FreakyVilleServer lastServer;
   private PrisonSector prisonSector;
   private boolean hasUpdatedToCurrentServer;
 
-  public ClientInfo(ServerController serverController, ClientPlayer clientPlayer) {
+  public ClientInfo(ServerController serverController) {
     this.serverController = serverController;
-    this.clientPlayer = clientPlayer;
     this.currentServer = FreakyVilleServer.NONE;
     this.lastServer = FreakyVilleServer.NONE;
     this.prisonSector = null;
@@ -29,14 +27,6 @@ public class ClientInfo {
     if (!this.serverController.isConnected()) return false;
     return isValidServerAddress(
         Objects.requireNonNull(this.serverController.getCurrentServerData()).address().getHost());
-  }
-
-  public Optional<ClientPlayer> getClientPlayer() {
-    return Optional.ofNullable(clientPlayer);
-  }
-
-  public void setClientPlayer(ClientPlayer clientPlayer) {
-    this.clientPlayer = clientPlayer;
   }
 
   public FreakyVilleServer getCurrentServer() {

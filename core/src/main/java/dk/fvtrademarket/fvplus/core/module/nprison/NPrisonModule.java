@@ -19,7 +19,6 @@ public class NPrisonModule extends BigModule {
   @Override
   protected ArrayList<Module> internalModulesOverview() {
     ArrayList<Module> modules = new ArrayList<>();
-    modules.add(new CellModule(this.moduleService, this.prisonSubConfiguration));
     return modules;
   }
 

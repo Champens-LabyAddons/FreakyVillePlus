@@ -3,9 +3,13 @@ package dk.fvtrademarket.fvplus.core.listeners;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultFinishEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
+import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
+import dk.fvtrademarket.fvplus.api.event.messaging.RecognizedMessageReceivedEvent;
+import dk.fvtrademarket.fvplus.api.misc.EventMessage;
 import dk.fvtrademarket.fvplus.api.service.message.MessageService;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import net.labymod.api.Laby;
+import net.labymod.api.client.chat.ChatMessage;
 import net.labymod.api.event.Event;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.chat.ChatReceiveEvent;
@@ -27,21 +31,28 @@ public class ChatListener {
       return;
     }
     String message = event.chatMessage().getPlainText().trim();
+    EventMessage foundEventMessage;
     if (this.messageService.getMessages().containsKey(message)) {
-      fireEvent(this.messageService.getMessages().get(message).getEvent());
+      foundEventMessage = this.messageService.getMessages().get(message);
+      event.setCancelled(foundEventMessage.isMessageCancelled());
+      fireEvent(foundEventMessage.getEvent(), event.chatMessage());
       return;
     }
     for (Pair<String, String> pair : this.messageService.getAdvancedMessages().keySet()) {
       String stringedPair = pairToString(pair);
       String variable = getVariableFromString(pair, message);
       if (message.replace(variable, "").equals(stringedPair)) {
-        fireEvent(this.messageService.getAdvancedMessages().get(pair).getEvent(), variable);
+        foundEventMessage = this.messageService.getAdvancedMessages().get(pair);
+        event.setCancelled(foundEventMessage.isMessageCancelled());
+        fireEvent(foundEventMessage.getEvent(), variable);
         return;
       }
     }
     for (String endVarMessage : this.messageService.getEndVarMessages().keySet()) {
       if (message.startsWith(endVarMessage)) {
-        fireEvent(this.messageService.getEndVarMessages().get(endVarMessage).getEvent(), message.replace(endVarMessage, ""));
+        foundEventMessage = this.messageService.getEndVarMessages().get(endVarMessage);
+        event.setCancelled(foundEventMessage.isMessageCancelled());
+        fireEvent(foundEventMessage.getEvent(), message.replace(endVarMessage, ""));
         return;
       }
     }
@@ -51,14 +62,15 @@ public class ChatListener {
     Event e = switch (event) {
       case GuardVaultTryEvent ignored -> {
         if (args.length > 0 && args[0] instanceof String player) {
-          yield new GuardVaultTryEvent(((GuardVaultTryEvent) event).getSector(), player);
+          yield new GuardVaultTryEvent(((GuardVaultTryEvent) event).getSector(), player.trim());
         } else {
           yield null;
         }
       }
       case GuardVaultFinishEvent ignored -> {
         if (args.length > 0 && args[0] instanceof String player) {
-          yield new GuardVaultFinishEvent(((GuardVaultFinishEvent) event).getSector(), player, ((GuardVaultFinishEvent) event).wasSuccessFull());
+          yield new GuardVaultFinishEvent(((GuardVaultFinishEvent) event).getSector(),
+              player.trim(), ((GuardVaultFinishEvent) event).wasSuccessFull());
         } else {
           yield null;
         }
@@ -66,6 +78,20 @@ public class ChatListener {
       case GuardVaultUpdateEvent ignored -> {
         if (args.length > 0 && args[0] instanceof String time) {
           yield new GuardVaultUpdateEvent(((GuardVaultUpdateEvent) event).getPrisonSector(), time);
+        } else {
+          yield null;
+        }
+      }
+      case LivingAreaLookupEvent ignored -> {
+        if (args.length > 0 && args[0] instanceof String areaIdentifier) {
+          yield new LivingAreaLookupEvent(areaIdentifier.trim());
+        } else {
+          yield null;
+        }
+      }
+      case RecognizedMessageReceivedEvent ignored -> {
+        if (args.length > 0 && args[0] instanceof ChatMessage message) {
+          yield new RecognizedMessageReceivedEvent(message);
         } else {
           yield null;
         }

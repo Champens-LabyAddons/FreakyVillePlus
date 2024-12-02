@@ -150,18 +150,13 @@ public class DefaultActivatableService implements ActivatableService {
     ArrayList<String[]> guardVaultData = DataFormatter.csv(Resource.GUARD_VAULTS.toString(), true);
     ArrayList<String[]> gangAreaData = DataFormatter.csv(Resource.GANG_AREAS.toString(), true);
 
-    if (!guardVaultData.isEmpty()) {
-      guardVaultData.removeFirst();
-      for (String[] line : guardVaultData) {
-        this.activatables.add(readGuardVault(line));
-      }
+    for (String[] line : guardVaultData) {
+      this.activatables.add(readGuardVault(line));
     }
-    if (!gangAreaData.isEmpty()) {
-      gangAreaData.removeFirst();
-      for (String[] line : gangAreaData) {
-        this.activatables.add(readGangArea(line));
-      }
+    for (String[] line : gangAreaData) {
+      this.activatables.add(readGangArea(line));
     }
+
     widgets.initialize();
     initialized = true;
   }

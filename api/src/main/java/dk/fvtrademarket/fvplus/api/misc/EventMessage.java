@@ -4,4 +4,5 @@ import net.labymod.api.event.Event;
 
 public interface EventMessage {
   Event getEvent();
+  boolean isMessageCancelled();
 }

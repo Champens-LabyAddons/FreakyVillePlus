@@ -26,7 +26,6 @@ public class ServerNavigationListener {
       this.clientInfo.setHasUpdatedToCurrentServer(false);
       return;
     }
-    this.clientInfo.setClientPlayer(Laby.labyAPI().minecraft().getClientPlayer());
     this.clientInfo.setCurrentServer(FreakyVilleServer.HUB);
     this.clientInfo.setLastServer(this.clientInfo.getLastServer());
     this.clientInfo.setPrisonSector(null);

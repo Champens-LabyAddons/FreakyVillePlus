@@ -1,5 +1,7 @@
 package dk.fvtrademarket.fvplus.core.commands;
 
+import dk.fvtrademarket.fvplus.api.housing.LivingArea;
+import dk.fvtrademarket.fvplus.api.service.housing.HousingService;
 import net.labymod.api.Laby;
 import net.labymod.api.client.chat.command.Command;
 import net.labymod.api.client.component.Component;
@@ -7,23 +9,21 @@ import net.labymod.api.client.component.format.NamedTextColor;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.event.CreateLocationWaypointEvent;
 import dk.fvtrademarket.fvplus.core.integrations.WaypointsIntegration;
-import dk.fvtrademarket.fvplus.core.internal.CellList;
-import dk.fvtrademarket.fvplus.core.objects.CellBlock;
-import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
+import java.util.Optional;
 
-public class CellWaypointCommand extends Command {
+public class LivingAreaWaypointCommand extends Command {
   private final ClientInfo clientInfo;
-  private final CellList cellList;
+  private final HousingService housingService;
 
-  public CellWaypointCommand(ClientInfo clientInfo, CellList cellList) {
+  public LivingAreaWaypointCommand(ClientInfo clientInfo, HousingService housingService) {
     super("ce");
     this.clientInfo = clientInfo;
-    this.cellList = cellList;
+    this.housingService = housingService;
   }
 
   @Override
   public boolean execute(String prefix, String[] arguments) {
-    if (clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) return false;
+    if (!this.clientInfo.isOnFreakyVille()) return false;
     if (arguments.length != 2) return false;
     if (!arguments[0].equalsIgnoreCase("waypoint")
         && !arguments[0].equalsIgnoreCase("w")) return false;
@@ -32,18 +32,14 @@ public class CellWaypointCommand extends Command {
           NamedTextColor.RED));
       return true;
     }
-    if (!cellList.isCellListed(arguments[1])) {
-      displayMessage(Component.translatable("fvplus.server.prison.cell.commands.waypoint.notListed",
-          NamedTextColor.RED));
-      return true;
-    }
-    if (cellList.getCorrespondingCellBlock(arguments[1]).isEmpty()) {
+    Optional<LivingArea> livingArea =
+        this.housingService.getLivingArea(this.clientInfo.getCurrentServer(), arguments[1]);
+    if (livingArea.isEmpty()) {
       displayMessage(Component.translatable("fvplus.server.prison.cell.commands.waypoint.emptyResult",
           NamedTextColor.RED));
       return true;
     }
-    CellBlock cellBlock = cellList.getCorrespondingCellBlock(arguments[1]).get();
-    Laby.fireEvent(new CreateLocationWaypointEvent(cellBlock.getLocationDescription(), cellBlock.getMinecraftLocation()));
+    Laby.fireEvent(new CreateLocationWaypointEvent(livingArea.get().getDescription(), livingArea.get().getLocation()));
     displayMessage(Component.translatable("fvplus.server.prison.cell.commands.waypoint.success",
       NamedTextColor.GREEN));
     return true;

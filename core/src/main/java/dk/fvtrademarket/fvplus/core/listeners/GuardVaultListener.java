@@ -10,8 +10,10 @@ import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
 import dk.fvtrademarket.fvplus.core.activatable.DefaultActivatableService;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import net.labymod.api.Laby;
+import net.labymod.api.LabyAPI;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.util.concurrent.task.Task;
+import net.labymod.api.util.logging.Logging;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -23,11 +25,13 @@ import java.util.regex.Pattern;
 public class GuardVaultListener {
 
   private final ClientInfo clientInfo;
+  private final LabyAPI labyAPI;
   private final DefaultActivatableService activatableService;
   private final Pattern hoursPattern, minutesPattern, secondsPattern;
 
-  public GuardVaultListener(ClientInfo clientInfo, DefaultActivatableService activatableService) {
+  public GuardVaultListener(ClientInfo clientInfo, LabyAPI labyAPI, DefaultActivatableService activatableService) {
     this.clientInfo = clientInfo;
+    this.labyAPI = labyAPI;
     this.activatableService = activatableService;
     this.hoursPattern = Pattern.compile("(\\d+) time");
     this.minutesPattern = Pattern.compile("(\\d+) minut");
@@ -38,6 +42,10 @@ public class GuardVaultListener {
   public void onGuardVaultTryEvent(GuardVaultTryEvent event) {
     GuardVault guardVault = parseGuardVault(event);
     if (guardVault == null) {
+      return;
+    }
+    if (guardVault.getPrisonSector() == PrisonSector.C || guardVault.getPrisonSector() == PrisonSector.B) {
+      Laby.fireEvent(new GuardVaultFinishEvent(event.getSector(), event.getRobber(), true));
       return;
     }
     this.activatableService.putActivatableInLimbo(guardVault);
@@ -115,7 +123,10 @@ public class GuardVaultListener {
   }
 
   private boolean wasPersonal(String robberName) {
-    String playerName = clientInfo.getClientPlayer().orElseThrow().getName();
+    Logging.getLogger().info("Checking if the robber was the player");
+    Logging.getLogger().info("Robber name: " + robberName);
+    Logging.getLogger().info("Client player: " + this.labyAPI.getName());
+    String playerName = this.labyAPI.getName();
     return playerName.equals(robberName);
   }
 
