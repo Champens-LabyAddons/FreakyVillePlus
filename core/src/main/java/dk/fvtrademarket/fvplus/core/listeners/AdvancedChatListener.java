@@ -23,7 +23,8 @@ public class AdvancedChatListener {
       return;
     }
     this.chatExecutor.displayClientMessage(event.getMessage()
-        .component().append(Component.text("✉", NamedTextColor.GOLD)));
+        .component().append(Component.space()
+            .append(Component.text("✉", NamedTextColor.GOLD))));
     this.chatExecutor.displayClientMessage(responseComponent(event.getMessage().getPlainText().trim()));
   }
 
