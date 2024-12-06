@@ -11,6 +11,7 @@ import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import net.labymod.api.Laby;
 import net.labymod.api.client.chat.ChatMessage;
 import net.labymod.api.event.Event;
+import net.labymod.api.event.Priority;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.event.client.chat.ChatReceiveEvent;
 import net.labymod.api.util.Pair;
@@ -25,7 +26,7 @@ public class ChatListener {
     this.messageService = messageService;
   }
 
-  @Subscribe
+  @Subscribe(Priority.FIRST)
   public void onChatMessageReceive(ChatReceiveEvent event) {
     if (!this.clientInfo.isOnFreakyVille()) {
       return;
