@@ -12,8 +12,6 @@ public class Resource {
     this.location = location;
   }
 
-  public static final String CELL_LIST_URL = "https://raw.githubusercontent.com/WildTooth/FreakyVille-General-Data/main/entities/cellblock.csv";
-
   public static final Resource GUARD_VAULTS = new Resource("activatable/guardvaults.csv", DATA_HUB);
   public static final Resource GANG_AREAS = new Resource("activatable/gangarea.csv", DATA_HUB);
 

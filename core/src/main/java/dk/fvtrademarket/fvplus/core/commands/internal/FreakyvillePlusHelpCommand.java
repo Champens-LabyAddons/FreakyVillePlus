@@ -25,7 +25,6 @@ public class FreakyvillePlusHelpCommand extends FreakyVillePlusCommand {
     Component headerComponent = Component.text(header).color(NamedTextColor.GOLD);
     displayMessage(headerComponent);
     displayTranslatable("commands.waypoint.description", NamedTextColor.GRAY, " - /ce waypoint");
-    displayTranslatable("commands.checkRoll.description", NamedTextColor.GRAY, " - /checkroll");
     displayTranslatable("commands.timer.description", NamedTextColor.GRAY, " - /timer");
     displayTranslatable("commands.freakyHelp.description", NamedTextColor.GRAY, " - /freakyhelp");
   }
