@@ -1,77 +1,33 @@
 package dk.fvtrademarket.fvplus.api.service.message;
 
-import dk.fvtrademarket.fvplus.api.misc.EventMessage;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleMessage;
 import dk.fvtrademarket.fvplus.api.service.Service;
 import net.labymod.api.reference.annotation.Referenceable;
-import net.labymod.api.util.Pair;
+import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Referenceable
 public interface MessageService extends Service {
 
   /**
-   * Tilføjer en besked
-   * <p>
-   * Simple beskeder uden egentlige variable informationer
-   *
-   * @param messageStr  Beskedens tekst
-   * @param eventMessage Beskedtypen
+   * Tilføjer et pattern ved hjælp af en string.
+   * @param message en string som skal konverteres til et pattern.
+   * @param event en event message som skal tilknyttes til et pattern.
    */
-  void addMessage(String messageStr, EventMessage eventMessage);
+  void addMessagePattern(String message, FreakyVilleMessage event);
 
   /**
-   * Tilføjer en besked med advancerede parametre
-   * <p>
-   * En avanceret besked ses som en besked i 2 dele, hvor den første del er beskedens begyndelse og den anden del er beskedens slutning.
-   * Ideen er at man på en nem måde kan få variable informationer ud af en besked, fordi vi kender den generelle beskedstruktur.
-   * <p>
-   * Eksempel:
-   * <br> Første del: "Du har nu"
-   * <br> Anden del: "point"
-   * <br> Besked: "Du har nu 10 point"
-   * <br>
-   * Her kan vi nemt udtrække tallet 10, fordi vi kender beskedens struktur.
-   *
-   * @param messagePair  Beskedens begyndelse og slutning
-   * @param eventMessage Beskedtypen
+   * Returnerer en kopi af en collection med alle message patterns.
+   * @return en kopi af en collection med alle message patterns.
    */
-  void addAdvancedMessage(Pair<String, String> messagePair, EventMessage eventMessage);
+  Collection<Pattern> getMessagePatterns();
 
   /**
-   * Tilføjer en besked med variabel information i slutningen
-   *
-   * @param messageStr Beskedens begyndelse
-   * @param eventMessage Beskedtypen
+   * Returnerer en kopi af en map med alle message patterns og deres tilhørende event messages.
+   * @return en kopi af en map med alle message patterns og deres tilhørende event messages.
    */
-  void addEndVarMessage(String messageStr, EventMessage eventMessage);
-
-  /**
-   * Fjerner en besked
-   *
-   * @param eventMessage Beskedtypen
-   */
-  void removeMessage(EventMessage eventMessage);
-
-  /**
-   * Returnerer alle almindelige beskeder
-   *
-   * @return Beskederne
-   */
-  Map<String, EventMessage> getMessages();
-
-  /**
-   * Returnerer alle avancerede beskeder
-   *
-   * @return Beskederne
-   */
-  Map<Pair<String, String>, EventMessage> getAdvancedMessages();
-
-  /**
-   * Returnerer alle endVar beskeder
-   *
-   * @return Beskederne
-   */
-  Map<String, EventMessage> getEndVarMessages();
+  Map<Pattern, FreakyVilleMessage> getPatternMap();
 
   @Override
   void initialize();

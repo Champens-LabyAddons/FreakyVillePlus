@@ -1,59 +1,41 @@
 package dk.fvtrademarket.fvplus.api.enums;
 
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultFinishEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
-import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
-import dk.fvtrademarket.fvplus.api.event.messaging.RecognizedMessageReceivedEvent;
-import dk.fvtrademarket.fvplus.api.misc.EventMessage;
-import net.labymod.api.event.Event;
-import org.jetbrains.annotations.Nullable;
-
-public enum FreakyVilleMessage implements EventMessage {
+public enum FreakyVilleMessage {
   // Vagt vault beskeder der handler om afslutningen af en VV bliver kun sendt når det blev gennemført uden fejl
   // Derfor er success altid true
-  C_GUARD_VAULT_START(new GuardVaultTryEvent(PrisonSector.C, null)),
-  C_GUARD_VAULT_UPDATE(new GuardVaultUpdateEvent(PrisonSector.C, null)),
+  C_GUARD_VAULT_START(),
+  C_GUARD_VAULT_UPDATE(),
 
-  B_GUARD_VAULT_START(new GuardVaultTryEvent(PrisonSector.B, null)),
-  B_GUARD_VAULT_UPDATE(new GuardVaultUpdateEvent(PrisonSector.B, null)),
+  B_GUARD_VAULT_START(),
+  B_GUARD_VAULT_UPDATE(),
 
-  B_PLUS_GUARD_VAULT_START(new GuardVaultTryEvent(PrisonSector.B_PLUS, null)),
-  B_PLUS_GUARD_VAULT_FINISH(new GuardVaultFinishEvent(PrisonSector.B_PLUS, null, true)),
-  B_PLUS_GUARD_VAULT_UPDATE(new GuardVaultUpdateEvent(PrisonSector.B_PLUS, null)),
+  B_PLUS_GUARD_VAULT_START(),
+  B_PLUS_GUARD_VAULT_FINISH(),
+  B_PLUS_GUARD_VAULT_UPDATE(),
 
-  A_GUARD_VAULT_START(new GuardVaultTryEvent(PrisonSector.A, null)),
-  A_GUARD_VAULT_FINISH(new GuardVaultFinishEvent(PrisonSector.A, null, true)),
-  A_GUARD_VAULT_UPDATE(new GuardVaultUpdateEvent(PrisonSector.A, null)),
+  A_GUARD_VAULT_START(),
+  A_GUARD_VAULT_FINISH(),
+  A_GUARD_VAULT_UPDATE(),
 
-  A_PLUS_GUARD_VAULT_START(new GuardVaultTryEvent(PrisonSector.A_PLUS, null)),
-  A_PLUS_GUARD_VAULT_FINISH(new GuardVaultFinishEvent(PrisonSector.A_PLUS, null, true)),
-  A_PLUS_GUARD_VAULT_UPDATE(new GuardVaultUpdateEvent(PrisonSector.A_PLUS, null)),
+  A_PLUS_GUARD_VAULT_START(),
+  A_PLUS_GUARD_VAULT_FINISH(),
+  A_PLUS_GUARD_VAULT_UPDATE(),
 
-  LIVING_AREA_LOOKUP(new LivingAreaLookupEvent(null), true),
+  LIVING_AREA_LOOKUP(true),
+  LIVING_AREA_HELP(true),
 
-  SPECIFIC_MESSAGE_RECEIVED(new RecognizedMessageReceivedEvent(null)),
-  SPECIFIC_MESSAGE_RECEIVED_CANCELLED(new RecognizedMessageReceivedEvent(null), true)
-  ;
+  UNRECOGNIZED();
 
-  private final @Nullable Event event;
   private final boolean cancelMessage;
 
-  FreakyVilleMessage(@Nullable Event event, boolean cancelMessage) {
-    this.event = event;
+  FreakyVilleMessage(boolean cancelMessage) {
     this.cancelMessage = cancelMessage;
   }
 
-  FreakyVilleMessage(@Nullable Event event) {
-    this(event, false);
+  FreakyVilleMessage() {
+    this(false);
   }
 
-  @Override
-  public @Nullable Event getEvent() {
-    return event;
-  }
-
-  @Override
   public boolean isMessageCancelled() {
     return cancelMessage;
   }
