@@ -2,8 +2,11 @@ package dk.fvtrademarket.fvplus.core.message;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleMessage;
 import dk.fvtrademarket.fvplus.api.service.message.MessageService;
+import dk.fvtrademarket.fvplus.core.util.DataFormatter;
+import dk.fvtrademarket.fvplus.core.util.Resource;
 import net.labymod.api.models.Implements;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +39,15 @@ public class DefaultMessageService implements MessageService {
   public void initialize() {
     if (this.initialized) {
       throw new IllegalStateException("Service already initialized");
+    }
+
+    ArrayList<String[]> messages = DataFormatter.tsv(Resource.MESSAGES.toString(), true);
+
+    for (String[] line : messages) {
+      this.addMessagePattern(
+          line[0],
+          FreakyVilleMessage.fromString(line[1])
+      );
     }
 
     this.initialized = true;

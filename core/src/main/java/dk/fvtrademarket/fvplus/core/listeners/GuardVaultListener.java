@@ -27,15 +27,11 @@ public class GuardVaultListener {
   private final ClientInfo clientInfo;
   private final LabyAPI labyAPI;
   private final DefaultActivatableService activatableService;
-  private final Pattern hoursPattern, minutesPattern, secondsPattern;
 
   public GuardVaultListener(ClientInfo clientInfo, LabyAPI labyAPI, DefaultActivatableService activatableService) {
     this.clientInfo = clientInfo;
     this.labyAPI = labyAPI;
     this.activatableService = activatableService;
-    this.hoursPattern = Pattern.compile("(\\d+) time");
-    this.minutesPattern = Pattern.compile("(\\d+) minut");
-    this.secondsPattern = Pattern.compile("(\\d+) sekund");
   }
 
   @Subscribe
@@ -67,12 +63,11 @@ public class GuardVaultListener {
     if (guardVault == null) {
       return;
     }
-    String message = event.getTimeLeftStr();
-    int hours = readTimeFromString(message, this.hoursPattern);
-    int minutes = readTimeFromString(message, this.minutesPattern);
-    int seconds = readTimeFromString(message, this.secondsPattern);
 
-    LocalDateTime endTime = LocalDateTime.now().plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    LocalDateTime endTime = LocalDateTime.now()
+        .plusHours(event.getHoursLeft())
+        .plusMinutes(event.getMinutesLeft())
+        .plusSeconds(event.getSecondsLeft());
     ZonedDateTime zonedDateTime = endTime.atZone(ZoneId.systemDefault());
 
     boolean personal = this.activatableService.isOnPersonalCooldown(guardVault);

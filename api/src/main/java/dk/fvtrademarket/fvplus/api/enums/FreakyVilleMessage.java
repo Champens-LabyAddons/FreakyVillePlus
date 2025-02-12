@@ -46,6 +46,6 @@ public enum FreakyVilleMessage {
         return freakyVilleMessage;
       }
     }
-    return null;
+    return UNRECOGNIZED;
   }
 }

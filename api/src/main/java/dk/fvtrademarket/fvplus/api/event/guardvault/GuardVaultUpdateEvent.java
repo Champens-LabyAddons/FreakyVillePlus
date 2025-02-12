@@ -5,19 +5,31 @@ import net.labymod.api.event.Event;
 
 public class GuardVaultUpdateEvent extends GuardVaultEvent {
   private final PrisonSector prisonSector;
-  private final String timeLeftStr;
+  private final short hoursLeft;
+  private final short minutesLeft;
+  private final short secondsLeft;
 
-  public GuardVaultUpdateEvent(PrisonSector prisonSector, String timeLeftStr) {
+  public GuardVaultUpdateEvent(PrisonSector prisonSector, short hoursLeft, short minutesLeft, short secondsLeft) {
     super(prisonSector, "");
     this.prisonSector = prisonSector;
-    this.timeLeftStr = timeLeftStr;
+    this.hoursLeft = hoursLeft;
+    this.minutesLeft = minutesLeft;
+    this.secondsLeft = secondsLeft;
   }
 
   public PrisonSector getPrisonSector() {
     return prisonSector;
   }
 
-  public String getTimeLeftStr() {
-    return timeLeftStr;
+  public short getHoursLeft() {
+    return hoursLeft;
+  }
+
+  public short getMinutesLeft() {
+    return minutesLeft;
+  }
+
+  public short getSecondsLeft() {
+    return secondsLeft;
   }
 }

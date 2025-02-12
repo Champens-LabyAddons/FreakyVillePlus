@@ -6,6 +6,7 @@ import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
 import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
+import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import net.labymod.api.Laby;
 import net.labymod.api.client.chat.ChatExecutor;
 import net.labymod.api.client.chat.ChatMessage;
@@ -19,9 +20,11 @@ public class MessageRecognizedListener {
 
   private final Logging logging = Logging.create(this.getClass());
 
+  private final ClientInfo clientInfo;
   private final ChatExecutor chatExecutor;
 
-  public MessageRecognizedListener(ChatExecutor chatExecutor) {
+  public MessageRecognizedListener(ClientInfo clientInfo, ChatExecutor chatExecutor) {
+    this.clientInfo = clientInfo;
     this.chatExecutor = chatExecutor;
   }
 
@@ -52,22 +55,37 @@ public class MessageRecognizedListener {
   }
 
   private void livingAreaLookup(Matcher matcher) {
-    String areaIdentifier = "";
+    String areaIdentifier = matcher.group(1);
     Laby.fireEvent(new LivingAreaLookupEvent(areaIdentifier));
   }
 
   private void guardVaultTry(PrisonSector sector, Matcher matcher) {
-    String robber = "";
+    String robber = matcher.group(1);
     Laby.fireEvent(new GuardVaultTryEvent(sector, robber));
   }
 
   private void guardVaultUpdate(PrisonSector sector, Matcher matcher) {
-    String timeLeftStr = "";
-    Laby.fireEvent(new GuardVaultUpdateEvent(sector, timeLeftStr));
+    if (sector == PrisonSector.A_PLUS || sector == PrisonSector.B_PLUS) {
+      PrisonSector currentSector = this.clientInfo.getPrisonSector().orElse(null);
+      if (currentSector == null) {
+        this.logging.error("Failed to get the current prison sector");
+        return;
+      }
+      if (currentSector == PrisonSector.A && sector != PrisonSector.A_PLUS) {
+        sector = PrisonSector.A_PLUS;
+      }
+      if (currentSector == PrisonSector.B && sector != PrisonSector.B_PLUS) {
+        sector = PrisonSector.B_PLUS;
+      }
+    }
+    short hours = extractNumber(matcher, 1);
+    short minutes = extractNumber(matcher, 2);
+    short seconds = extractNumber(matcher, 3);
+    Laby.fireEvent(new GuardVaultUpdateEvent(sector, hours, minutes, seconds));
   }
 
   private void guardVaultFinish(PrisonSector sector, Matcher matcher) {
-    String player = "";
+    String player = matcher.group(1);
     Laby.fireEvent(new GuardVaultFinishEvent(sector, player, true));
   }
 
@@ -96,5 +114,25 @@ public class MessageRecognizedListener {
     );
   }
 
-
+  private short extractNumber(Matcher matcher, int group) {
+    short num = 0;
+    if (matcher.group(group) == null) {
+      return num;
+    }
+    StringBuilder numbers = new StringBuilder();
+    for (int i = 0; i < matcher.group(group).length(); i++) {
+      if (!Character.isDigit(matcher.group(group).charAt(i))) {
+        continue;
+      }
+      numbers.append(matcher.group(group).charAt(i));
+    }
+    if (!numbers.isEmpty()) {
+      try {
+        num = Short.parseShort(numbers.toString());
+      } catch (NumberFormatException e) {
+        this.logging.error("Failed to parse number from string: " + matcher.group(group));
+      }
+    }
+    return num;
+  }
 }

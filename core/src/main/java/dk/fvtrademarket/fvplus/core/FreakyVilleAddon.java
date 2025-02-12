@@ -8,6 +8,7 @@ import dk.fvtrademarket.fvplus.core.listeners.AdvancedChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
+import dk.fvtrademarket.fvplus.core.listeners.MessageRecognizedListener;
 import dk.fvtrademarket.fvplus.core.util.WidgetUpdater;
 import net.labymod.api.Laby;
 import net.labymod.api.LabyAPI;
@@ -54,7 +55,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
             (DefaultActivatableService) FreakyVillePlus.getReferences().activatableService()),
         new LivingAreaListener(clientInfo, referenceStorage.chatExecutor(),
             FreakyVillePlus.getReferences().housingService()),
-        new AdvancedChatListener(clientInfo, referenceStorage.chatExecutor())
+        new MessageRecognizedListener(clientInfo, referenceStorage.chatExecutor()),
     };
   }
 
