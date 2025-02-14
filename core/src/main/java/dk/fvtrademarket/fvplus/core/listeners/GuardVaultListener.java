@@ -13,14 +13,11 @@ import net.labymod.api.Laby;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.util.concurrent.task.Task;
-import net.labymod.api.util.logging.Logging;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GuardVaultListener {
 
@@ -118,19 +115,7 @@ public class GuardVaultListener {
   }
 
   private boolean wasPersonal(String robberName) {
-    Logging.getLogger().info("Checking if the robber was the player");
-    Logging.getLogger().info("Robber name: " + robberName);
-    Logging.getLogger().info("Client player: " + this.labyAPI.getName());
     String playerName = this.labyAPI.getName();
     return playerName.equals(robberName);
-  }
-
-  private int readTimeFromString(String timer, Pattern pattern) {
-    int amount = 0;
-    Matcher matcher = pattern.matcher(timer);
-    if (matcher.find()) {
-      amount = Integer.parseInt(matcher.group(1));
-    }
-    return amount;
   }
 }

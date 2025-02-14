@@ -4,7 +4,6 @@ import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import dk.fvtrademarket.fvplus.core.activatable.DefaultActivatableService;
 import dk.fvtrademarket.fvplus.core.commands.LivingAreaWaypointCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.TimerCommand;
-import dk.fvtrademarket.fvplus.core.listeners.AdvancedChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
