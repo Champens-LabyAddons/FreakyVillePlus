@@ -29,6 +29,18 @@ public interface MessageService extends Service {
    */
   Map<Pattern, FreakyVilleMessage> getPatternMap();
 
+  void addIgnoredPlayer(String player);
+
+  void removeIgnoredPlayer(String player);
+
+  Collection<String> getIgnoredPlayers();
+
+  void addBlockedPlayer(String player);
+
+  void removeBlockedPlayer(String player);
+
+  Collection<String> getBlockedPlayers();
+
   @Override
   void initialize();
 

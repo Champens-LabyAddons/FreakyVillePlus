@@ -9,7 +9,9 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Singleton
@@ -17,6 +19,8 @@ import java.util.regex.Pattern;
 public class DefaultMessageService implements MessageService {
 
   private final HashMap<Pattern, FreakyVilleMessage> patternMap = new HashMap<>();
+  private final HashSet<String> ignoredPlayers = new HashSet<>();
+  private final HashSet<String> blockedPlayers = new HashSet<>();
 
   private boolean initialized = false;
 
@@ -33,6 +37,36 @@ public class DefaultMessageService implements MessageService {
   @Override
   public Map<Pattern, FreakyVilleMessage> getPatternMap() {
     return Map.copyOf(this.patternMap);
+  }
+
+  @Override
+  public void addIgnoredPlayer(String player) {
+    this.ignoredPlayers.add(player);
+  }
+
+  @Override
+  public void removeIgnoredPlayer(String player) {
+    this.ignoredPlayers.remove(player);
+  }
+
+  @Override
+  public Collection<String> getIgnoredPlayers() {
+    return Set.copyOf(this.ignoredPlayers);
+  }
+
+  @Override
+  public void addBlockedPlayer(String player) {
+    this.blockedPlayers.add(player);
+  }
+
+  @Override
+  public void removeBlockedPlayer(String player) {
+    this.blockedPlayers.remove(player);
+  }
+
+  @Override
+  public Collection<String> getBlockedPlayers() {
+    return Set.copyOf(this.blockedPlayers);
   }
 
   @Override

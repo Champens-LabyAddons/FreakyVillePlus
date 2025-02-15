@@ -23,6 +23,7 @@ public enum FreakyVilleMessage {
 
   LIVING_AREA_LOOKUP(true),
   LIVING_AREA_HELP(true),
+  PLAYER_MESSAGE_ALL(true),
 
   UNRECOGNIZED();
 
