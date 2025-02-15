@@ -12,6 +12,7 @@ import net.labymod.api.client.chat.ChatExecutor;
 import net.labymod.api.client.chat.ChatMessage;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.format.NamedTextColor;
+import net.labymod.api.client.component.format.TextColor;
 import net.labymod.api.event.Subscribe;
 import net.labymod.api.util.logging.Logging;
 import java.util.regex.Matcher;
@@ -93,7 +94,7 @@ public class MessageRecognizedListener {
     if (message == null) {
       throw new NullPointerException("The provided ChatMessage is null");
     }
-    markedResend(message);
+    markedResend(message, "§", NamedTextColor.GRAY);
     this.chatExecutor.displayClientMessage(
         Component.translatable("fvplus.server.prison.cell.commands.waypoint.description", NamedTextColor.WHITE,
             Component.text("[", NamedTextColor.DARK_GRAY)
@@ -107,10 +108,10 @@ public class MessageRecognizedListener {
     this.logging.warn("The following chat-message is registered but is not supported by the client in this version, is the addon up-to-date?: " + matcher.group());
   }
 
-  private void markedResend(ChatMessage message) {
+  private void markedResend(ChatMessage message, String addition, TextColor color) {
+    Component marked = Component.text(addition, color);
     this.chatExecutor.displayClientMessage(
-        message.component()
-            .append(Component.space().append(Component.text("✉", NamedTextColor.GOLD)))
+        marked.append(message.component())
     );
   }
 
