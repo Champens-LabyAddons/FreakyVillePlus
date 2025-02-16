@@ -1,4 +1,4 @@
-package dk.fvtrademarket.fvplus.core.commands;
+package dk.fvtrademarket.fvplus.core.commands.waypoint;
 
 import dk.fvtrademarket.fvplus.api.housing.LivingArea;
 import dk.fvtrademarket.fvplus.api.service.housing.HousingService;
