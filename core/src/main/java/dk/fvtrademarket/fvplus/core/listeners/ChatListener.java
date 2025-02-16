@@ -1,6 +1,7 @@
 package dk.fvtrademarket.fvplus.core.listeners;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleMessage;
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.api.service.message.MessageService;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
@@ -38,6 +39,9 @@ public class ChatListener {
         if (type == FreakyVilleMessage.PLAYER_MESSAGE_ALL) {
           playerMessageAll(matcher, event);
           return;
+        } else if (type == FreakyVilleMessage.PLAYER_MESSAGE_YOU) {
+          playerMessageYou(matcher, event);
+          return;
         }
         MessageRecognizedEvent recognizedEvent;
         if (type.isMessageCancelled()) {
@@ -52,8 +56,8 @@ public class ChatListener {
   }
 
   private void playerMessageAll(Matcher matcher, ChatReceiveEvent event) {
-    String sender = matcher.group(6);
-    String messageText = matcher.group(7);
+    String sender = matcher.group(senderGroupAll(this.clientInfo.getCurrentServer()));
+    String messageText = matcher.group(messageGroupAll(this.clientInfo.getCurrentServer()));
     if (this.messageService.getIgnoredPlayers().contains(sender)) {
       event.setMessage(Component.text("Ignoreret besked, hold musen over for at se", NamedTextColor.RED)
           .hoverEvent(HoverEvent.showText(
@@ -67,5 +71,71 @@ public class ChatListener {
       this.logging.info("Blocked Message from: " + sender + " - " + messageText);
       event.setCancelled(true);
     }
+  }
+
+  private void playerMessageYou(Matcher matcher, ChatReceiveEvent event) {
+    String sender = matcher.group(senderGroupYou(this.clientInfo.getCurrentServer()));
+    String messageText = matcher.group(messageGroupYou(this.clientInfo.getCurrentServer()));
+    if (this.messageService.getIgnoredPlayers().contains(sender)) {
+      event.setMessage(Component.text("Ignoreret /msg, hold musen over for at se", NamedTextColor.RED)
+          .hoverEvent(HoverEvent.showText(
+                  Component.text(sender, NamedTextColor.GRAY)
+                      .append(Component.text(": ", NamedTextColor.WHITE))
+                      .append(Component.text(messageText, NamedTextColor.WHITE))
+              )
+          )
+      );
+    } else if (this.messageService.getBlockedPlayers().contains(sender)) {
+      this.logging.info("Blocked /msg from: " + sender + " - " + messageText);
+      event.setCancelled(true);
+    }
+  }
+
+  private int senderGroupAll(FreakyVilleServer server) {
+    return switch (server) {
+      case PRISON -> 6;
+      case CREATIVE -> 0;
+      case SKY_BLOCK -> 0;
+      case THE_CITY -> 0;
+      case KIT_PVP -> 0;
+      case HUB -> 0;
+      default -> 0;
+    };
+  }
+
+  private int messageGroupAll(FreakyVilleServer server) {
+    return switch (server) {
+      case PRISON -> 7;
+      case CREATIVE -> 0;
+      case SKY_BLOCK -> 0;
+      case THE_CITY -> 0;
+      case KIT_PVP -> 0;
+      case HUB -> 0;
+      default -> 0;
+    };
+  }
+
+  private int senderGroupYou(FreakyVilleServer server) {
+    return switch (server) {
+      case PRISON -> 2;
+      case CREATIVE -> 0;
+      case SKY_BLOCK -> 0;
+      case THE_CITY -> 0;
+      case KIT_PVP -> 0;
+      case HUB -> 0;
+      default -> 0;
+    };
+  }
+
+  private int messageGroupYou(FreakyVilleServer server) {
+    return switch (server) {
+      case PRISON -> 3;
+      case CREATIVE -> 0;
+      case SKY_BLOCK -> 0;
+      case THE_CITY -> 0;
+      case KIT_PVP -> 0;
+      case HUB -> 0;
+      default -> 0;
+    };
   }
 }

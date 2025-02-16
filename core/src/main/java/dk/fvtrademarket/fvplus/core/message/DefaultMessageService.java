@@ -40,13 +40,13 @@ public class DefaultMessageService implements MessageService {
   }
 
   @Override
-  public void addIgnoredPlayer(String player) {
-    this.ignoredPlayers.add(player);
+  public boolean addIgnoredPlayer(String player) {
+    return this.ignoredPlayers.add(player);
   }
 
   @Override
-  public void removeIgnoredPlayer(String player) {
-    this.ignoredPlayers.remove(player);
+  public boolean removeIgnoredPlayer(String player) {
+    return this.ignoredPlayers.remove(player);
   }
 
   @Override
@@ -55,13 +55,13 @@ public class DefaultMessageService implements MessageService {
   }
 
   @Override
-  public void addBlockedPlayer(String player) {
-    this.blockedPlayers.add(player);
+  public boolean addBlockedPlayer(String player) {
+    return this.blockedPlayers.add(player);
   }
 
   @Override
-  public void removeBlockedPlayer(String player) {
-    this.blockedPlayers.remove(player);
+  public boolean removeBlockedPlayer(String player) {
+    return this.blockedPlayers.remove(player);
   }
 
   @Override

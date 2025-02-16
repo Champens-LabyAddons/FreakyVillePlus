@@ -2,7 +2,9 @@ package dk.fvtrademarket.fvplus.core;
 
 import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import dk.fvtrademarket.fvplus.core.activatable.DefaultActivatableService;
-import dk.fvtrademarket.fvplus.core.commands.LivingAreaWaypointCommand;
+import dk.fvtrademarket.fvplus.core.commands.internal.BlockCommand;
+import dk.fvtrademarket.fvplus.core.commands.internal.IgnoreCommand;
+import dk.fvtrademarket.fvplus.core.commands.waypoint.LivingAreaWaypointCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.TimerCommand;
 import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.GuardVaultListener;
@@ -86,6 +88,8 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     this.registerCommand(new FreakyvillePlusHelpCommand());
     this.registerCommand(new LivingAreaWaypointCommand(clientInfo, FreakyVillePlus.getReferences().housingService()));
     this.registerCommand(new TimerCommand(clientInfo, FreakyVillePlus.getReferences().activatableService()));
+    this.registerCommand(new BlockCommand(clientInfo, FreakyVillePlus.getReferences().messageService()));
+    this.registerCommand(new IgnoreCommand(clientInfo, FreakyVillePlus.getReferences().messageService()));
 
     ModuleService moduleService = new ModuleService(labyAPI, labyAPI.eventBus(),
         labyAPI.commandService(), clientInfo);

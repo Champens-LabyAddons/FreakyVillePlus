@@ -24,13 +24,23 @@ public class FreakyvillePlusHelpCommand extends FreakyVillePlusCommand {
     String header = " -= [ " + I18n.getTranslation(getTranslationKey("header")) + " ] =-";
     Component headerComponent = Component.text(header).color(NamedTextColor.GOLD);
     displayMessage(headerComponent);
-    displayTranslatable("commands.waypoint.description", NamedTextColor.GRAY, " - /ce waypoint");
     displayTranslatable("commands.timer.description", NamedTextColor.GRAY, " - /timer");
+    displayTranslatable("commands.ignore.description", NamedTextColor.GRAY, " - /ignore");
+    displayTranslatable("commands.block.description", NamedTextColor.GRAY, " - /block");
+    displayTranslatable("commands.waypoint.description", NamedTextColor.GRAY, " - /ce waypoint");
     displayTranslatable("commands.freakyHelp.description", NamedTextColor.GRAY, " - /freakyhelp");
   }
 
   private void specificHelp(String command) {
     switch (command.toLowerCase()) {
+      case "ignore":
+      case "ign":
+        displayTranslatable("commands.ignore.usage", NamedTextColor.AQUA);
+        break;
+      case "block":
+      case "bloker":
+        displayTranslatable("commands.block.usage", NamedTextColor.AQUA);
+        break;
       case "waypoint":
       case "w":
       case "wp":

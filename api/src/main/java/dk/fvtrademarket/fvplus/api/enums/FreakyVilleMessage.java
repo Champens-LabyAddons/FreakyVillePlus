@@ -1,8 +1,6 @@
 package dk.fvtrademarket.fvplus.api.enums;
 
 public enum FreakyVilleMessage {
-  // Vagt vault beskeder der handler om afslutningen af en VV bliver kun sendt når det blev gennemført uden fejl
-  // Derfor er success altid true
   C_GUARD_VAULT_START(),
   C_GUARD_VAULT_UPDATE(),
 
@@ -23,7 +21,9 @@ public enum FreakyVilleMessage {
 
   LIVING_AREA_LOOKUP(true),
   LIVING_AREA_HELP(true),
+
   PLAYER_MESSAGE_ALL(true),
+  PLAYER_MESSAGE_YOU(true),
 
   UNRECOGNIZED();
 

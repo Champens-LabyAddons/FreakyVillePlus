@@ -91,13 +91,17 @@
       "freakyHelp": {
         "header": "Hjælpe oversigt",
         "commands": {
+          "ignore": {
+            "description": "%s | Ignorer en spiller",
+            "usage": "Brug: /ignore <list/add/remove> [<spiller>]"
+          },
+          "block": {
+            "description": "%s | Bloker en spiller",
+            "usage": "Brug: /block <list/add/remove> [<spiller>]"
+          },
           "waypoint": {
             "description": "%s | Opret et midlertidigt waypoint til den angivne celle",
             "usage": "Brug: /ce waypoint <cellenavn>"
-          },
-          "checkRoll": {
-            "description": "%s | Vis vinderen af et lykkehjul",
-            "usage": "Brug: /checkroll <UUID>"
           },
           "timer": {
             "description": "%s | Vis en liste over timers",
@@ -110,16 +114,6 @@
         },
         "noCommand": "Ingen kommando fundet"
       },
-      "checkRoll": {
-        "header": "Check Roll",
-        "usage": "Brug: /checkroll <UUID>",
-        "invalidUuid": "Ugyldig UUID, skal være præcis 36 tegn lang!",
-        "wheel": {
-          "header": "Hjul: %s",
-          "winner": "Vinder: %s",
-          "tooManyOptions": "For mange navne at vise, du kan kun se vinderen"
-        }
-      },
       "timer": {
         "usage": "Brug: /timer <global/personlig>",
         "global": {
@@ -131,6 +125,40 @@
           "header": "Personlig Timer",
           "noPoisToShow": "Ingen timers at vise endnu",
           "invalidServer": "Ugyldig server!"
+        }
+      },
+      "ignore": {
+        "syntax": "<list/add/remove> [<spiller>]",
+        "list": {
+          "header": "Ignorerede spillere:",
+          "emptyIgnoreList": "Ingen spillere er blevet ignoreret endnu..."
+        },
+        "add": {
+          "syntax": "add <spiller>",
+          "success": "Spilleren blev ignoreret",
+          "alreadyIgnored": "Spilleren er allerede ignoreret"
+        },
+        "remove": {
+          "syntax": "remove <spiller>",
+          "success": "Spilleren blev fjernet fra listen over ignorerede spillere",
+          "notIgnored": "Spilleren er ikke på listen over ignorerede spillere"
+        }
+      },
+      "block": {
+        "syntax": "<list/add/remove> [<spiller>]",
+        "list": {
+          "header": "Blokerede spillere:",
+          "emptyBlockList": "Ingen spillere er blevet blokeret endnu..."
+        },
+        "add": {
+          "syntax": "add <spiller>",
+          "success": "Spilleren blev blokeret",
+          "alreadyBlocked": "Spilleren er allerede blokeret"
+        },
+        "remove": {
+          "syntax": "remove <spiller>",
+          "success": "Spilleren blev fjernet fra listen over blokerede spillere",
+          "notBlocked": "Spilleren er ikke på listen over blokerede spillere"
         }
       }
     },
