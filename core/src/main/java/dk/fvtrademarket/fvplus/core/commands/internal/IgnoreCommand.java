@@ -57,11 +57,9 @@ public class IgnoreCommand extends Command {
       displayTranslatable("list.emptyIgnoreList", NamedTextColor.GRAY);
       return;
     }
+    Component indent = Components.INDENT.color(NamedTextColor.GRAY);
     this.messageService.getIgnoredPlayers().forEach(player -> displayMessage(
-        Components.INDENT
-            .color(NamedTextColor.GRAY)
-            .append(Component.space())
-            .append(Component.text(player, NamedTextColor.AQUA))
+          indent.copy().append(Component.text(player, NamedTextColor.AQUA))
     ));
   }
 
