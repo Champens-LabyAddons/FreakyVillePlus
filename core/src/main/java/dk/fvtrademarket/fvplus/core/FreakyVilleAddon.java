@@ -3,6 +3,7 @@ package dk.fvtrademarket.fvplus.core;
 import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import dk.fvtrademarket.fvplus.core.activatable.DefaultActivatableService;
 import dk.fvtrademarket.fvplus.core.commands.internal.BlockCommand;
+import dk.fvtrademarket.fvplus.core.commands.internal.FreakyVillePlusDebugCommand;
 import dk.fvtrademarket.fvplus.core.commands.internal.IgnoreCommand;
 import dk.fvtrademarket.fvplus.core.commands.waypoint.LivingAreaWaypointCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.TimerCommand;
@@ -22,7 +23,6 @@ import net.labymod.api.util.I18n;
 import dk.fvtrademarket.fvplus.core.commands.internal.FreakyvillePlusHelpCommand;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.integrations.WaypointsIntegration;
-import dk.fvtrademarket.fvplus.core.listeners.internal.PrisonNavigationListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.ScoreBoardListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.ServerNavigationListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.ModuleListener;
@@ -50,7 +50,6 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     return new Object[] {
         new ScoreBoardListener(clientInfo),
         new ServerNavigationListener(clientInfo),
-        new PrisonNavigationListener(clientInfo),
         new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService()),
         new GuardVaultListener(clientInfo, labyAPI,
             (DefaultActivatableService) FreakyVillePlus.getReferences().activatableService()),
@@ -86,6 +85,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     }
 
     this.registerCommand(new FreakyvillePlusHelpCommand());
+    this.registerCommand(new FreakyVillePlusDebugCommand(clientInfo));
     this.registerCommand(new LivingAreaWaypointCommand(clientInfo, FreakyVillePlus.getReferences().housingService()));
     this.registerCommand(new TimerCommand(clientInfo, FreakyVillePlus.getReferences().activatableService()));
     this.registerCommand(new BlockCommand(clientInfo, FreakyVillePlus.getReferences().messageService()));

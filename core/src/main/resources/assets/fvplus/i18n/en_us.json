@@ -88,6 +88,13 @@
       "lastSeen": "Sidst set på %s"
     },
     "commands": {
+      "debug": {
+        "header": "FV+ Debug:",
+        "isConnected": "Er forbundet: %s",
+        "currentServer": "Nuværende server: %s",
+        "lastServer": "Sidste server: %s",
+        "foundPrison": "Lige nu i fængselsblok: %s"
+      },
       "freakyHelp": {
         "header": "Hjælpe oversigt",
         "commands": {

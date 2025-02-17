@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.listeners;
 
+import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultFinishEvent;
 import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
@@ -7,6 +8,7 @@ import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
 import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
+import dk.fvtrademarket.fvplus.core.util.Messaging;
 import net.labymod.api.Laby;
 import net.labymod.api.client.chat.ChatExecutor;
 import net.labymod.api.client.chat.ChatMessage;
@@ -14,6 +16,7 @@ import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.format.NamedTextColor;
 import net.labymod.api.client.component.format.TextColor;
 import net.labymod.api.event.Subscribe;
+import net.labymod.api.util.I18n;
 import net.labymod.api.util.logging.Logging;
 import java.util.regex.Matcher;
 
@@ -31,6 +34,9 @@ public class MessageRecognizedListener {
 
   @Subscribe
   public void onMessageRecognized(MessageRecognizedEvent event) {
+    if (!this.clientInfo.isOnFreakyVille()) {
+      return;
+    }
     switch (event.getType()) {
       case LIVING_AREA_LOOKUP -> livingAreaLookup(event.getMatcher());
       case LIVING_AREA_HELP -> livingAreaHelpSendWaypoint(event.getMessage().orElse(null));
@@ -50,6 +56,8 @@ public class MessageRecognizedListener {
       case B_PLUS_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.B_PLUS, event.getMatcher());
       case A_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.A, event.getMatcher());
       case A_PLUS_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.A_PLUS, event.getMatcher());
+
+      case PRISON_CHECK -> prisonCheck(event.getMatcher());
 
       case UNRECOGNIZED -> unrecognizedMessage(event.getMatcher());
     }
@@ -102,6 +110,22 @@ public class MessageRecognizedListener {
                 .append(Component.text("]", NamedTextColor.DARK_GRAY))
         )
     );
+  }
+
+  private void prisonCheck(Matcher matcher) {
+    if (this.clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) {
+      return;
+    }
+    if (this.clientInfo.getPrisonSector().isPresent()) {
+      return;
+    }
+    try {
+      this.clientInfo.setPrisonSector(PrisonSector.valueOf(matcher.group(1).toUpperCase()));
+    } catch (IllegalArgumentException e) {
+      this.clientInfo.setPrisonSector(null);
+      this.logging.error(I18n.translate("fvplus.logging.error.findingPrison"), e);
+      Messaging.displayTranslatable("fvplus.logging.error.findingPrison", NamedTextColor.RED);
+    }
   }
 
   private void unrecognizedMessage(Matcher matcher) {

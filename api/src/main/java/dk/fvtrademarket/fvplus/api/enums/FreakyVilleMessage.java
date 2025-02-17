@@ -25,6 +25,8 @@ public enum FreakyVilleMessage {
   PLAYER_MESSAGE_ALL(true),
   PLAYER_MESSAGE_YOU(true),
 
+  PRISON_CHECK(),
+
   UNRECOGNIZED();
 
   private final boolean cancelMessage;
