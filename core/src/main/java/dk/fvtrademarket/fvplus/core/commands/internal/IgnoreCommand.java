@@ -17,7 +17,7 @@ public class IgnoreCommand extends Command {
     super("ignore", "ign");
     this.clientInfo = clientInfo;
     this.messageService = messageService;
-    this.messagePrefix(Messaging.addonPrefix());
+    this.messagePrefix(Components.ADDON_PREFIX.copy());
     this.translationKey("fvplus.commands.ignore");
   }
 

@@ -25,14 +25,6 @@ public final class Messaging {
   }
 
   public static void displayTranslatable(String key, TextColor color) {
-    executor.displayClientMessage(addonPrefix().append(Component.text(" ")).append(Component.translatable(key, color)));
-  }
-
-  public static Component addonPrefix() {
-    Component leftBracket = Component.text("[", NamedTextColor.DARK_GRAY);
-    Component rightBracket = Component.text("]", NamedTextColor.DARK_GRAY);
-    Component text = Component.translatable("fvplus.prefix", NamedTextColor.GOLD)
-        .append(Component.text("+", NamedTextColor.AQUA));
-    return leftBracket.append(text).append(rightBracket);
+    executor.displayClientMessage(Components.ADDON_PREFIX.copy().append(Component.space()).append(Component.translatable(key, color)));
   }
 }
