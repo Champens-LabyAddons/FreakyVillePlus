@@ -1,7 +1,6 @@
 package dk.fvtrademarket.fvplus.core.activatable;
 
-import dk.fvtrademarket.fvplus.api.activatable.guardvault.GuardVault;
-import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GuardVault;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
@@ -32,11 +31,6 @@ public class DefaultGuardVault implements GuardVault {
   @Override
   public PrisonSector[] getVisiblePrisonSectors() {
     return this.visiblePrisonSectors;
-  }
-
-  @Override
-  public FreakyVilleServer getAssociatedServer() {
-    return FreakyVilleServer.PRISON;
   }
 
   @Override

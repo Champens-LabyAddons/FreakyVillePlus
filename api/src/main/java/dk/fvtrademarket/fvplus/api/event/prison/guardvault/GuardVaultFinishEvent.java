@@ -1,4 +1,4 @@
-package dk.fvtrademarket.fvplus.api.event.guardvault;
+package dk.fvtrademarket.fvplus.api.event.prison.guardvault;
 
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 

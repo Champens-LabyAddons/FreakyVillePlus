@@ -1,4 +1,4 @@
-package dk.fvtrademarket.fvplus.api.event.gangarea;
+package dk.fvtrademarket.fvplus.api.event.prison.gangarea;
 
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import java.time.Instant;

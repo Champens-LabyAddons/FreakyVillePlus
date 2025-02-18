@@ -1,12 +1,13 @@
-package dk.fvtrademarket.fvplus.core.listeners;
+package dk.fvtrademarket.fvplus.core.listeners.activatable;
 
-import dk.fvtrademarket.fvplus.api.activatable.guardvault.GuardVault;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GuardVault;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultFinishEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.SectoredEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultFinishEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultTryEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultUpdateEvent;
 import dk.fvtrademarket.fvplus.core.activatable.DefaultActivatableService;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import net.labymod.api.Laby;
@@ -19,21 +20,15 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-public class GuardVaultListener {
-
-  private final ClientInfo clientInfo;
-  private final LabyAPI labyAPI;
-  private final DefaultActivatableService activatableService;
+public class GuardVaultListener extends AbstractPrisonActivatableListener<GuardVault> {
 
   public GuardVaultListener(ClientInfo clientInfo, LabyAPI labyAPI, DefaultActivatableService activatableService) {
-    this.clientInfo = clientInfo;
-    this.labyAPI = labyAPI;
-    this.activatableService = activatableService;
+    super(clientInfo, labyAPI, activatableService, GuardVault.class);
   }
 
   @Subscribe
   public void onGuardVaultTryEvent(GuardVaultTryEvent event) {
-    GuardVault guardVault = parseGuardVault(event);
+    GuardVault guardVault = parsePrisonActivatable(event);
     if (guardVault == null) {
       return;
     }
@@ -56,7 +51,7 @@ public class GuardVaultListener {
 
   @Subscribe
   public void onGuardVaultUpdateEvent(GuardVaultUpdateEvent event) {
-    GuardVault guardVault = parseGuardVault(event);
+    GuardVault guardVault = parsePrisonActivatable(event);
     if (guardVault == null) {
       return;
     }
@@ -74,7 +69,7 @@ public class GuardVaultListener {
 
   @Subscribe
   public void onGuardVaultFinishEvent(GuardVaultFinishEvent event) {
-    GuardVault guardVault = parseGuardVault(event);
+    GuardVault guardVault = parsePrisonActivatable(event);
     if (guardVault == null) {
       return;
     }
@@ -86,8 +81,12 @@ public class GuardVaultListener {
     activatableService.removeActivatableFromLimbo(guardVault);
   }
 
-  private GuardVault parseGuardVault(GuardVaultEvent event) {
-    Optional<GuardVault> guardVault = getGuardVaultBySector(event.getSector());
+  @Override
+  protected GuardVault parsePrisonActivatable(SectoredEvent event) {
+    if (!(event instanceof GuardVaultEvent)) {
+      return null;
+    }
+    Optional<GuardVault> guardVault = getPrisonActivatableBySector(event.getSector());
     if (guardVault.isEmpty()) {
       return null;
     }
@@ -103,19 +102,5 @@ public class GuardVaultListener {
       }
     }
     return null;
-  }
-
-  private Optional<GuardVault> getGuardVaultBySector(PrisonSector sector) {
-    for (GuardVault guardVault : activatableService.getActivatables(GuardVault.class)) {
-      if (guardVault.getPrisonSector() == sector) {
-        return Optional.of(guardVault);
-      }
-    }
-    return Optional.empty();
-  }
-
-  private boolean wasPersonal(String robberName) {
-    String playerName = this.labyAPI.getName();
-    return playerName.equals(robberName);
   }
 }

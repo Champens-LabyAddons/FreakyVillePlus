@@ -8,7 +8,7 @@ import dk.fvtrademarket.fvplus.core.commands.internal.IgnoreCommand;
 import dk.fvtrademarket.fvplus.core.commands.waypoint.LivingAreaWaypointCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.TimerCommand;
 import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
-import dk.fvtrademarket.fvplus.core.listeners.GuardVaultListener;
+import dk.fvtrademarket.fvplus.core.listeners.activatable.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
 import dk.fvtrademarket.fvplus.core.listeners.MessageRecognizedListener;
 import dk.fvtrademarket.fvplus.core.util.WidgetUpdater;

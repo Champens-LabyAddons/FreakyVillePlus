@@ -2,9 +2,9 @@ package dk.fvtrademarket.fvplus.core.listeners;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultFinishEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultTryEvent;
-import dk.fvtrademarket.fvplus.api.event.guardvault.GuardVaultUpdateEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultFinishEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultTryEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultUpdateEvent;
 import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;

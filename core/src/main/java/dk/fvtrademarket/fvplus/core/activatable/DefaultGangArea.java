@@ -1,6 +1,6 @@
 package dk.fvtrademarket.fvplus.core.activatable;
 
-import dk.fvtrademarket.fvplus.api.activatable.misc.GangArea;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GangArea;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import net.labymod.api.client.component.Component;
@@ -24,11 +24,6 @@ public class DefaultGangArea implements GangArea {
   @Override
   public PrisonSector getPrisonSector() {
     return this.prisonSector;
-  }
-
-  @Override
-  public FreakyVilleServer getAssociatedServer() {
-    return FreakyVilleServer.PRISON;
   }
 
   @Override

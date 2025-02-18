@@ -1,8 +1,8 @@
 package dk.fvtrademarket.fvplus.core.widgets.factory;
 
 import dk.fvtrademarket.fvplus.api.activatable.Activatable;
-import dk.fvtrademarket.fvplus.api.activatable.guardvault.GuardVault;
-import dk.fvtrademarket.fvplus.api.activatable.misc.GangArea;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GuardVault;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GangArea;
 import dk.fvtrademarket.fvplus.core.widgets.TimerHudWidget;
 import net.labymod.api.client.component.TextComponent;
 import net.labymod.api.client.component.serializer.plain.PlainTextComponentSerializer;

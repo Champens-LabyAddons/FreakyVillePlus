@@ -1,7 +1,6 @@
-package dk.fvtrademarket.fvplus.api.event.guardvault;
+package dk.fvtrademarket.fvplus.api.event.prison.guardvault;
 
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
-import net.labymod.api.event.Event;
 
 public class GuardVaultUpdateEvent extends GuardVaultEvent {
   private final PrisonSector prisonSector;

@@ -1,8 +1,8 @@
 package dk.fvtrademarket.fvplus.core.widgets;
 
 import dk.fvtrademarket.fvplus.api.activatable.Activatable;
-import dk.fvtrademarket.fvplus.api.activatable.guardvault.GuardVault;
-import dk.fvtrademarket.fvplus.api.activatable.misc.GangArea;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GuardVault;
+import dk.fvtrademarket.fvplus.api.activatable.prison.GangArea;
 import dk.fvtrademarket.fvplus.api.service.Service;
 import dk.fvtrademarket.fvplus.api.service.activatable.ActivatableService;
 import dk.fvtrademarket.fvplus.core.widgets.factory.TimerHudWidgetPatterns;

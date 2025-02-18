@@ -1,19 +1,15 @@
-package dk.fvtrademarket.fvplus.api.event.gangarea;
+package dk.fvtrademarket.fvplus.api.event.prison.gangarea;
 
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
+import dk.fvtrademarket.fvplus.api.event.prison.SectoredEvent;
 import net.labymod.api.event.Event;
 
-public abstract class GangAreaEvent implements Event {
-  private final PrisonSector sector;
+public abstract class GangAreaEvent extends SectoredEvent implements Event {
   private final String takerName;
 
   public GangAreaEvent(PrisonSector sector, String takerName) {
-    this.sector = sector;
+    super(sector);
     this.takerName = takerName;
-  }
-
-  public PrisonSector getSector() {
-    return sector;
   }
 
   public String getTakerName() {
