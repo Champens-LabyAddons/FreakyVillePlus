@@ -2,6 +2,7 @@ package dk.fvtrademarket.fvplus.core.message;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleMessage;
 import dk.fvtrademarket.fvplus.api.service.message.MessageService;
+import dk.fvtrademarket.fvplus.core.FreakyVilleAddon;
 import dk.fvtrademarket.fvplus.core.util.DataFormatter;
 import dk.fvtrademarket.fvplus.core.util.Resource;
 import net.labymod.api.models.Implements;
@@ -75,6 +76,11 @@ public class DefaultMessageService implements MessageService {
       throw new IllegalStateException("Service already initialized");
     }
 
+    FreakyVilleAddon addon = FreakyVilleAddon.get();
+
+    addon.configuration().getIgnoredPlayers().forEach(this::addIgnoredPlayer);
+    addon.configuration().getBlockedPlayers().forEach(this::addBlockedPlayer);
+
     ArrayList<String[]> messages = DataFormatter.tsv(Resource.MESSAGES.toString(), true);
 
     for (String[] line : messages) {
@@ -89,6 +95,18 @@ public class DefaultMessageService implements MessageService {
 
   @Override
   public void shutdown() {
+    if (!this.initialized) {
+      throw new IllegalStateException("Service not initialized");
+    }
 
+    FreakyVilleAddon addon = FreakyVilleAddon.get();
+
+    addon.configuration().getIgnoredPlayers().clear();
+    addon.configuration().getIgnoredPlayers().addAll(this.ignoredPlayers);
+
+    addon.configuration().getBlockedPlayers().clear();
+    addon.configuration().getBlockedPlayers().addAll(this.blockedPlayers);
+
+    this.initialized = false;
   }
 }

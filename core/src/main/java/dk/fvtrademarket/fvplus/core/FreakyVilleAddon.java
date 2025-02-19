@@ -11,6 +11,7 @@ import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
 import dk.fvtrademarket.fvplus.core.listeners.activatable.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
 import dk.fvtrademarket.fvplus.core.listeners.MessageRecognizedListener;
+import dk.fvtrademarket.fvplus.core.listeners.internal.GameShutdownListener;
 import dk.fvtrademarket.fvplus.core.util.WidgetUpdater;
 import net.labymod.api.Laby;
 import net.labymod.api.LabyAPI;
@@ -34,6 +35,8 @@ import net.labymod.api.util.Pair;
 @AddonMain
 public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
 
+  private static FreakyVilleAddon INSTANCE;
+
   private HudWidgetCategory[] getWidgetCategories() {
     return new HudWidgetCategory[] {
         new HudWidgetCategory(this,"fvplus_timer_category")
@@ -48,6 +51,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
 
   private Object[] getStandardListeners(ClientInfo clientInfo, LabyAPI labyAPI, ReferenceStorage referenceStorage) {
     return new Object[] {
+        new GameShutdownListener(),
         new ScoreBoardListener(clientInfo),
         new ServerNavigationListener(clientInfo),
         new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService()),
@@ -61,6 +65,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
 
   @Override
   protected void enable() {
+    INSTANCE = this;
     this.registerSettingCategory();
     LabyAPI labyAPI = this.labyAPI();
 
@@ -106,5 +111,9 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
   @Override
   protected Class<FreakyVillePlusConfiguration> configurationClass() {
     return FreakyVillePlusConfiguration.class;
+  }
+
+  public static FreakyVilleAddon get() {
+    return INSTANCE;
   }
 }
