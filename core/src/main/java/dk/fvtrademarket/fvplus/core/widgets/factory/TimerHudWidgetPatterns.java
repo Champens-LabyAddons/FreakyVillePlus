@@ -52,7 +52,7 @@ public class TimerHudWidgetPatterns {
         case C -> Icon.sprite16(iconLocation, 0, 0);
       };
     } else if (activatable instanceof GangArea) {
-      return Icon.sprite16(iconLocation, 0, 5);
+      return Icon.sprite16(iconLocation, 1, 2);
     }
     return Icon.sprite16(iconLocation, 0, 0);
   }
