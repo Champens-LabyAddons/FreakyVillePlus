@@ -18,19 +18,25 @@ public class TimerHudWidgetPatterns {
   public TimerHudWidget createTimerHudWidget(GuardVault guardVault) {
     TextComponent component = (TextComponent) guardVault.toComponent();
     String id = "guard_vault_timer_" + correctFormat(componentToString(component));
-    return new TimerHudWidget(id, componentToString(component), getIcon(guardVault), -1L);
+    return new TimerHudWidget(id, componentToString(component), getIcon(guardVault), -1L,
+      "fvplus_guard_vault_timer_category"
+    );
   }
 
   public TimerHudWidget createTimerHudWidget(GangArea gangArea) {
     TextComponent component = (TextComponent) gangArea.toComponent();
     String id = "gang_area_timer_" + correctFormat(componentToString(component));
-    return new TimerHudWidget(id, componentToString(component), getIcon(gangArea), -1L);
+    return new TimerHudWidget(id, componentToString(component), getIcon(gangArea), -1L,
+        "fvplus_gang_area_timer_category"
+    );
   }
 
   public TimerHudWidget createTimerHudWidget(Activatable activatable) {
     TextComponent component = (TextComponent) activatable.toComponent();
     String id = "activatable_misc_timer_" + correctFormat(componentToString(component));
-    return new TimerHudWidget(id, componentToString(component), getIcon(activatable), -1L);
+    return new TimerHudWidget(id, componentToString(component), getIcon(activatable), -1L,
+        "fvplus_misc_timer_category"
+    );
   }
 
   private String componentToString(TextComponent component) {
@@ -52,7 +58,7 @@ public class TimerHudWidgetPatterns {
         case C -> Icon.sprite16(iconLocation, 0, 0);
       };
     } else if (activatable instanceof GangArea) {
-      return Icon.sprite16(iconLocation, 1, 2);
+      return Icon.sprite16(iconLocation, 2, 1);
     }
     return Icon.sprite16(iconLocation, 0, 0);
   }

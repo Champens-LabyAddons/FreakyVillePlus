@@ -2,6 +2,8 @@ package dk.fvtrademarket.fvplus.core.listeners;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
+import dk.fvtrademarket.fvplus.api.event.prison.gangarea.GangAreaFinishEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.gangarea.GangAreaTryEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultFinishEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultTryEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultUpdateEvent;
@@ -9,6 +11,7 @@ import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
+import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import net.labymod.api.Laby;
 import net.labymod.api.client.chat.ChatExecutor;
 import net.labymod.api.client.chat.ChatMessage;
@@ -57,6 +60,20 @@ public class MessageRecognizedListener {
       case A_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.A, event.getMatcher());
       case A_PLUS_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.A_PLUS, event.getMatcher());
 
+      case GANG_AREA_TRY_STANDARD -> gangAreaTryStandard(event.getMatcher());
+      case GANG_AREA_TRY_ADVANCED -> gangAreaTryAdvanced(event.getMatcher());
+
+      case GANG_AREA_UPDATE -> {
+        try {
+          gangAreaUpdate(event.getMatcher());
+        } catch (NotImplementedException e) {
+          this.logging.error("Failed to handle the GangAreaUpdateEvent", e);
+        }
+      }
+
+      case GANG_AREA_FINISH_STANDARD -> gangAreaFinishStandard(event.getMatcher());
+      case GANG_AREA_FINISH_ADVANCED -> gangAreaFinishAdvanced(event.getMatcher());
+
       case PRISON_CHECK -> prisonCheck(event.getMatcher());
 
       case UNRECOGNIZED -> unrecognizedMessage(event.getMatcher());
@@ -87,15 +104,71 @@ public class MessageRecognizedListener {
         sector = PrisonSector.B_PLUS;
       }
     }
-    short hours = extractNumber(matcher, 1);
-    short minutes = extractNumber(matcher, 2);
-    short seconds = extractNumber(matcher, 3);
+    byte hours = extractNumber(matcher, 1);
+    byte minutes = extractNumber(matcher, 2);
+    byte seconds = extractNumber(matcher, 3);
     Laby.fireEvent(new GuardVaultUpdateEvent(sector, hours, minutes, seconds));
   }
 
   private void guardVaultFinish(PrisonSector sector, Matcher matcher) {
     String player = matcher.group(1);
     Laby.fireEvent(new GuardVaultFinishEvent(sector, player, true));
+  }
+
+  private void gangAreaTryStandard(Matcher matcher) {
+    String takerName = matcher.group(1);
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    }
+    Laby.fireEvent(new GangAreaTryEvent(sector, takerName));
+  }
+
+  private void gangAreaTryAdvanced(Matcher matcher) {
+    String takerName = matcher.group(1);
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    } else if (sector == PrisonSector.A) {
+      sector = PrisonSector.A_PLUS;
+    } else if (sector == PrisonSector.B) {
+      sector = PrisonSector.B_PLUS;
+    } else {
+      return;
+    }
+    Laby.fireEvent(new GangAreaTryEvent(sector, takerName));
+  }
+
+  private void gangAreaUpdate(Matcher matcher) throws NotImplementedException {
+    throw new NotImplementedException("The GangAreaUpdateEvent is not supported by the client in this version");
+  }
+
+  private void gangAreaFinishStandard(Matcher matcher) {
+    String takerName = matcher.group(1);
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    }
+    Laby.fireEvent(new GangAreaFinishEvent(sector, takerName, true));
+  }
+
+  private void gangAreaFinishAdvanced(Matcher matcher) {
+    String takerName = matcher.group(1);
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    } else if (sector == PrisonSector.A) {
+      sector = PrisonSector.A_PLUS;
+    } else if (sector == PrisonSector.B) {
+      sector = PrisonSector.B_PLUS;
+    } else {
+      return;
+    }
+    Laby.fireEvent(new GangAreaFinishEvent(sector, takerName, true));
   }
 
   private void livingAreaHelpSendWaypoint(ChatMessage message) {
@@ -139,8 +212,8 @@ public class MessageRecognizedListener {
     );
   }
 
-  private short extractNumber(Matcher matcher, int group) {
-    short num = 0;
+  private byte extractNumber(Matcher matcher, int group) {
+    byte num = 0;
     if (matcher.group(group) == null) {
       return num;
     }
@@ -153,7 +226,7 @@ public class MessageRecognizedListener {
     }
     if (!numbers.isEmpty()) {
       try {
-        num = Short.parseShort(numbers.toString());
+        num = Byte.parseByte(numbers.toString());
       } catch (NumberFormatException e) {
         this.logging.error("Failed to parse number from string: " + matcher.group(group));
       }

@@ -41,9 +41,17 @@
       }
     },
     "hudWidgetCategory": {
-      "fvplus_timer_category": {
-        "name": "Freakyville+ Timers",
-        "description": "Alle timerwidgets fra FreakyVille+"
+      "fvplus_guard_vault_timer_category": {
+        "name": "Freakyville+ Vagt-Vault Timers",
+        "description": "Alle  FV+ Vagt-Vault timers!"
+      },
+      "fvplus_gang_area_timer_category": {
+        "name": "Freakyville+ Bande-Område Timers",
+        "description": "Alle FV+ Bande-Område timers!"
+      },
+      "fvplus_misc_timer_category": {
+        "name": "Freakyville+ Timers (Misc)",
+        "description": "Alle timers der ikke falder ind under de andre kategorier"
       }
     },
     "server": {

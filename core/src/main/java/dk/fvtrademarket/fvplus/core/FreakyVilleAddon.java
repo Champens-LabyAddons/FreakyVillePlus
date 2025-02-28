@@ -39,7 +39,9 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
 
   private HudWidgetCategory[] getWidgetCategories() {
     return new HudWidgetCategory[] {
-        new HudWidgetCategory(this,"fvplus_timer_category")
+        new HudWidgetCategory(this,"fvplus_guard_vault_timer_category"),
+        new HudWidgetCategory(this,"fvplus_gang_area_timer_category"),
+        new HudWidgetCategory(this,"fvplus_misc_timer_category")
     };
   }
 

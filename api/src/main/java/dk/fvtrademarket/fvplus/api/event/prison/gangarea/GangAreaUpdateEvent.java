@@ -1,14 +1,14 @@
-package dk.fvtrademarket.fvplus.api.event.prison.guardvault;
+package dk.fvtrademarket.fvplus.api.event.prison.gangarea;
 
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 
-public class GuardVaultUpdateEvent extends GuardVaultEvent {
+public class GangAreaUpdateEvent extends GangAreaEvent {
   private final PrisonSector prisonSector;
   private final byte hoursLeft;
   private final byte minutesLeft;
   private final byte secondsLeft;
 
-  public GuardVaultUpdateEvent(PrisonSector prisonSector, byte hoursLeft, byte minutesLeft, byte secondsLeft) {
+  public GangAreaUpdateEvent(PrisonSector prisonSector, byte hoursLeft, byte minutesLeft, byte secondsLeft) {
     super(prisonSector, "");
     this.prisonSector = prisonSector;
     this.hoursLeft = hoursLeft;

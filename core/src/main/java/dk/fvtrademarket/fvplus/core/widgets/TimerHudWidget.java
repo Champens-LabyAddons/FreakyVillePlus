@@ -27,7 +27,14 @@ public class TimerHudWidget extends TextHudWidget<TextHudWidgetConfig> {
     this.associatedIcon = associatedIcon;
     this.endTime = endTime;
 
-    this.bindCategory(Laby.labyAPI().hudWidgetRegistry().categoryRegistry().getById("fvplus_timer_category"));
+    this.bindCategory(Laby.labyAPI().hudWidgetRegistry().categoryRegistry().getById("fvplus_misc_timer_category"));
+  }
+
+  public TimerHudWidget(String id, String timerName, Icon associatedIcon, long endTime, String categoryId) {
+    this(id, timerName, associatedIcon, endTime);
+
+    this.bindCategory(Laby.labyAPI().hudWidgetRegistry().categoryRegistry().getById(categoryId));
+
   }
 
   @Override
