@@ -42,7 +42,7 @@ public class GangAreaListener extends AbstractPrisonActivatableListener<GangArea
   }
 
   @Subscribe
-  public void onGangAreaFinishEvent(GangAreaUpdateEvent event) {
+  public void onGangAreaUpdateEvent(GangAreaUpdateEvent event) {
     GangArea gangArea = parsePrisonActivatable(event);
     if (gangArea == null) {
       return;

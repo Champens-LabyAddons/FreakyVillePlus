@@ -8,6 +8,7 @@ import dk.fvtrademarket.fvplus.core.commands.internal.IgnoreCommand;
 import dk.fvtrademarket.fvplus.core.commands.waypoint.LivingAreaWaypointCommand;
 import dk.fvtrademarket.fvplus.core.commands.timers.TimerCommand;
 import dk.fvtrademarket.fvplus.core.listeners.ChatListener;
+import dk.fvtrademarket.fvplus.core.listeners.activatable.GangAreaListener;
 import dk.fvtrademarket.fvplus.core.listeners.activatable.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
 import dk.fvtrademarket.fvplus.core.listeners.MessageRecognizedListener;
@@ -58,6 +59,8 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
         new ServerNavigationListener(clientInfo),
         new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService()),
         new GuardVaultListener(clientInfo, labyAPI,
+            (DefaultActivatableService) FreakyVillePlus.getReferences().activatableService()),
+        new GangAreaListener(clientInfo, labyAPI,
             (DefaultActivatableService) FreakyVillePlus.getReferences().activatableService()),
         new LivingAreaListener(clientInfo, referenceStorage.chatExecutor(),
             FreakyVillePlus.getReferences().housingService()),

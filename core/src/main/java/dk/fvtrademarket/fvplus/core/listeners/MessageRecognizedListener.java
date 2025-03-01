@@ -60,8 +60,10 @@ public class MessageRecognizedListener {
       case A_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.A, event.getMatcher());
       case A_PLUS_GUARD_VAULT_FINISH -> guardVaultFinish(PrisonSector.A_PLUS, event.getMatcher());
 
-      case GANG_AREA_TRY_STANDARD -> gangAreaTryStandard(event.getMatcher());
-      case GANG_AREA_TRY_ADVANCED -> gangAreaTryAdvanced(event.getMatcher());
+      case GANG_AREA_TRY_UNSPECIFIED -> gangAreaTryUnspecified(event.getMatcher());
+      case GANG_AREA_TRY_B -> gangAreaTrySpecified(PrisonSector.B, event.getMatcher());
+      case GANG_AREA_TRY_B_PLUS -> gangAreaTrySpecified(PrisonSector.B_PLUS, event.getMatcher());
+      case GANG_AREA_TRY_A_PLUS -> gangAreaTrySpecified(PrisonSector.A_PLUS, event.getMatcher());
 
       case GANG_AREA_UPDATE -> {
         try {
@@ -71,8 +73,9 @@ public class MessageRecognizedListener {
         }
       }
 
-      case GANG_AREA_FINISH_STANDARD -> gangAreaFinishStandard(event.getMatcher());
-      case GANG_AREA_FINISH_ADVANCED -> gangAreaFinishAdvanced(event.getMatcher());
+      case GANG_AREA_FINISH_UNSPECIFIED -> gangAreaFinishUnspecified(event.getMatcher());
+      case GANG_AREA_FINISH_B_PLUS -> gangAreaFinishSpecified(PrisonSector.B_PLUS, event.getMatcher());
+      case GANG_AREA_FINISH_A_PLUS -> gangAreaFinishSpecified(PrisonSector.A_PLUS, event.getMatcher());
 
       case PRISON_CHECK -> prisonCheck(event.getMatcher());
 
@@ -115,7 +118,7 @@ public class MessageRecognizedListener {
     Laby.fireEvent(new GuardVaultFinishEvent(sector, player, true));
   }
 
-  private void gangAreaTryStandard(Matcher matcher) {
+  private void gangAreaTryUnspecified(Matcher matcher) {
     String takerName = matcher.group(1);
     PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
     if (sector == null) {
@@ -125,19 +128,8 @@ public class MessageRecognizedListener {
     Laby.fireEvent(new GangAreaTryEvent(sector, takerName));
   }
 
-  private void gangAreaTryAdvanced(Matcher matcher) {
+  private void gangAreaTrySpecified(PrisonSector sector, Matcher matcher) {
     String takerName = matcher.group(1);
-    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
-    if (sector == null) {
-      this.logging.error("Failed to get the current prison sector");
-      return;
-    } else if (sector == PrisonSector.A) {
-      sector = PrisonSector.A_PLUS;
-    } else if (sector == PrisonSector.B) {
-      sector = PrisonSector.B_PLUS;
-    } else {
-      return;
-    }
     Laby.fireEvent(new GangAreaTryEvent(sector, takerName));
   }
 
@@ -145,7 +137,7 @@ public class MessageRecognizedListener {
     throw new NotImplementedException("The GangAreaUpdateEvent is not supported by the client in this version");
   }
 
-  private void gangAreaFinishStandard(Matcher matcher) {
+  private void gangAreaFinishUnspecified(Matcher matcher) {
     String takerName = matcher.group(1);
     PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
     if (sector == null) {
@@ -155,19 +147,8 @@ public class MessageRecognizedListener {
     Laby.fireEvent(new GangAreaFinishEvent(sector, takerName, true));
   }
 
-  private void gangAreaFinishAdvanced(Matcher matcher) {
+  private void gangAreaFinishSpecified(PrisonSector sector, Matcher matcher) {
     String takerName = matcher.group(1);
-    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
-    if (sector == null) {
-      this.logging.error("Failed to get the current prison sector");
-      return;
-    } else if (sector == PrisonSector.A) {
-      sector = PrisonSector.A_PLUS;
-    } else if (sector == PrisonSector.B) {
-      sector = PrisonSector.B_PLUS;
-    } else {
-      return;
-    }
     Laby.fireEvent(new GangAreaFinishEvent(sector, takerName, true));
   }
 
