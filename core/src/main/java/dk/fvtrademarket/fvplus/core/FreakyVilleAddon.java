@@ -13,6 +13,7 @@ import dk.fvtrademarket.fvplus.core.listeners.activatable.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
 import dk.fvtrademarket.fvplus.core.listeners.MessageRecognizedListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.GameShutdownListener;
+import dk.fvtrademarket.fvplus.core.listeners.skill.SkillListener;
 import dk.fvtrademarket.fvplus.core.util.WidgetUpdater;
 import net.labymod.api.Laby;
 import net.labymod.api.LabyAPI;
@@ -57,7 +58,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
         new GameShutdownListener(),
         new ScoreBoardListener(clientInfo),
         new ServerNavigationListener(clientInfo),
-        new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService()),
+        new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService(), configuration().getPrisonSubSettings().getSkillConfiguration()),
         new GuardVaultListener(clientInfo, labyAPI,
             (DefaultActivatableService) FreakyVillePlus.getReferences().activatableService()),
         new GangAreaListener(clientInfo, labyAPI,
@@ -65,6 +66,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
         new LivingAreaListener(clientInfo, referenceStorage.chatExecutor(),
             FreakyVillePlus.getReferences().housingService()),
         new MessageRecognizedListener(clientInfo, referenceStorage.chatExecutor()),
+        new SkillListener(clientInfo, labyAPI, configuration().getPrisonSubSettings().getSkillConfiguration(), FreakyVillePlus.getReferences().skillService())
     };
   }
 

@@ -36,5 +36,6 @@ public class FreakyVillePlus {
     references.messageService().initialize();
     references.activatableService().initialize();
     references.housingService().initialize();
+    references.skillService().initialize();
   }
 }

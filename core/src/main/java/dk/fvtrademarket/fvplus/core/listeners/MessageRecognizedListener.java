@@ -2,6 +2,7 @@ package dk.fvtrademarket.fvplus.core.listeners;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
+import dk.fvtrademarket.fvplus.api.enums.SkillType;
 import dk.fvtrademarket.fvplus.api.event.prison.gangarea.GangAreaFinishEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.gangarea.GangAreaTryEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultFinishEvent;
@@ -9,6 +10,7 @@ import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultTryEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultUpdateEvent;
 import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillExperienceGainEvent;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
@@ -76,6 +78,10 @@ public class MessageRecognizedListener {
       case GANG_AREA_FINISH_UNSPECIFIED -> gangAreaFinishUnspecified(event.getMatcher());
       case GANG_AREA_FINISH_B_PLUS -> gangAreaFinishSpecified(PrisonSector.B_PLUS, event.getMatcher());
       case GANG_AREA_FINISH_A_PLUS -> gangAreaFinishSpecified(PrisonSector.A_PLUS, event.getMatcher());
+
+      case SKILL_EXPERIENCE_GAIN_GENERIC -> skillExperienceGainGeneric(event.getMatcher());
+      case SKILL_EXPERIENCE_GAIN_FISHING_SCROLL -> skillExperienceGainXpScroll(SkillType.FISHING, event.getMatcher());
+      case SKILL_EXPERIENCE_GAIN_RESPECT_SCROLL -> skillExperienceGainXpScroll(SkillType.RESPECT, event.getMatcher());
 
       case PRISON_CHECK -> prisonCheck(event.getMatcher());
 
@@ -150,6 +156,28 @@ public class MessageRecognizedListener {
   private void gangAreaFinishSpecified(PrisonSector sector, Matcher matcher) {
     String takerName = matcher.group(1);
     Laby.fireEvent(new GangAreaFinishEvent(sector, takerName, true));
+  }
+
+  private void skillExperienceGainGeneric(Matcher matcher) {
+    double experience = Double.parseDouble(matcher.group(1));
+    SkillType type = SkillType.fromString(matcher.group(2).toUpperCase());
+    boolean treasureDrop = matcher.group(3) != null;
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    }
+    Laby.fireEvent(new SkillExperienceGainEvent(sector, experience, type, false, treasureDrop));
+  }
+
+  private void skillExperienceGainXpScroll(SkillType skillType, Matcher matcher) {
+    double experience = Double.parseDouble(matcher.group(1));
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    }
+    Laby.fireEvent(new SkillExperienceGainEvent(sector, experience, skillType, true, false));
   }
 
   private void livingAreaHelpSendWaypoint(ChatMessage message) {

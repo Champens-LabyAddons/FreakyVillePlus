@@ -4,6 +4,7 @@ import dk.fvtrademarket.fvplus.api.enums.FreakyVilleMessage;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.api.service.message.MessageService;
+import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import net.labymod.api.Laby;
 import net.labymod.api.client.component.Component;
@@ -19,11 +20,13 @@ import java.util.regex.Pattern;
 public class ChatListener {
   private final ClientInfo clientInfo;
   private final MessageService messageService;
+  private final PrisonSkillConfiguration skillConfiguration;
   private final Logging logging = Logging.create(this.getClass());
 
-  public ChatListener(ClientInfo clientInfo, MessageService messageService) {
+  public ChatListener(ClientInfo clientInfo, MessageService messageService, PrisonSkillConfiguration skillConfiguration) {
     this.clientInfo = clientInfo;
     this.messageService = messageService;
+    this.skillConfiguration = skillConfiguration;
   }
 
   @Subscribe(Priority.FIRST)
@@ -41,6 +44,9 @@ public class ChatListener {
           return;
         } else if (type == FreakyVilleMessage.PLAYER_MESSAGE_YOU) {
           playerMessageYou(matcher, event);
+          return;
+        } else if (isSkillMessage(type) && !this.skillConfiguration.getExperienceActionbar().get()) {
+          Laby.fireEvent(new MessageRecognizedEvent(type, matcher));
           return;
         }
         MessageRecognizedEvent recognizedEvent;
@@ -137,5 +143,9 @@ public class ChatListener {
       case HUB -> 0;
       default -> 0;
     };
+  }
+
+  private boolean isSkillMessage(FreakyVilleMessage type) {
+    return type == FreakyVilleMessage.SKILL_EXPERIENCE_GAIN_GENERIC || type == FreakyVilleMessage.SKILL_EXPERIENCE_GAIN_FISHING_SCROLL || type == FreakyVilleMessage.SKILL_EXPERIENCE_GAIN_RESPECT_SCROLL;
   }
 }

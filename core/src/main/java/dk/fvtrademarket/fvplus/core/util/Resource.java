@@ -20,6 +20,10 @@ public class Resource {
   public static final Resource CELL_LIST = new Resource("livingarea/nprison.csv", DATA_HUB);
   public static final Resource HOMES_LIST = new Resource("livingarea/friheden.csv", DATA_HUB);
 
+  public static final Resource C_SKILL_REQUIREMENTS = new Resource("skill/c.csv", DATA_HUB);
+  public static final Resource B_SKILL_REQUIREMENTS = new Resource("skill/b.csv", DATA_HUB);
+  public static final Resource A_SKILL_REQUIREMENTS = new Resource("skill/a.csv", DATA_HUB);
+
   @Override
   public String toString() {
     return this.location + this.specifics;

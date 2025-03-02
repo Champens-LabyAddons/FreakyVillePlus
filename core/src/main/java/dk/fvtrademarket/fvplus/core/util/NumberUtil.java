@@ -30,4 +30,14 @@ public final class NumberUtil {
       return timeLeft.toString();
   }
 
+  public static String convertNumberToSimpleString(double number) {
+    if (number < 1000) {
+      return String.valueOf(number);
+    }
+    if (number < 1000000) {
+      return String.format("%.1fK", number / 1000);
+    }
+    return String.format("%.1fM", number / 1000000);
+  }
+
 }

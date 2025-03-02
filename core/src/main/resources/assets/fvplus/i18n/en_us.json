@@ -11,11 +11,22 @@
         "enabled": {
           "name": "Slået til"
         },
-        "enabledCellModule": {
-          "name": "Aktiver Celle relaterede funktioner"
-        },
-        "enabledPoiModule": {
-          "name": "Aktiver Timer relaterede funktioner"
+        "skillConfiguration": {
+          "name": "Skill Konfiguration",
+          "enabled": {
+            "name": "Slået til"
+          },
+          "experienceActionbar": {
+            "name": "Vis xp i actionbar"
+          },
+          "openSkillProfiles": {
+            "name": "Åben skill profiler"
+          },
+          "header": {
+            "profiles": {
+              "name": "Profiler"
+            }
+          }
         }
       },
       "discordSubSettings": {
@@ -26,17 +37,28 @@
         "showCurrentServer": {
           "name": "Vis hvilken server du er på, (f.eks. KitPvP)"
         }
-      },
-      "sessionSubSettings": {
-        "name": "Sessioner",
-        "enabled": {
-          "name": "Slået til"
-        },
-        "includeStatsFromPrison": {
-          "name": "Inkluder statistik fra NPrison"
-        },
-        "saveToFileSystem": {
-          "name": "Gem stats til filsystemet"
+      }
+    },
+    "activity": {
+      "prison": {
+        "skill": {
+          "playerName": "Minecraft Navn",
+          "sector": "Fængselsblok",
+          "mining": {
+            "level": "Mining Level",
+            "experience": "Mining XP"
+          },
+          "fishing": {
+            "level": "Fishing Level",
+            "experience": "Fishing XP"
+          },
+          "respect": {
+            "level": "Respekt Level",
+            "experience": "Respekt XP"
+          },
+          "manage": {
+            "remove": "Vil du virkelig fjerne denne profil?"
+          }
         }
       }
     },
@@ -72,6 +94,9 @@
         },
         "poi": {
           "willNotUpdate": "Den registrerede ændring i dette Point of interest vil ikke blive inkluderet, da den forekommer unaturligt."
+        },
+        "skill": {
+          "treasureDrop": "Treasure Drop"
         }
       },
       "city": {
