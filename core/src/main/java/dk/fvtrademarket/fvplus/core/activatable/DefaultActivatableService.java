@@ -86,6 +86,7 @@ public class DefaultActivatableService implements ActivatableService {
 
   public void putActivatableInLimbo(Activatable activatable) {
     this.limboingActivatables.add(activatable);
+    this.widgets.setTimer(activatable, System.currentTimeMillis() + (activatable.getExpectedActivationTime() * 1000L));
   }
 
   public void removeActivatableFromLimbo(Activatable activatable) {
