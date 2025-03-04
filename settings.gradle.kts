@@ -1,4 +1,4 @@
-rootProject.name = "FreakyVillePlus"
+rootProject.name = "fvplus"
 
 pluginManagement {
     val labyGradlePluginVersion = "0.5.8"
