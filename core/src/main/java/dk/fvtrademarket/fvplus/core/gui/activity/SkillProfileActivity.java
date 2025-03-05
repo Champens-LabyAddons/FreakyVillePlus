@@ -220,17 +220,17 @@ public class SkillProfileActivity extends Activity {
     this.inputWidget.addContent(checkBoxList);
 
     HorizontalListWidget miningList = new HorizontalListWidget();
-    miningList.addId("mining-list");
+    miningList.addId("skill-list");
 
     DivWidget miningLevelContainer = new DivWidget();
-    miningLevelContainer.addId("mining-div");
+    miningLevelContainer.addId("skill-div");
 
     ComponentWidget miningLevelText = ComponentWidget.i18n("fvplus.activity.prison.skill.mining.level");
-    miningLevelText.addId("mining-name");
+    miningLevelText.addId("skill-name");
     miningLevelContainer.addChild(miningLevelText);
 
     SliderWidget miningLevelSlider = new SliderWidget()
-        .addId("mining-level-slider");
+        .addId("skill-level-slider");
     miningLevelSlider.range(0, 10);
     miningLevelSlider.setValue(Math.max(0, skillProfileWidget.getSkillProfile().getMiningLevel()));
     miningLevelContainer.addChild(miningLevelSlider);
@@ -238,14 +238,14 @@ public class SkillProfileActivity extends Activity {
     miningList.addEntry(miningLevelContainer);
 
     DivWidget miningExperienceContainer = new DivWidget();
-    miningExperienceContainer.addId("mining-div");
+    miningExperienceContainer.addId("skill-div");
 
     ComponentWidget miningExperienceText = ComponentWidget.i18n("fvplus.activity.prison.skill.mining.experience")
-        .addId("mining-name");
+        .addId("skill-name");
     miningExperienceContainer.addChild(miningExperienceText);
 
     TextFieldWidget miningExperienceTextField = new TextFieldWidget();
-    miningExperienceTextField.addId("mining-experience-text-field");
+    miningExperienceTextField.addId("skill-experience-text-field");
     miningExperienceTextField.setText(String.valueOf(skillProfileWidget.getSkillProfile().getMiningExperience()));
     miningExperienceContainer.addChild(miningExperienceTextField);
 
@@ -254,17 +254,17 @@ public class SkillProfileActivity extends Activity {
     this.inputWidget.addContent(miningList);
 
     HorizontalListWidget fishingList = new HorizontalListWidget();
-    fishingList.addId("fishing-list");
+    fishingList.addId("skill-list");
 
     DivWidget fishingLevelContainer = new DivWidget();
-    fishingLevelContainer.addId("fishing-div");
+    fishingLevelContainer.addId("skill-div");
 
     ComponentWidget fishingLevelText = ComponentWidget.i18n("fvplus.activity.prison.skill.fishing.level");
-    fishingLevelText.addId("fishing-name");
+    fishingLevelText.addId("skill-name");
     fishingLevelContainer.addChild(fishingLevelText);
 
     SliderWidget fishingLevelSlider = new SliderWidget();
-    fishingLevelSlider.addId("fishing-level-slider");
+    fishingLevelSlider.addId("skill-level-slider");
     fishingLevelSlider.range(0, 10);
     fishingLevelSlider.setValue(skillProfileWidget.getSkillProfile().getFishingLevel());
     fishingLevelContainer.addChild(fishingLevelSlider);
@@ -272,14 +272,14 @@ public class SkillProfileActivity extends Activity {
     fishingList.addEntry(fishingLevelContainer);
 
     DivWidget fishingExperienceContainer = new DivWidget();
-    fishingExperienceContainer.addId("fishing-div");
+    fishingExperienceContainer.addId("skill-div");
 
     ComponentWidget fishingExperienceText = ComponentWidget.i18n("fvplus.activity.prison.skill.fishing.experience");
-    fishingExperienceText.addId("fishing-name");
+    fishingExperienceText.addId("skill-name");
     fishingExperienceContainer.addChild(fishingExperienceText);
 
     TextFieldWidget fishingExperienceTextField = new TextFieldWidget();
-    fishingExperienceTextField.addId("fishing-experience-text-field");
+    fishingExperienceTextField.addId("skill-experience-text-field");
     fishingExperienceTextField.setText(String.valueOf(skillProfileWidget.getSkillProfile().getFishingExperience()));
     fishingExperienceContainer.addChild(fishingExperienceTextField);
 
@@ -288,17 +288,17 @@ public class SkillProfileActivity extends Activity {
     this.inputWidget.addContent(fishingList);
 
     HorizontalListWidget respectList = new HorizontalListWidget();
-    respectList.addId("respect-list");
+    respectList.addId("skill-list");
 
     DivWidget respectLevelContainer = new DivWidget();
-    respectLevelContainer.addId("respect-div");
+    respectLevelContainer.addId("skill-div");
 
     ComponentWidget respectLevelText = ComponentWidget.i18n("fvplus.activity.prison.skill.respect.level");
-    respectLevelText.addId("respect-name");
+    respectLevelText.addId("skill-name");
     respectLevelContainer.addChild(respectLevelText);
 
     SliderWidget respectLevelSlider = new SliderWidget();
-    respectLevelSlider.addId("respect-level-slider");
+    respectLevelSlider.addId("skill-level-slider");
     respectLevelSlider.range(0, 10);
     respectLevelSlider.setValue(skillProfileWidget.getSkillProfile().getRespectLevel());
     respectLevelContainer.addChild(respectLevelSlider);
@@ -306,14 +306,14 @@ public class SkillProfileActivity extends Activity {
     respectList.addEntry(respectLevelContainer);
 
     DivWidget respectExperienceContainer = new DivWidget();
-    respectExperienceContainer.addId("respect-div");
+    respectExperienceContainer.addId("skill-div");
 
     ComponentWidget respectExperienceText = ComponentWidget.i18n("fvplus.activity.prison.skill.respect.experience");
-    respectExperienceText.addId("respect-name");
+    respectExperienceText.addId("skill-name");
     respectExperienceContainer.addChild(respectExperienceText);
 
     TextFieldWidget respectExperienceTextField = new TextFieldWidget();
-    respectExperienceTextField.addId("respect-experience-text-field");
+    respectExperienceTextField.addId("skill-experience-text-field");
     respectExperienceTextField.setText(String.valueOf(skillProfileWidget.getSkillProfile().getRespectExperience()));
     respectExperienceContainer.addChild(respectExperienceTextField);
 
