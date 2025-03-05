@@ -101,4 +101,32 @@ public class SkillProfile {
         break;
     }
   }
+
+  public void removeExperience(SkillType skillType, double experience) {
+    switch (skillType) {
+      case MINING:
+        this.miningExperience -= experience;
+        break;
+      case FISHING:
+        this.fishingExperience -= experience;
+        break;
+      case RESPECT:
+        this.respectExperience -= experience;
+        break;
+    }
+  }
+
+  public void incrementLevel(SkillType skillType) {
+    switch (skillType) {
+      case MINING:
+        this.miningLevel++;
+        break;
+      case FISHING:
+        this.fishingLevel++;
+        break;
+      case RESPECT:
+        this.respectLevel++;
+        break;
+    }
+  }
 }

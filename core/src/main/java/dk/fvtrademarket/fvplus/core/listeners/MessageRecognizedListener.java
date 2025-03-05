@@ -11,6 +11,7 @@ import dk.fvtrademarket.fvplus.api.event.prison.guardvault.GuardVaultUpdateEvent
 import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillExperienceGainEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillLevelUpEvent;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
@@ -82,6 +83,8 @@ public class MessageRecognizedListener {
       case SKILL_EXPERIENCE_GAIN_GENERIC -> skillExperienceGainGeneric(event.getMatcher());
       case SKILL_EXPERIENCE_GAIN_FISHING_SCROLL -> skillExperienceGainXpScroll(SkillType.FISHING, event.getMatcher());
       case SKILL_EXPERIENCE_GAIN_RESPECT_SCROLL -> skillExperienceGainXpScroll(SkillType.RESPECT, event.getMatcher());
+
+      case SKILL_LEVEL_UP -> skillLevelUp(event.getMatcher());
 
       case PRISON_CHECK -> prisonCheck(event.getMatcher());
 
@@ -178,6 +181,17 @@ public class MessageRecognizedListener {
       return;
     }
     Laby.fireEvent(new SkillExperienceGainEvent(sector, experience, skillType, true, false));
+  }
+
+  private void skillLevelUp(Matcher matcher) {
+    int newLevel = Integer.parseInt(matcher.group(1));
+    SkillType type = SkillType.fromString(matcher.group(2));
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    }
+    Laby.fireEvent(new SkillLevelUpEvent(sector, type, newLevel));
   }
 
   private void livingAreaHelpSendWaypoint(ChatMessage message) {

@@ -4,6 +4,7 @@ import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import dk.fvtrademarket.fvplus.api.enums.SkillType;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillExperienceGainEvent;
+import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillLevelUpEvent;
 import dk.fvtrademarket.fvplus.api.service.skill.SkillService;
 import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration;
 import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration.ColourProfile;
@@ -54,12 +55,8 @@ public class SkillListener {
           .build();
       this.labyAPI.minecraft().showTitle(treasureDropTitle);
     }
-    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
-    if (sector == null) {
-      return;
-    }
     this.skillService.increaseRecentGain(
-      sector,
+      event.getSector(),
       event.getType(),
       event.getExperience()
     );
@@ -67,10 +64,10 @@ public class SkillListener {
       return;
     }
     ColourProfile colourProfile = this.prisonSkillConfiguration.colourProfile().get();
-    Component gain = Component.text("+" + this.skillService.getRecentGain(sector, event.getType()), colourProfile.getColours().getFirst());
+    Component gain = Component.text("+" + this.skillService.getRecentGain(event.getSector(), event.getType()), colourProfile.getColours().getFirst());
     double progress = getProgress(skillProfile, event.getType());
     double maxProgress = this.skillService.getExperienceRequirement(
-        sector,
+        event.getSector(),
         event.getType(),
         getLevel(skillProfile, event.getType())
     );
@@ -89,6 +86,26 @@ public class SkillListener {
         .build();
     this.labyAPI.minecraft().chatExecutor().displayActionBar(LegacyComponentSerializer.legacySection()
         .serialize(finalComponent));
+  }
+
+  @Subscribe
+  public void onSkillLevelUp(SkillLevelUpEvent event) {
+    if (!this.clientInfo.isOnFreakyVille()) {
+      return;
+    }
+    if (this.clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) {
+      return;
+    }
+    if (!this.prisonSkillConfiguration.getSkillProfiles().containsKey(this.labyAPI.getName())) {
+      return;
+    }
+    SkillProfile skillProfile = this.prisonSkillConfiguration.getSkillProfiles().get(this.labyAPI.getName());
+    skillProfile.incrementLevel(event.getSkillType());
+    skillProfile.removeExperience(event.getSkillType(), this.skillService.getExperienceRequirement(
+        event.getSector(),
+        event.getSkillType(),
+        event.getNewLevel() - 1
+    ));
   }
 
   private Component treasureDropSubTitle(SkillType skillType) {
