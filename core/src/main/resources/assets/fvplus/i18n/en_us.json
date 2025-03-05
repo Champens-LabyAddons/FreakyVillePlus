@@ -37,6 +37,12 @@
             "name": "Åben skill profiler"
           },
           "header": {
+            "general": {
+              "name": "Generelt"
+            },
+            "experienceBar": {
+              "name": "XP Bar"
+            },
             "profiles": {
               "name": "Profiler"
             }

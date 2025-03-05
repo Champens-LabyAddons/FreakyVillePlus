@@ -7,6 +7,7 @@ import net.labymod.api.client.component.format.TextColor;
 import net.labymod.api.client.gui.screen.activity.Activity;
 import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.ActivitySettingWidget.ActivitySetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
+import net.labymod.api.client.gui.screen.widget.widgets.input.dropdown.DropdownWidget.DropdownSetting;
 import net.labymod.api.configuration.loader.Config;
 import net.labymod.api.configuration.loader.annotation.Exclude;
 import net.labymod.api.configuration.loader.annotation.ShowSettingInParent;
@@ -23,6 +24,7 @@ public class PrisonSkillConfiguration extends Config {
   @SwitchSetting
   private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
 
+  @SettingSection("general")
   @SwitchSetting
   private final ConfigProperty<Boolean> hideExperienceMessages = new ConfigProperty<>(false);
 
@@ -30,7 +32,7 @@ public class PrisonSkillConfiguration extends Config {
   @SwitchSetting
   private final ConfigProperty<Boolean> experienceActionbar = new ConfigProperty<>(true);
 
-  @SwitchSetting
+  @DropdownSetting
   private final ConfigProperty<ColourProfile> colourProfile = new ConfigProperty<>(ColourProfile.AQUA);
 
   @Exclude
