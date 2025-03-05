@@ -16,8 +16,22 @@
           "enabled": {
             "name": "Slået til"
           },
+          "hideExperienceMessages": {
+            "name": "Skjul XP beskeder"
+          },
           "experienceActionbar": {
             "name": "Vis xp i actionbar"
+          },
+          "colourProfile": {
+            "name": "Farve Profil",
+            "entries": {
+              "AQUA": "Lyseblå",
+              "BLUE": "Blå",
+              "GREEN": "Grøn",
+              "RED": "Rød",
+              "YELLOW": "Gul",
+              "PURPLE": "Lilla"
+            }
           },
           "openSkillProfiles": {
             "name": "Åben skill profiler"

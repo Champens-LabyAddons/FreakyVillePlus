@@ -6,6 +6,7 @@ import dk.fvtrademarket.fvplus.api.enums.SkillType;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillExperienceGainEvent;
 import dk.fvtrademarket.fvplus.api.service.skill.SkillService;
 import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration;
+import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration.ColourProfile;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.skill.SkillProfile;
 import dk.fvtrademarket.fvplus.core.util.Components;
@@ -43,9 +44,6 @@ public class SkillListener {
     }
     SkillProfile skillProfile = this.prisonSkillConfiguration.getSkillProfiles().get(this.labyAPI.getName());
     skillProfile.addExperience(event.getType(), event.getExperience());
-    if (!this.prisonSkillConfiguration.getExperienceActionbar().get()) {
-      return;
-    }
     if (event.isTreasureDrop()) {
       Title treasureDropTitle = Title.builder()
           .title(Component.empty())
@@ -65,15 +63,21 @@ public class SkillListener {
       event.getType(),
       event.getExperience()
     );
-    Component gain = Component.text("+" + this.skillService.getRecentGain(sector, event.getType()), NamedTextColor.AQUA);
+    if (!this.prisonSkillConfiguration.experienceActionbar().get()) {
+      return;
+    }
+    ColourProfile colourProfile = this.prisonSkillConfiguration.colourProfile().get();
+    Component gain = Component.text("+" + this.skillService.getRecentGain(sector, event.getType()), colourProfile.getColours().getFirst());
     double progress = getProgress(skillProfile, event.getType());
     double maxProgress = this.skillService.getExperienceRequirement(
         sector,
         event.getType(),
         getLevel(skillProfile, event.getType())
     );
-    Component progressBar = Components.getProgressBar(progress, maxProgress, 10);
-    Component progressFraction = Components.getProgressFraction(progress, maxProgress);
+    Component progressBar = Components.getProgressBar(progress, maxProgress, 10,
+        colourProfile.getColours().getFirst(), colourProfile.getColours().getSecond(), NamedTextColor.DARK_GRAY);
+    Component progressFraction = Components.getProgressFraction(progress, maxProgress,
+        colourProfile.getColours().getFirst(), NamedTextColor.GRAY, colourProfile.getColours().getSecond());
     Component finalComponent = Component.text()
         .append(gain)
         .append(Component.space())
