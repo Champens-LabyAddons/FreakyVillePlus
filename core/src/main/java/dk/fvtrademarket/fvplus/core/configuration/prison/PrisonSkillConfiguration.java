@@ -66,24 +66,12 @@ public class PrisonSkillConfiguration extends Config {
   }
 
   public enum ColourProfile {
-    AQUA(
-        Pair.of(NamedTextColor.AQUA, NamedTextColor.DARK_AQUA)
-    ),
-    BLUE(
-        Pair.of(NamedTextColor.BLUE, NamedTextColor.DARK_BLUE)
-    ),
-    GREEN(
-        Pair.of(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN)
-    ),
-    RED(
-        Pair.of(NamedTextColor.RED, NamedTextColor.DARK_RED)
-    ),
-    YELLOW(
-        Pair.of(NamedTextColor.YELLOW, NamedTextColor.GOLD)
-    ),
-    PURPLE(
-        Pair.of(NamedTextColor.LIGHT_PURPLE, NamedTextColor.DARK_PURPLE)
-    ),
+    AQUA(Pair.of(NamedTextColor.AQUA, NamedTextColor.DARK_AQUA)),
+    BLUE(Pair.of(NamedTextColor.BLUE, NamedTextColor.DARK_BLUE)),
+    GREEN(Pair.of(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN)),
+    RED(Pair.of(NamedTextColor.RED, NamedTextColor.DARK_RED)),
+    YELLOW(Pair.of(NamedTextColor.YELLOW, NamedTextColor.GOLD)),
+    PURPLE(Pair.of(NamedTextColor.LIGHT_PURPLE, NamedTextColor.DARK_PURPLE)),
     ;
 
     private final Pair<TextColor, TextColor> colours;
