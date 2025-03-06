@@ -1,23 +1,13 @@
 package dk.fvtrademarket.fvplus.core.configuration.prison;
 
 import dk.fvtrademarket.fvplus.core.configuration.SubConfiguration;
-import dk.fvtrademarket.fvplus.core.gui.activity.SkillProfileActivity;
-import dk.fvtrademarket.fvplus.core.skill.SkillProfile;
 import net.labymod.api.client.component.format.NamedTextColor;
 import net.labymod.api.client.component.format.TextColor;
-import net.labymod.api.client.gui.screen.activity.Activity;
-import net.labymod.api.client.gui.screen.widget.widgets.activity.settings.ActivitySettingWidget.ActivitySetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.dropdown.DropdownWidget.DropdownSetting;
-import net.labymod.api.configuration.loader.Config;
-import net.labymod.api.configuration.loader.annotation.Exclude;
-import net.labymod.api.configuration.loader.annotation.ShowSettingInParent;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
 import net.labymod.api.configuration.settings.annotation.SettingSection;
-import net.labymod.api.util.MethodOrder;
 import net.labymod.api.util.Pair;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PrisonSkillConfiguration extends SubConfiguration {
 
@@ -32,8 +22,6 @@ public class PrisonSkillConfiguration extends SubConfiguration {
   @DropdownSetting
   private final ConfigProperty<ColourProfile> colourProfile = new ConfigProperty<>(ColourProfile.AQUA);
 
-  @Exclude
-  private Map<String, SkillProfile> skillProfiles = new HashMap<>();
 
   public ConfigProperty<Boolean> hideExperienceMessages() {
     return this.hideExperienceMessages;
@@ -45,17 +33,6 @@ public class PrisonSkillConfiguration extends SubConfiguration {
 
   public ConfigProperty<ColourProfile> colourProfile() {
     return this.colourProfile;
-  }
-
-  @MethodOrder(after = "colourProfile")
-  @SettingSection("profiles")
-  @ActivitySetting
-  public Activity openSkillProfiles() {
-    return new SkillProfileActivity();
-  }
-
-  public Map<String, SkillProfile> getSkillProfiles() {
-    return this.skillProfiles;
   }
 
   public enum ColourProfile {

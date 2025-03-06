@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.listeners;
 
+import dk.fvtrademarket.fvplus.api.FreakyVillePlus;
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
 import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import dk.fvtrademarket.fvplus.api.enums.SkillType;
@@ -12,6 +13,7 @@ import dk.fvtrademarket.fvplus.api.event.housing.LivingAreaLookupEvent;
 import dk.fvtrademarket.fvplus.api.event.messaging.MessageRecognizedEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillExperienceGainEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillLevelUpEvent;
+import dk.fvtrademarket.fvplus.api.service.skill.SkillService;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
@@ -85,6 +87,8 @@ public class MessageRecognizedListener {
       case SKILL_EXPERIENCE_GAIN_RESPECT_SCROLL -> skillExperienceGainXpScroll(SkillType.RESPECT, event.getMatcher());
 
       case SKILL_LEVEL_UP -> skillLevelUp(event.getMatcher());
+
+      case SKILL_INFO_LOOKUP -> skillInfoLookup(event.getMatcher());
 
       case PRISON_CHECK -> prisonCheck(event.getMatcher());
 
@@ -184,7 +188,7 @@ public class MessageRecognizedListener {
   }
 
   private void skillLevelUp(Matcher matcher) {
-    int newLevel = Integer.parseInt(matcher.group(1));
+    byte newLevel = Byte.parseByte(matcher.group(1));
     SkillType type = SkillType.fromString(matcher.group(2));
     PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
     if (sector == null) {
@@ -192,6 +196,27 @@ public class MessageRecognizedListener {
       return;
     }
     Laby.fireEvent(new SkillLevelUpEvent(sector, type, newLevel));
+  }
+
+  private void skillInfoLookup(Matcher matcher) {
+    SkillType type = SkillType.fromString(matcher.group(1));
+    byte level = Byte.parseByte(matcher.group(2));
+    SkillService skillService = FreakyVillePlus.getReferences().skillService();
+    PrisonSector sector = this.clientInfo.getPrisonSector().orElse(null);
+    if (sector == null) {
+      this.logging.error("Failed to get the current prison sector");
+      return;
+    }
+    if (level == skillService.getMaxLevel(sector, type)) {
+      skillService.updateRequirement(type, -1);
+      skillService.updateLevel(type, level);
+      return;
+    }
+    double experience = Double.parseDouble(matcher.group(4));
+    double requirement = Double.parseDouble(matcher.group(5));
+    skillService.updateExperience(type, experience);
+    skillService.updateRequirement(type, requirement);
+    skillService.updateLevel(type, level);
   }
 
   private void livingAreaHelpSendWaypoint(ChatMessage message) {

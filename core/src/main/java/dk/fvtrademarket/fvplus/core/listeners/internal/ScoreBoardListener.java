@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.listeners.internal;
 
+import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration;
 import net.labymod.api.Laby;
 import net.labymod.api.client.component.Component;
 import net.labymod.api.client.component.TextComponent;
@@ -13,9 +14,11 @@ import dk.fvtrademarket.fvplus.core.util.Messaging;
 
 public class ScoreBoardListener {
   private final ClientInfo clientInfo;
+  private final PrisonSkillConfiguration prisonSkillConfiguration;
 
-  public ScoreBoardListener(ClientInfo clientInfo) {
+  public ScoreBoardListener(ClientInfo clientInfo, PrisonSkillConfiguration prisonSkillConfiguration) {
     this.clientInfo = clientInfo;
+    this.prisonSkillConfiguration = prisonSkillConfiguration;
   }
 
   @Subscribe
@@ -55,6 +58,9 @@ public class ScoreBoardListener {
     this.clientInfo.setHasUpdatedToCurrentServer(true);
     if (this.clientInfo.getCurrentServer() == FreakyVilleServer.PRISON) {
       Messaging.executor().chat("/list");
+      if (this.prisonSkillConfiguration.enabled().get()) {
+        Messaging.executor().chat("/xp");
+      }
     }
     Laby.fireEvent(new RequestEvent(RequestType.DISCORD_RPC));
   }

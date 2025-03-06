@@ -36,6 +36,8 @@ public enum FreakyVilleMessage {
 
   SKILL_LEVEL_UP(),
 
+  SKILL_INFO_LOOKUP(),
+
   LIVING_AREA_LOOKUP(true),
   LIVING_AREA_HELP(true),
 

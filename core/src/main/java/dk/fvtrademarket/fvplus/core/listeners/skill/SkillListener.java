@@ -1,7 +1,6 @@
 package dk.fvtrademarket.fvplus.core.listeners.skill;
 
 import dk.fvtrademarket.fvplus.api.enums.FreakyVilleServer;
-import dk.fvtrademarket.fvplus.api.enums.PrisonSector;
 import dk.fvtrademarket.fvplus.api.enums.SkillType;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillExperienceGainEvent;
 import dk.fvtrademarket.fvplus.api.event.prison.skill.SkillLevelUpEvent;
@@ -9,8 +8,8 @@ import dk.fvtrademarket.fvplus.api.service.skill.SkillService;
 import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration;
 import dk.fvtrademarket.fvplus.core.configuration.prison.PrisonSkillConfiguration.ColourProfile;
 import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
-import dk.fvtrademarket.fvplus.core.skill.SkillProfile;
 import dk.fvtrademarket.fvplus.core.util.Components;
+import dk.fvtrademarket.fvplus.core.util.Messaging;
 import net.labymod.api.LabyAPI;
 import net.labymod.api.client.chat.Title;
 import net.labymod.api.client.component.Component;
@@ -34,17 +33,11 @@ public class SkillListener {
 
   @Subscribe
   public void onSkillExperienceGainEvent(SkillExperienceGainEvent event) {
-    if (!this.clientInfo.isOnFreakyVille()) {
+    if (!playerPassesChecks()) {
       return;
     }
-    if (this.clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) {
-      return;
-    }
-    if (!this.prisonSkillConfiguration.getSkillProfiles().containsKey(this.labyAPI.getName())) {
-      return;
-    }
-    SkillProfile skillProfile = this.prisonSkillConfiguration.getSkillProfiles().get(this.labyAPI.getName());
-    skillProfile.addExperience(event.getType(), event.getExperience());
+    double previousExperience = this.skillService.getExperience(event.getType());
+    this.skillService.updateExperience(event.getType(), previousExperience + event.getExperience());
     if (event.isTreasureDrop()) {
       Title treasureDropTitle = Title.builder()
           .title(Component.empty())
@@ -55,22 +48,14 @@ public class SkillListener {
           .build();
       this.labyAPI.minecraft().showTitle(treasureDropTitle);
     }
-    this.skillService.increaseRecentGain(
-      event.getSector(),
-      event.getType(),
-      event.getExperience()
-    );
+    this.skillService.increaseRecentGain(event.getType(), event.getExperience());
     if (!this.prisonSkillConfiguration.passesChecks(this.prisonSkillConfiguration.experienceActionbar())) {
       return;
     }
     ColourProfile colourProfile = this.prisonSkillConfiguration.colourProfile().get();
-    Component gain = Component.text("+" + this.skillService.getRecentGain(event.getSector(), event.getType()), colourProfile.getColours().getFirst());
-    double progress = getProgress(skillProfile, event.getType());
-    double maxProgress = this.skillService.getExperienceRequirement(
-        event.getSector(),
-        event.getType(),
-        getLevel(skillProfile, event.getType())
-    );
+    Component gain = Component.text("+" + this.skillService.getRecentGain(event.getType()), colourProfile.getColours().getFirst());
+    double progress = this.skillService.getExperience(event.getType());
+    double maxProgress = this.skillService.getExperienceRequirement(event.getType());
     Component progressBar = Components.getProgressBar(progress, maxProgress, 10,
         colourProfile.getColours().getFirst(), colourProfile.getColours().getSecond(), NamedTextColor.DARK_GRAY);
     Component progressFraction = Components.getProgressFraction(progress, maxProgress,
@@ -84,28 +69,26 @@ public class SkillListener {
         .append(progressFraction)
         .append(Component.text("]", NamedTextColor.DARK_GRAY))
         .build();
-    this.labyAPI.minecraft().chatExecutor().displayActionBar(LegacyComponentSerializer.legacySection()
-        .serialize(finalComponent));
+    this.labyAPI.minecraft().chatExecutor().displayActionBar(LegacyComponentSerializer.legacySection().serialize(finalComponent));
   }
 
   @Subscribe
   public void onSkillLevelUp(SkillLevelUpEvent event) {
-    if (!this.clientInfo.isOnFreakyVille()) {
+    if (!playerPassesChecks()) {
       return;
     }
-    if (this.clientInfo.getCurrentServer() != FreakyVilleServer.PRISON) {
+    this.skillService.updateLevel(event.getSkillType(), event.getNewLevel());
+    double previousExperience = this.skillService.getExperience(event.getSkillType());
+    double experienceRequirement = this.skillService.getExperienceRequirement(event.getSkillType());
+    this.skillService.updateExperience(event.getSkillType(), previousExperience - experienceRequirement);
+    if (!this.prisonSkillConfiguration.enabled().get()) {
       return;
     }
-    if (!this.prisonSkillConfiguration.getSkillProfiles().containsKey(this.labyAPI.getName())) {
-      return;
-    }
-    SkillProfile skillProfile = this.prisonSkillConfiguration.getSkillProfiles().get(this.labyAPI.getName());
-    skillProfile.incrementLevel(event.getSkillType());
-    skillProfile.removeExperience(event.getSkillType(), this.skillService.getExperienceRequirement(
-        event.getSector(),
-        event.getSkillType(),
-        event.getNewLevel() - 1
-    ));
+    Messaging.executor().chat("/xp");
+  }
+
+  private boolean playerPassesChecks() {
+    return this.clientInfo.isOnFreakyVille() && this.clientInfo.getCurrentServer() == FreakyVilleServer.PRISON;
   }
 
   private Component treasureDropSubTitle(SkillType skillType) {
@@ -122,21 +105,4 @@ public class SkillListener {
         .append(Component.text(skillTypeIcon, NamedTextColor.LIGHT_PURPLE))
         .build();
   }
-
-  private double getProgress(SkillProfile skillProfile, SkillType type) {
-    return switch (type) {
-      case MINING -> skillProfile.getMiningExperience();
-      case FISHING -> skillProfile.getFishingExperience();
-      case RESPECT -> skillProfile.getRespectExperience();
-    };
-  }
-
-  private int getLevel(SkillProfile skillProfile, SkillType type) {
-    return switch (type) {
-      case MINING -> skillProfile.getMiningLevel();
-      case FISHING -> skillProfile.getFishingLevel();
-      case RESPECT -> skillProfile.getRespectLevel();
-    };
-  }
-
 }

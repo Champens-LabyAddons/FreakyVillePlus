@@ -18,65 +18,97 @@ import java.util.concurrent.TimeUnit;
 @Implements(SkillService.class)
 public class DefaultSkillService implements SkillService {
 
-  private final Map<SkillType, int[]> experienceRequirementsC = new HashMap<>(3);
-  private final Map<SkillType, int[]> experienceRequirementsB = new HashMap<>(3);
-  private final Map<SkillType, int[]> experienceRequirementsA = new HashMap<>(3);
+  private byte maxFishingLevel_C = 0;
+  private byte maxMiningLevel_C = 0;
 
-  private final Map<SkillType, BlockingQueue<GainEntry>> recentGainsC = new HashMap<>();
-  private final Map<SkillType, BlockingQueue<GainEntry>> recentGainsB = new HashMap<>();
-  private final Map<SkillType, BlockingQueue<GainEntry>> recentGainsA = new HashMap<>();
+  private byte maxFishingLevel_B = 0;
+  private byte maxMiningLevel_B = 0;
+  private byte maxRespectLevel_B = 0;
 
-  private static final long GAIN_EXPIRY_TIME = TimeUnit.SECONDS.toMillis(5);
+  private byte maxFishingLevel_A = 0;
+  private byte maxRespectLevel_A = 0;
+
+  private double fishingExperience = 0;
+  private double miningExperience = 0;
+  private double respectExperience = 0;
+
+  private double fishingRequirement = -1;
+  private double miningRequirement = -1;
+  private double respectRequirement = -1;
+
+  private byte fishingLevel = 0;
+  private byte miningLevel = 0;
+  private byte respectLevel = 0;
+
+  private final Map<SkillType, BlockingQueue<GainEntry>> recentGains = new HashMap<>();
+
+  private static final long GAIN_EXPIRY_TIME = TimeUnit.SECONDS.toMillis(2);
 
   private boolean initialized;
 
   @Override
-  public void registerSkill(PrisonSector sector, SkillType skillType, int[] experienceRequirements) {
-    switch (sector) {
-      case C:
-        experienceRequirementsC.put(skillType, experienceRequirements);
-        break;
-      case B:
-        experienceRequirementsB.put(skillType, experienceRequirements);
-        break;
-      case A:
-        experienceRequirementsA.put(skillType, experienceRequirements);
-        break;
+  public void updateExperience(SkillType skillType, double experience) {
+    switch (skillType) {
+      case FISHING -> fishingExperience = experience;
+      case MINING -> miningExperience = experience;
+      case RESPECT -> respectExperience = experience;
     }
   }
 
   @Override
-  public int getExperienceRequirement(PrisonSector sector, SkillType skillType, int level) {
-    if (level == 10) {
-      return -1;
+  public void updateRequirement(SkillType skillType, double requirement) {
+    switch (skillType) {
+      case FISHING -> fishingRequirement = requirement;
+      case MINING -> miningRequirement = requirement;
+      case RESPECT -> respectRequirement = requirement;
     }
-    return switch (sector) {
-      case C -> experienceRequirementsC.get(skillType)[level];
-      case B -> experienceRequirementsB.get(skillType)[level];
-      case A -> experienceRequirementsA.get(skillType)[level];
-      default -> 0;
+  }
+
+  @Override
+  public void updateLevel(SkillType skillType, byte level) {
+    switch (skillType) {
+      case FISHING -> fishingLevel = level;
+      case MINING -> miningLevel = level;
+      case RESPECT -> respectLevel = level;
+    }
+  }
+
+  @Override
+  public double getExperience(SkillType skillType) {
+    return switch (skillType) {
+      case FISHING -> fishingExperience;
+      case MINING -> miningExperience;
+      case RESPECT -> respectExperience;
     };
   }
 
   @Override
-  public Map<SkillType, int[]> getExperienceRequirements(PrisonSector sector) {
-    return Map.copyOf(switch (sector) {
-      case C -> experienceRequirementsC;
-      case B -> experienceRequirementsB;
-      case A -> experienceRequirementsA;
-      default -> new HashMap<SkillType, int[]>();
-    });
+  public double getExperienceRequirement(SkillType skillType) {
+    return switch (skillType) {
+      case FISHING -> (int) fishingRequirement;
+      case MINING -> (int) miningRequirement;
+      case RESPECT -> (int) respectRequirement;
+    };
   }
 
   @Override
-  public void increaseRecentGain(PrisonSector sector, SkillType skillType, double gain) {
+  public byte getLevel(SkillType skillType) {
+    return switch (skillType) {
+      case FISHING -> fishingLevel;
+      case MINING -> miningLevel;
+      case RESPECT -> respectLevel;
+    };
+  }
+
+  @Override
+  public void increaseRecentGain(SkillType skillType, double gain) {
     GainEntry gainEntry = new GainEntry(gain, System.currentTimeMillis());
-    getRecentGainsQueue(sector, skillType).add(gainEntry);
+    getRecentGainsQueue(skillType).add(gainEntry);
   }
 
   @Override
-  public double getRecentGain(PrisonSector sector, SkillType skillType) {
-    BlockingQueue<GainEntry> queue = getRecentGainsQueue(sector, skillType);
+  public double getRecentGain(SkillType skillType) {
+    BlockingQueue<GainEntry> queue = getRecentGainsQueue(skillType);
     long currentTime = System.currentTimeMillis();
     double totalGain = 0;
 
@@ -92,17 +124,58 @@ public class DefaultSkillService implements SkillService {
   }
 
   @Override
+  public byte getMaxLevel(PrisonSector sector, SkillType skillType) {
+    return switch (sector) {
+      case C -> switch (skillType) {
+        case FISHING -> maxFishingLevel_C;
+        case MINING -> maxMiningLevel_C;
+        default -> 0;
+      };
+      case B -> switch (skillType) {
+        case FISHING -> maxFishingLevel_B;
+        case MINING -> maxMiningLevel_B;
+        case RESPECT -> maxRespectLevel_B;
+        default -> 0;
+      };
+      case A -> switch (skillType) {
+        case FISHING -> maxFishingLevel_A;
+        case RESPECT -> maxRespectLevel_A;
+        default -> 0;
+      };
+      default -> 0;
+    };
+  }
+
+  @Override
   public void initialize() {
     if (initialized) {
       throw new IllegalStateException("Service already initialized");
     }
-    ArrayList<String[]> cSkillRequirements = DataFormatter.csv(Resource.C_SKILL_REQUIREMENTS.toString(), true);
-    ArrayList<String[]> bSkillRequirements = DataFormatter.csv(Resource.B_SKILL_REQUIREMENTS.toString(), true);
-    ArrayList<String[]> aSkillRequirements = DataFormatter.csv(Resource.A_SKILL_REQUIREMENTS.toString(), true);
+    ArrayList<String[]> cSkillRequirements = DataFormatter.csv(Resource.C_SKILL_MAX_LEVELS.toString(), true);
+    ArrayList<String[]> bSkillRequirements = DataFormatter.csv(Resource.B_SKILL_MAX_LEVELS.toString(), true);
+    ArrayList<String[]> aSkillRequirements = DataFormatter.csv(Resource.A_SKILL_MAX_LEVELS.toString(), true);
 
-    readSkillRequirements(PrisonSector.C, cSkillRequirements);
-    readSkillRequirements(PrisonSector.B, bSkillRequirements);
-    readSkillRequirements(PrisonSector.A, aSkillRequirements);
+    for (String[] requirement : cSkillRequirements) {
+      switch (requirement[0]) {
+        case "FISHING" -> maxFishingLevel_C = Byte.parseByte(requirement[1]);
+        case "MINING" -> maxMiningLevel_C = Byte.parseByte(requirement[1]);
+      }
+    }
+
+    for (String[] requirement : bSkillRequirements) {
+      switch (requirement[0]) {
+        case "FISHING" -> maxFishingLevel_B = Byte.parseByte(requirement[1]);
+        case "MINING" -> maxMiningLevel_B = Byte.parseByte(requirement[1]);
+        case "RESPECT" -> maxRespectLevel_B = Byte.parseByte(requirement[1]);
+      }
+    }
+
+    for (String[] requirement : aSkillRequirements) {
+      switch (requirement[0]) {
+        case "FISHING" -> maxFishingLevel_A = Byte.parseByte(requirement[1]);
+        case "RESPECT" -> maxRespectLevel_A = Byte.parseByte(requirement[1]);
+      }
+    }
 
     initialized = true;
   }
@@ -112,30 +185,8 @@ public class DefaultSkillService implements SkillService {
 
   }
 
-  private void readSkillRequirements(PrisonSector sector, ArrayList<String[]> skillRequirements) {
-    for (String[] line : skillRequirements) {
-      SkillType skillType = SkillType.fromString(line[0]);
-      int[] requirements = new int[line.length - 1];
-
-      for (int i = 1; i < line.length; i++) {
-        if (line[i].equals("x")) {
-          requirements[i - 1] = 0;
-        } else {
-          requirements[i - 1] = Integer.parseInt(line[i]);
-        }
-      }
-
-      registerSkill(sector, skillType, requirements);
-    }
-  }
-
-  private BlockingQueue<GainEntry> getRecentGainsQueue(PrisonSector sector, SkillType skillType) {
-    return switch (sector) {
-      case C -> recentGainsC.computeIfAbsent(skillType, k -> new LinkedBlockingQueue<>());
-      case B -> recentGainsB.computeIfAbsent(skillType, k -> new LinkedBlockingQueue<>());
-      case A -> recentGainsA.computeIfAbsent(skillType, k -> new LinkedBlockingQueue<>());
-      default -> throw new IllegalArgumentException("Unknown sector: " + sector);
-    };
+  private BlockingQueue<GainEntry> getRecentGainsQueue(SkillType skillType) {
+    return recentGains.computeIfAbsent(skillType, k -> new LinkedBlockingQueue<>());
   }
 
   private static class GainEntry {

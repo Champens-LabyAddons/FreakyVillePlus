@@ -54,7 +54,7 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
   private Object[] getStandardListeners(ClientInfo clientInfo, LabyAPI labyAPI, ReferenceStorage referenceStorage) {
     return new Object[] {
         new GameShutdownListener(),
-        new ScoreBoardListener(clientInfo),
+        new ScoreBoardListener(clientInfo, configuration().getPrisonSubSettings().getSkillConfiguration()),
         new ServerNavigationListener(clientInfo),
         new ChatListener(clientInfo, FreakyVillePlus.getReferences().messageService(), configuration().getPrisonSubSettings().getSkillConfiguration()),
         new GuardVaultListener(clientInfo, labyAPI,

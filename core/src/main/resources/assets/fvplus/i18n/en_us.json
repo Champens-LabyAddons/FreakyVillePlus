@@ -42,9 +42,6 @@
             },
             "experienceBar": {
               "name": "XP Bar"
-            },
-            "profiles": {
-              "name": "Profiler"
             }
           }
         },
@@ -86,29 +83,6 @@
         },
         "misc": {
           "name": "Uden for kategori"
-        }
-      }
-    },
-    "activity": {
-      "prison": {
-        "skill": {
-          "playerName": "Minecraft Navn",
-          "sector": "Fængselsblok",
-          "mining": {
-            "level": "Mining Level",
-            "experience": "Mining XP"
-          },
-          "fishing": {
-            "level": "Fishing Level",
-            "experience": "Fishing XP"
-          },
-          "respect": {
-            "level": "Respekt Level",
-            "experience": "Respekt XP"
-          },
-          "manage": {
-            "remove": "Vil du virkelig fjerne denne profil?"
-          }
         }
       }
     },

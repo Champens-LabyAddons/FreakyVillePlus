@@ -7,9 +7,9 @@ import net.labymod.api.event.Event;
 
 public class SkillLevelUpEvent extends SectoredEvent implements Event {
   private final SkillType skillType;
-  private final int newLevel;
+  private final byte newLevel;
 
-  public SkillLevelUpEvent(PrisonSector sector, SkillType skillType, int newLevel) {
+  public SkillLevelUpEvent(PrisonSector sector, SkillType skillType, byte newLevel) {
     super(sector);
     this.skillType = skillType;
     this.newLevel = newLevel;
@@ -19,7 +19,7 @@ public class SkillLevelUpEvent extends SectoredEvent implements Event {
     return this.skillType;
   }
 
-  public int getNewLevel() {
+  public byte getNewLevel() {
     return this.newLevel;
   }
 }
