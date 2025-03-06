@@ -45,7 +45,7 @@ public class ChatListener {
         } else if (type == FreakyVilleMessage.PLAYER_MESSAGE_YOU) {
           playerMessageYou(matcher, event);
           return;
-        } else if (isSkillMessage(type) && !this.skillConfiguration.hideExperienceMessages().get()) {
+        } else if (isSkillMessage(type) && !this.skillConfiguration.passesChecks(this.skillConfiguration.hideExperienceMessages())) {
           Laby.fireEvent(new MessageRecognizedEvent(type, matcher));
           return;
         }

@@ -13,6 +13,7 @@ import dk.fvtrademarket.fvplus.core.listeners.activatable.GuardVaultListener;
 import dk.fvtrademarket.fvplus.core.listeners.LivingAreaListener;
 import dk.fvtrademarket.fvplus.core.listeners.MessageRecognizedListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.GameShutdownListener;
+import dk.fvtrademarket.fvplus.core.listeners.misc.DiscordRPCListener;
 import dk.fvtrademarket.fvplus.core.listeners.skill.SkillListener;
 import dk.fvtrademarket.fvplus.core.util.WidgetUpdater;
 import net.labymod.api.Laby;
@@ -28,9 +29,6 @@ import dk.fvtrademarket.fvplus.core.connection.ClientInfo;
 import dk.fvtrademarket.fvplus.core.integrations.WaypointsIntegration;
 import dk.fvtrademarket.fvplus.core.listeners.internal.ScoreBoardListener;
 import dk.fvtrademarket.fvplus.core.listeners.internal.ServerNavigationListener;
-import dk.fvtrademarket.fvplus.core.listeners.internal.ModuleListener;
-import dk.fvtrademarket.fvplus.core.module.ModuleService;
-import dk.fvtrademarket.fvplus.core.module.general.RPCModule;
 import dk.fvtrademarket.fvplus.core.util.Messaging;
 import net.labymod.api.util.Pair;
 
@@ -66,7 +64,8 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
         new LivingAreaListener(clientInfo, referenceStorage.chatExecutor(),
             FreakyVillePlus.getReferences().housingService()),
         new MessageRecognizedListener(clientInfo, referenceStorage.chatExecutor()),
-        new SkillListener(clientInfo, labyAPI, configuration().getPrisonSubSettings().getSkillConfiguration(), FreakyVillePlus.getReferences().skillService())
+        new SkillListener(clientInfo, labyAPI, configuration().getPrisonSubSettings().getSkillConfiguration(), FreakyVillePlus.getReferences().skillService()),
+        new DiscordRPCListener(clientInfo, labyAPI, configuration().getDiscordSubSettings())
     };
   }
 
@@ -102,15 +101,6 @@ public class FreakyVilleAddon extends LabyAddon<FreakyVillePlusConfiguration> {
     this.registerCommand(new TimerCommand(clientInfo, FreakyVillePlus.getReferences().activatableService()));
     this.registerCommand(new BlockCommand(clientInfo, FreakyVillePlus.getReferences().messageService()));
     this.registerCommand(new IgnoreCommand(clientInfo, FreakyVillePlus.getReferences().messageService()));
-
-    ModuleService moduleService = new ModuleService(labyAPI, labyAPI.eventBus(),
-        labyAPI.commandService(), clientInfo);
-    moduleService.registerModules(
-        new RPCModule(moduleService, configuration().getDiscordSubSettings())//,
-        //new NPrisonModule(moduleService, configuration().getPrisonSubSettings())
-    );
-
-    this.registerListener(new ModuleListener(moduleService));
 
     this.logger().info(I18n.translate("fvplus.logging.enabled"));
   }

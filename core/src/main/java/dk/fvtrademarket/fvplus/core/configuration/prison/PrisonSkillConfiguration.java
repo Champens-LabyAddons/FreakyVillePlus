@@ -1,5 +1,6 @@
 package dk.fvtrademarket.fvplus.core.configuration.prison;
 
+import dk.fvtrademarket.fvplus.core.configuration.SubConfiguration;
 import dk.fvtrademarket.fvplus.core.gui.activity.SkillProfileActivity;
 import dk.fvtrademarket.fvplus.core.skill.SkillProfile;
 import net.labymod.api.client.component.format.NamedTextColor;
@@ -18,11 +19,7 @@ import net.labymod.api.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PrisonSkillConfiguration extends Config {
-
-  @ShowSettingInParent
-  @SwitchSetting
-  private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
+public class PrisonSkillConfiguration extends SubConfiguration {
 
   @SettingSection("general")
   @SwitchSetting
@@ -37,10 +34,6 @@ public class PrisonSkillConfiguration extends Config {
 
   @Exclude
   private Map<String, SkillProfile> skillProfiles = new HashMap<>();
-
-  public ConfigProperty<Boolean> enabled() {
-    return this.enabled;
-  }
 
   public ConfigProperty<Boolean> hideExperienceMessages() {
     return this.hideExperienceMessages;

@@ -33,6 +33,9 @@ public class DiscordRPCListener {
     if (this.currentlyRunning) {
       return;
     }
+    if (!configuration.enabled().get()) {
+      return;
+    }
     if (!clientInfo.isOnFreakyVille()) {
       return;
     }

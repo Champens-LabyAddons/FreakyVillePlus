@@ -8,6 +8,7 @@ import net.labymod.api.configuration.loader.annotation.SpriteTexture;
 import net.labymod.api.configuration.loader.property.ConfigProperty;
 import dk.fvtrademarket.fvplus.core.configuration.DiscordSubConfiguration;
 import dk.fvtrademarket.fvplus.core.configuration.PrisonSubConfiguration;
+import net.labymod.api.configuration.settings.annotation.SettingSection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,14 @@ import java.util.List;
 @SpriteTexture("settings/icons.png")
 public class FreakyVillePlusConfiguration extends AddonConfig {
 
+  @SettingSection("general")
   @SwitchSetting
   private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
 
+  @SettingSection("servers")
   private final PrisonSubConfiguration prisonSubSettings = new PrisonSubConfiguration();
 
+  @SettingSection("misc")
   private final DiscordSubConfiguration discordSubSettings = new DiscordSubConfiguration();
 
   @Exclude

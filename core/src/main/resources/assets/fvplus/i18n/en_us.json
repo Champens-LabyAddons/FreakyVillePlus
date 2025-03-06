@@ -47,15 +47,45 @@
               "name": "Profiler"
             }
           }
+        },
+        "header": {
+          "shared": {
+            "name": "Flere Blokke"
+          },
+          "sectorC": {
+            "name": "C Blokken"
+          },
+          "sectorB": {
+            "name": "B Blokken"
+          },
+          "sectorA": {
+            "name": "A Blokken"
+          }
         }
       },
       "discordSubSettings": {
-        "name": "Discord",
+        "name": "Discord Rich Presence",
         "enabled": {
           "name": "Slået til"
         },
         "showCurrentServer": {
           "name": "Vis hvilken server du er på, (f.eks. KitPvP)"
+        },
+        "header": {
+          "information": {
+            "name": "Information"
+          }
+        }
+      },
+      "header": {
+        "general": {
+          "name": "Generelt"
+        },
+        "servers": {
+          "name": "Servere"
+        },
+        "misc": {
+          "name": "Uden for kategori"
         }
       }
     },
@@ -111,9 +141,6 @@
               "success": "Waypoint oprettet"
             }
           }
-        },
-        "poi": {
-          "willNotUpdate": "Den registrerede ændring i dette Point of interest vil ikke blive inkluderet, da den forekommer unaturligt."
         },
         "skill": {
           "treasureDrop": "Treasure Drop"

@@ -60,7 +60,7 @@ public class SkillListener {
       event.getType(),
       event.getExperience()
     );
-    if (!this.prisonSkillConfiguration.experienceActionbar().get()) {
+    if (!this.prisonSkillConfiguration.passesChecks(this.prisonSkillConfiguration.experienceActionbar())) {
       return;
     }
     ColourProfile colourProfile = this.prisonSkillConfiguration.colourProfile().get();
