@@ -11,21 +11,97 @@
         "enabled": {
           "name": "Slået til"
         },
-        "enabledCellModule": {
-          "name": "Aktiver Celle relaterede funktioner"
+        "skillConfiguration": {
+          "name": "Skill Konfiguration",
+          "enabled": {
+            "name": "Slået til"
+          },
+          "hideExperienceMessages": {
+            "name": "Skjul XP beskeder"
+          },
+          "treasureDropTitle": {
+            "name": "Treasure Drop Title",
+            "description": "Viser en Title på din skærm når du får et Treasure Drop"
+          },
+          "experienceActionbar": {
+            "name": "Vis xp i actionbar"
+          },
+          "colourProfile": {
+            "name": "Farve Profil",
+            "entries": {
+              "AQUA": "Lyseblå",
+              "BLUE": "Blå",
+              "GREEN": "Grøn",
+              "RED": "Rød",
+              "YELLOW": "Gul",
+              "PURPLE": "Lilla"
+            }
+          },
+          "openSkillProfiles": {
+            "name": "Åben skill profiler"
+          },
+          "header": {
+            "general": {
+              "name": "Generelt"
+            },
+            "experienceBar": {
+              "name": "XP Bar"
+            }
+          }
         },
-        "enabledPoiModule": {
-          "name": "Aktiver Timer relaterede funktioner"
+        "header": {
+          "shared": {
+            "name": "Flere Blokke"
+          },
+          "sectorC": {
+            "name": "C Blokken"
+          },
+          "sectorB": {
+            "name": "B Blokken"
+          },
+          "sectorA": {
+            "name": "A Blokken"
+          }
         }
       },
       "discordSubSettings": {
-        "name": "Discord",
+        "name": "Discord Rich Presence",
         "enabled": {
           "name": "Slået til"
         },
         "showCurrentServer": {
           "name": "Vis hvilken server du er på, (f.eks. KitPvP)"
+        },
+        "header": {
+          "information": {
+            "name": "Information"
+          }
         }
+      },
+      "header": {
+        "general": {
+          "name": "Generelt"
+        },
+        "servers": {
+          "name": "Servere"
+        },
+        "misc": {
+          "name": "Uden for kategori"
+        }
+      }
+    },
+    "hudWidgetCategory": {
+      "fvplus_guard_vault_timer_category": {
+        "name": "Freakyville+ Vagt-Vault Timers",
+        "description": "Alle  FV+ Vagt-Vault timers!"
+      },
+      "fvplus_gang_area_timer_category": {
+        "name": "Freakyville+ Bande-Område Timers",
+        "description": "Alle FV+ Bande-Område timers!"
+      },
+      "fvplus_misc_timer_category": {
+        "name": "Freakyville+ Timers (Misc)",
+        "description": "Alle timers der ikke falder ind under de andre kategorier"
       }
     },
     "server": {
@@ -44,8 +120,8 @@
             }
           }
         },
-        "poi": {
-          "willNotUpdate": "Den registrerede ændring i dette Point of interest vil ikke blive inkluderet, da den forekommer unaturligt."
+        "skill": {
+          "treasureDrop": "Treasure Drop"
         }
       },
       "city": {
@@ -70,15 +146,38 @@
       "lastSeen": "Sidst set på %s"
     },
     "commands": {
-      "checkRoll": {
-        "header": "Check Roll",
-        "usage": "Brug: /checkroll <UUID>",
-        "invalidUuid": "Ugyldig UUID, skal være præcis 36 tegn lang!",
-        "wheel": {
-          "header": "Hjul: %s",
-          "winner": "Vinder: %s",
-          "tooManyOptions": "For mange navne at vise, du kan kun se vinderen"
-        }
+      "debug": {
+        "header": "FV+ Debug:",
+        "isConnected": "Er forbundet: %s",
+        "currentServer": "Nuværende server: %s",
+        "lastServer": "Sidste server: %s",
+        "foundPrison": "Lige nu i fængselsblok: %s"
+      },
+      "freakyHelp": {
+        "header": "Hjælpe oversigt",
+        "commands": {
+          "ignore": {
+            "description": "%s | Ignorer en spiller",
+            "usage": "Brug: /ignore <list/add/remove> [<spiller>]"
+          },
+          "block": {
+            "description": "%s | Bloker en spiller",
+            "usage": "Brug: /block <list/add/remove> [<spiller>]"
+          },
+          "waypoint": {
+            "description": "%s | Opret et midlertidigt waypoint til den angivne celle",
+            "usage": "Brug: /ce waypoint <cellenavn>"
+          },
+          "timer": {
+            "description": "%s | Vis en liste over timers",
+            "usage": "Brug: /timer <global/personlig>"
+          },
+          "freakyHelp": {
+            "description": "%s | Vis denne hjælpe oversigt",
+            "usage": "Brug: /fhelp <command>"
+          }
+        },
+        "noCommand": "Ingen kommando fundet"
       },
       "timer": {
         "usage": "Brug: /timer <global/personlig>",
@@ -91,6 +190,40 @@
           "header": "Personlig Timer",
           "noPoisToShow": "Ingen timers at vise endnu",
           "invalidServer": "Ugyldig server!"
+        }
+      },
+      "ignore": {
+        "syntax": "<list/add/remove> [<spiller>]",
+        "list": {
+          "header": "Ignorerede spillere:",
+          "emptyIgnoreList": "Ingen spillere er blevet ignoreret endnu..."
+        },
+        "add": {
+          "syntax": "add <spiller>",
+          "success": "Spilleren blev ignoreret",
+          "alreadyIgnored": "Spilleren er allerede ignoreret"
+        },
+        "remove": {
+          "syntax": "remove <spiller>",
+          "success": "Spilleren blev fjernet fra listen over ignorerede spillere",
+          "notIgnored": "Spilleren er ikke på listen over ignorerede spillere"
+        }
+      },
+      "block": {
+        "syntax": "<list/add/remove> [<spiller>]",
+        "list": {
+          "header": "Blokerede spillere:",
+          "emptyBlockList": "Ingen spillere er blevet blokeret endnu..."
+        },
+        "add": {
+          "syntax": "add <spiller>",
+          "success": "Spilleren blev blokeret",
+          "alreadyBlocked": "Spilleren er allerede blokeret"
+        },
+        "remove": {
+          "syntax": "remove <spiller>",
+          "success": "Spilleren blev fjernet fra listen over blokerede spillere",
+          "notBlocked": "Spilleren er ikke på listen over blokerede spillere"
         }
       }
     },
@@ -112,47 +245,26 @@
     },
     "widgets": {
       "timer": {
+        "displayName": "Timer",
         "timeLeft": {
-          "isTakeable": "Kan blive overtaget",
+          "finished": "Kan blive taget",
           "unavailable": "Ikke tilgængeligt",
-          "cantKnowForSure": "Opdateres ikke",
+          "cantKnowForSure": "Opdateres ikke på nuværende tidspunkt",
           "format": {
-            "all": "%s, %s",
-            "hours": "%st",
-            "minutes": "%sm",
-            "seconds": "%ss"
+            "hours": "t",
+            "minutes": "m",
+            "seconds": "s"
           }
         }
       }
     },
+    "activatable": {
+      "gangArea": "Bande-Område",
+      "guardVault": "Vagt-Vault",
+      "bank": "Banken"
+    },
     "hudWidget": {
-      "C_VV": {
-        "name": "C Vagt-Vault timer"
-      },
-      "B_VV": {
-        "name": "B Vagt-Vault timer"
-      },
-      "A_VV": {
-        "name": "A Vagt-Vault timer"
-      },
-      "BPLUS_VV": {
-        "name": "B+ Bank timer"
-      },
-      "APLUS_VV": {
-        "name": "A+ Bank timer"
-      },
-      "B_BO": {
-        "name": "B Bande-Område timer"
-      },
-      "A_BO": {
-        "name": "A Bande-Område timer"
-      },
-      "BPLUS_BO": {
-        "name": "B+ Bande-Område timer"
-      },
-      "APLUS_BO": {
-        "name": "A+ Bande-Område timer"
-      }
+
     }
   }
 }

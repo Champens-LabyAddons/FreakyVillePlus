@@ -1,0 +1,64 @@
+package dk.fvtrademarket.fvplus.core.configuration.prison;
+
+import dk.fvtrademarket.fvplus.core.configuration.SubConfiguration;
+import net.labymod.api.client.component.format.NamedTextColor;
+import net.labymod.api.client.component.format.TextColor;
+import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
+import net.labymod.api.client.gui.screen.widget.widgets.input.dropdown.DropdownWidget.DropdownSetting;
+import net.labymod.api.configuration.loader.property.ConfigProperty;
+import net.labymod.api.configuration.settings.annotation.SettingSection;
+import net.labymod.api.util.Pair;
+
+public class PrisonSkillConfiguration extends SubConfiguration {
+
+  @SettingSection("general")
+  @SwitchSetting
+  private final ConfigProperty<Boolean> hideExperienceMessages = new ConfigProperty<>(false);
+
+  @SwitchSetting
+  private final ConfigProperty<Boolean> treasureDropTitle = new ConfigProperty<>(true);
+
+  @SettingSection("experienceBar")
+  @SwitchSetting
+  private final ConfigProperty<Boolean> experienceActionbar = new ConfigProperty<>(true);
+
+  @DropdownSetting
+  private final ConfigProperty<ColourProfile> colourProfile = new ConfigProperty<>(ColourProfile.AQUA);
+
+
+  public ConfigProperty<Boolean> hideExperienceMessages() {
+    return this.hideExperienceMessages;
+  }
+
+  public ConfigProperty<Boolean> treasureDropTitle() {
+    return this.treasureDropTitle;
+  }
+
+  public ConfigProperty<Boolean> experienceActionbar() {
+    return this.experienceActionbar;
+  }
+
+  public ConfigProperty<ColourProfile> colourProfile() {
+    return this.colourProfile;
+  }
+
+  public enum ColourProfile {
+    AQUA(Pair.of(NamedTextColor.AQUA, NamedTextColor.DARK_AQUA)),
+    BLUE(Pair.of(NamedTextColor.BLUE, NamedTextColor.DARK_BLUE)),
+    GREEN(Pair.of(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN)),
+    RED(Pair.of(NamedTextColor.RED, NamedTextColor.DARK_RED)),
+    YELLOW(Pair.of(NamedTextColor.YELLOW, NamedTextColor.GOLD)),
+    PURPLE(Pair.of(NamedTextColor.LIGHT_PURPLE, NamedTextColor.DARK_PURPLE)),
+    ;
+
+    private final Pair<TextColor, TextColor> colours;
+
+    ColourProfile(Pair<TextColor, TextColor> colours) {
+      this.colours = colours;
+    }
+
+    public Pair<TextColor, TextColor> getColours() {
+      return this.colours;
+    }
+  }
+}
