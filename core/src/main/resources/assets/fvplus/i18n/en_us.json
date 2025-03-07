@@ -19,6 +19,10 @@
           "hideExperienceMessages": {
             "name": "Skjul XP beskeder"
           },
+          "treasureDropTitle": {
+            "name": "Treasure Drop Title",
+            "description": "Viser en Title på din skærm når du får et Treasure Drop"
+          },
           "experienceActionbar": {
             "name": "Vis xp i actionbar"
           },

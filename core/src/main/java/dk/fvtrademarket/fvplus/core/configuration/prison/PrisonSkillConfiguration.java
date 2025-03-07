@@ -15,6 +15,9 @@ public class PrisonSkillConfiguration extends SubConfiguration {
   @SwitchSetting
   private final ConfigProperty<Boolean> hideExperienceMessages = new ConfigProperty<>(false);
 
+  @SwitchSetting
+  private final ConfigProperty<Boolean> treasureDropTitle = new ConfigProperty<>(true);
+
   @SettingSection("experienceBar")
   @SwitchSetting
   private final ConfigProperty<Boolean> experienceActionbar = new ConfigProperty<>(true);
@@ -25,6 +28,10 @@ public class PrisonSkillConfiguration extends SubConfiguration {
 
   public ConfigProperty<Boolean> hideExperienceMessages() {
     return this.hideExperienceMessages;
+  }
+
+  public ConfigProperty<Boolean> treasureDropTitle() {
+    return this.treasureDropTitle;
   }
 
   public ConfigProperty<Boolean> experienceActionbar() {

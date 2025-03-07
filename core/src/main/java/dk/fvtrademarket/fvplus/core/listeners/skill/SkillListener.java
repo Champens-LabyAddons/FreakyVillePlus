@@ -38,7 +38,7 @@ public class SkillListener {
     }
     double previousExperience = this.skillService.getExperience(event.getType());
     this.skillService.updateExperience(event.getType(), previousExperience + event.getExperience());
-    if (event.isTreasureDrop()) {
+    if (event.isTreasureDrop() && this.prisonSkillConfiguration.passesChecks(this.prisonSkillConfiguration.treasureDropTitle())) {
       Title treasureDropTitle = Title.builder()
           .title(Component.empty())
           .subTitle(treasureDropSubTitle(event.getType()))
